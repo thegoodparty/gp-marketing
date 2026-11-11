@@ -1,0 +1,802 @@
+[
+	{
+		"claim": "The General Assembly meets every year on the second Wednesday in January",
+		"citation": "Va. Const. art. IV, § 6",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "The General Assembly shall meet once each year on the second Wednesday in January",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An odd-year regular session may last 30 days and an even-year session 60 days",
+		"citation": "Va. Const. art. IV, § 6",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "no regular session of the General Assembly convened in an odd-numbered year shall continue longer than thirty days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any regular session may be extended by up to 30 days with two-thirds of each house",
+		"citation": "Va. Const. art. IV, § 6",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "any regular session may be extended for a period not exceeding thirty days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The General Assembly reconvenes on the sixth Wednesday after adjournment to take up the governor's vetoes and amendments",
+		"citation": "Va. Const. art. IV, § 6",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "The General Assembly shall reconvene on the sixth Wednesday after adjournment of each regular or special session",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The reconvened session lasts three days unless extended by up to seven more",
+		"citation": "Va. Const. art. IV, § 6",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "Such reconvened session shall not continue longer than three days unless the session be extended, for a period not exceeding seven additional days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "During the session the governor has seven days to act on a bill",
+		"citation": "Va. Const. art. V, § 6(b)",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "the Governor shall have seven days in which to act on the bill after it is presented to him",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills presented with fewer than seven days left: the governor has 30 days after adjournment",
+		"citation": "Va. Const. art. V, § 6(c)",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "the Governor shall have thirty days from the date of adjournment of the regular or special session in which to act on the bills presented to him",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills returned from the reconvened session become law without signature if not acted on within 30 days after it adjourns",
+		"citation": "Va. Const. art. V, § 6(c)",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "If the Governor does not act on the bill within thirty days after the adjournment of the reconvened session, the bill shall become law without his signature",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws from a regular session take effect on 1 July after adjournment unless another date is set",
+		"citation": "Va. Const. art. IV, § 13",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "shall take effect on the first day of July following the adjournment of the session of the General Assembly at which it has been enacted",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Laws from a regular session take effect on 1 July unless a later date is specified",
+		"citation": "Va. Code § 1-214(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title1/chapter2.1/",
+		"quote": "shall take effect on the first day of July following the adjournment of the regular session at which they were enacted, unless a subsequent date is specified",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Since 2022 every election for mayor, local governing body or elected school board is held in November, whatever the charter says",
+		"citation": "Va. Code § 15.2-1400(E)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter14/",
+		"quote": "beginning with any election held after January 1, 2022, elections for mayor, members of a local governing body, or members of an elected school board shall be held at the time of the November general election for terms to commence January 1",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Older sections still describe May city and town elections (now overridden)",
+		"citation": "Va. Code § 24.2-222(B)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "shall take place at the May general election of an even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A general election is held on the Tuesday after the first Monday in November (the definition still also names May)",
+		"citation": "Va. Code § 24.2-101",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter1/",
+		"quote": "means an election held in the Commonwealth on the Tuesday after the first Monday in November or on the first Tuesday in May",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County supervisors are elected by district every four years on the cycle counted from November 1995, for four-year terms",
+		"citation": "Va. Code § 24.2-218(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "shall elect one or more supervisors at the general election in November 1995, and every four years thereafter for terms of four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county can switch to staggered four-year supervisor terms with elections every two years, by ordinance or by voter petition and referendum",
+		"citation": "Va. Code § 24.2-219(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "The governing body of any county may by ordinance provide that the county board of supervisors be elected biennially for staggered four-year terms",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County constitutional officers (sheriff, Commonwealth's attorney, treasurer, commissioner of the revenue) are elected every four years on the cycle counted from 1995",
+		"citation": "Va. Code § 24.2-217",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "shall elect a sheriff, an attorney for the Commonwealth, a treasurer, and a commissioner of the revenue at the general election in November 1995, and every four years thereafter",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City constitutional officers are elected every four years on the cycle counted from 1997, unless the city charter provides otherwise",
+		"citation": "Va. Code § 24.2-217",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "The qualified voters of each city, unless its charter provides otherwise, shall elect a sheriff, an attorney for the Commonwealth, a treasurer, and a commissioner of the revenue at the general election in November 1997",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Circuit court clerks serve eight-year terms; county clerks are elected on the cycle counted from 1999",
+		"citation": "Va. Code § 24.2-217",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "shall elect a clerk of the circuit court of the county at the general election in November 1999, and every eight years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county and city that share an office vote on the county schedule",
+		"citation": "Va. Code § 24.2-217",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "the qualified voters of the city shall cast their votes for that office according to the schedule set forth above for counties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Constitutional officers serve four years; the clerk eight",
+		"citation": "Va. Const. art. VII, § 4",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "shall hold their respective offices for the term of four years, except that the clerk shall hold office for eight years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City and town councils (and mayors where the charter provides) serve the terms set in their charters",
+		"citation": "Va. Code § 24.2-222(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "shall elect a mayor, if so provided by charter, and a council for the terms provided by charter",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city or town council chooses its November election cycle by ordinance",
+		"citation": "Va. Code § 24.2-222.1(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "shall be elected at the November general election date of any cycle as designated in the ordinance",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected school boards vote at the same election as the locality's governing body and serve the same terms",
+		"citation": "Va. Code § 22.1-57.3(A), (B)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title22.1/chapter5/",
+		"quote": "The terms of the members of the elected school board for any county, city, or town shall be the same as the terms of the members of the governing body for the county, city, or town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected school board elections coincide with the governing body's elections",
+		"citation": "Va. Code § 24.2-223",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "elections shall be held to coincide with the election of members of the governing body",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Soil and water conservation district directors are elected only at the November general election every fourth year, counted from 2003",
+		"citation": "Va. Code § 10.1-523(D)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title10.1/chapter5/",
+		"quote": "elections shall be held only at the November general election in 2003 and at the November general election in each fourth year thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A district covering one county or city elects three directors; the top three vote-getters win",
+		"citation": "Va. Code § 10.1-527",
+		"url": "https://law.lis.virginia.gov/vacodefull/title10.1/chapter5/",
+		"quote": "the three candidates who receive the largest number of the votes cast in the election shall be elected directors for the district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A multi-locality district elects two directors from each county or city",
+		"citation": "Va. Code § 10.1-515(2)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title10.1/chapter5/",
+		"quote": "the board of district directors shall consist of two members elected by the registered voters from each county or city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Soil and water director candidates file nominating petitions with the general registrar",
+		"citation": "Va. Code § 10.1-523(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title10.1/chapter5/",
+		"quote": "nominating petitions, statements of qualifications, and declarations of candidacy shall be filed with the general registrar of the county or city where the candidate resides",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An office with no election time set by law is filled at the general election just before its term begins",
+		"citation": "Va. Code § 24.2-224",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter2/",
+		"quote": "shall be held at the general election immediately preceding the time provided for the term of such office to commence",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party primaries for November offices are held on the third Tuesday in June",
+		"citation": "Va. Code § 24.2-515",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "shall be held on the third Tuesday in June next preceding such election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every registered voter may vote in a primary, but in only one party's primary",
+		"citation": "Va. Code § 24.2-530",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "No person shall vote for the candidates of more than one party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All qualified voters may vote in a primary",
+		"citation": "Va. Code § 24.2-530",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "All persons qualified to vote, pursuant to",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The registration form does not ask for party affiliation",
+		"citation": "Va. Code § 24.2-418",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter4/",
+		"quote": "full name; gender; date of birth; social security number, if any; whether the applicant is presently a United States citizen",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The local party committee decides whether a local nomination is made by primary or another method",
+		"citation": "Va. Code § 24.2-509(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "The duly constituted authorities of the political party for the district, county, city, or town in which any other office is to be filled shall have the right to determine the method by which a party nomination for that office shall be made",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party whose incumbent won after a primary must use a primary again unless the incumbent consents otherwise",
+		"citation": "Va. Code § 24.2-509(B)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "shall nominate a candidate for the next election for that office by a primary unless all incumbents of that party for that office consent to a different method",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary candidate who loses cannot then appear on the November ballot for that office",
+		"citation": "Va. Code § 24.2-520",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "his name is not to be printed on the ballots for that office in the succeeding general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary nominees are the candidates with the most votes",
+		"citation": "Va. Code § 24.2-532",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "the persons who have received the highest number of votes for nomination to any such office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party labels appear on the ballot only for federal, statewide and General Assembly offices",
+		"citation": "Va. Code § 24.2-613(B)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter6/",
+		"quote": "For elections for federal, statewide, and General Assembly offices only, each candidate who has been nominated by a political party or in a primary election shall be identified by the name of his political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent candidates for those offices are labeled \"Independent\"",
+		"citation": "Va. Code § 24.2-613(B)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter6/",
+		"quote": "Independent candidates shall be identified by the term \"Independent.\"",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board candidates are nominated only by petition",
+		"citation": "Va. Code § 22.1-57.3(E)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title22.1/chapter5/",
+		"quote": "all candidates shall be nominated only by petition as provided by general law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The candidate with the most votes wins",
+		"citation": "Va. Code § 24.2-673(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter6/",
+		"quote": "the person having the highest number of votes for any office shall be deemed to have been elected to such office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A tie for local office is decided by lot by the electoral board",
+		"citation": "Va. Code § 24.2-674",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter6/",
+		"quote": "the electoral board shall proceed publicly to determine by lot which of the candidates shall be declared elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A local governing body may choose ranked choice voting for its own elections by majority vote",
+		"citation": "Va. Code § 24.2-673.1(B)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter6/",
+		"quote": "Elections of members of a local governing body may be conducted by ranked choice voting pursuant to this section",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The ranked choice decision is made by majority vote of the governing body",
+		"citation": "Va. Code § 24.2-673.1(B)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter6/",
+		"quote": "shall be made, in consultation with the local electoral board and general registrar, by a majority vote of the local governing body that the office being elected serves",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A non-party candidate for local office files a declaration of candidacy with the general registrar",
+		"citation": "Va. Code § 24.2-505(C)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "who intends to be a candidate at any election for any other office shall file a declaration of candidacy with the general registrar of the county or city where he resides",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A non-party candidate needs a petition of qualified voters to be printed on the ballot",
+		"citation": "Va. Code § 24.2-506(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "other than a party nominee, shall not be printed upon any official ballots provided for the election unless he shall file along with his declaration of candidacy a petition therefor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates for council or school board in a town with fewer than 1,500 registered voters need no petition",
+		"citation": "Va. Code § 24.2-506(A)(8)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "any town that has fewer than 1,500 registered voters, no petition shall be required",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only qualified voters entitled to vote for the office count on a petition",
+		"citation": "Va. Code § 24.2-101",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter1/",
+		"quote": "with inactive status who are qualified to vote for the office for which the petition was circulated",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petition signatures must be witnessed by someone who is not a minor or a felon without restored rights",
+		"citation": "Va. Code § 24.2-506(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter5/",
+		"quote": "Each signature on the petition shall have been witnessed by a person who is not a minor or a felon whose voting rights have not been restored",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city is an independent community: 5,000 people or more and incorporated as a city",
+		"citation": "Va. Const. art. VII, § 1",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "\"city\" means an independent incorporated community which became a city as provided by law before noon on the first day of July, nineteen hundred seventy-one, or which has within defined boundaries a population of 5,000 or more",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town is an incorporated community within one or more counties, 1,000 or more people",
+		"citation": "Va. Const. art. VII, § 1",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "an incorporated community within one or more counties which became a town before noon, July one, nineteen hundred seventy-one",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The General Assembly organizes all local governments by general law and may grant charters by special act",
+		"citation": "Va. Const. art. VII, § 2",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "The General Assembly may also provide by special act for the organization, government, and powers of any county, city, town, or regional government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A special act (such as a charter) needs two-thirds of each house",
+		"citation": "Va. Const. art. VII, § 1",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "for enactment shall require an affirmative vote of two-thirds of the members elected to each house of the General Assembly",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every county and city elects a treasurer, sheriff, Commonwealth's attorney, clerk and commissioner of revenue",
+		"citation": "Va. Const. art. VII, § 4",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "There shall be elected by the qualified voters of each county and city a treasurer, a sheriff, an attorney for the Commonwealth, a clerk, who shall be clerk of the court in the office of which deeds are recorded, and a commissioner of revenue",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Constitutional officers may be shared or replaced only by a law approved by local voters",
+		"citation": "Va. Const. art. VII, § 4",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "by general law to become effective in any county or city when submitted to the qualified voters thereof in an election held for such purpose",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties and cities with a form of government not requiring these officers are exempt",
+		"citation": "Va. Code § 15.2-1600(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter16/",
+		"quote": "nor shall the provisions of this section apply to those counties and cities which have heretofore adopted, or may hereafter adopt, a form of government, as provided by law, which does not require such counties or cities to have or elect one or more of such officers",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Two or more localities may share constitutional officers after a referendum in each",
+		"citation": "Va. Code § 15.2-1602",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter16/",
+		"quote": "Two or more units of government may share the officer or officers, or any combination of them",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county governing body is the board of supervisors; city and town governing bodies are councils",
+		"citation": "Va. Code § 15.2-102",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter1/",
+		"quote": "\"Governing body\" means the board of supervisors of a county, council of a city, or council of a town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "\"Locality\" means a county, city or town",
+		"citation": "Va. Code § 15.2-102",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter1/",
+		"quote": "\"Locality\" or \"local government\" shall be construed to mean a county, city, or town as the context may require",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every locality elects a governing body of 3 to 11 members",
+		"citation": "Va. Code § 15.2-1400(B)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter14/",
+		"quote": "The governing body of every locality shall be composed of not fewer than three nor more than 11 members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Localities of 400,000 or more must elect governing bodies from single-member districts (after 1 July 2026); presiding officer may be at large",
+		"citation": "Va. Code § 15.2-1400(G)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter14/",
+		"quote": "every locality with a population of 400,000 or greater shall elect its members of the governing body by individual single-member districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The presiding officer of a large locality may still be elected at large",
+		"citation": "Va. Code § 15.2-1400(G)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter14/",
+		"quote": "A governing body's presiding officer may be elected at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A district member is elected by the district's voters only, not at large",
+		"citation": "Va. Code § 15.2-1400(F)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter14/",
+		"quote": "the member elected from each district or ward shall be elected by the qualified voters of that district or ward and not by the locality at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A governing body chooses at large, districts, or a mix by ordinance",
+		"citation": "Va. Code § 24.2-304.1(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title24.2/chapter3/",
+		"quote": "the governing body of each county, city, or town may provide by ordinance for the election of its members on any of the following bases",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unless popularly elected, the board picks its chair (or the council its mayor) from its members",
+		"citation": "Va. Code § 15.2-1422",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter14/",
+		"quote": "Unless the presiding officer is elected by popular vote, every governing body, at its first meeting after taking office, shall elect one of its number as presiding officer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The presiding officer is called mayor if a member of a city or town council",
+		"citation": "Va. Code § 15.2-1422",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter14/",
+		"quote": "\"mayor\" if a member of a city or town council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The chair or mayor heads the locality for official functions and has a vote but no veto",
+		"citation": "Va. Code § 15.2-1423",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter14/",
+		"quote": "He shall have a vote but no veto",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a county executive county, voters can choose by referendum to elect the board chair at large",
+		"citation": "Va. Code § 15.2-503(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter5/",
+		"quote": "Shall the chairman of the county board of supervisors, to be known as the county chairman, be elected by the voters of the county at large?",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the urban county executive form, voters elect a county chairman as well as district supervisors",
+		"citation": "Va. Code § 15.2-802",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter8/",
+		"quote": "In addition to the above board members, the voters shall elect a county chairman who shall be a qualified voter of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the county manager plan, legislative power is in a five-member county board",
+		"citation": "Va. Code § 15.2-702",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter7/",
+		"quote": "shall be vested in a board of five members to be known as the county board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the county manager plan the board elects its chair annually",
+		"citation": "Va. Code § 15.2-702",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter7/",
+		"quote": "The chairman shall be elected by the board annually",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county board form adds one member elected at large",
+		"citation": "Va. Code § 15.2-402(B)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter4/",
+		"quote": "The board shall consist of one member elected from the county at large by the qualified voters of the county and one member from each magisterial or election district in the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties adopt optional forms only by referendum",
+		"citation": "Va. Code § 15.2-301(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter3/",
+		"quote": "A county may adopt one of the optional forms of government provided for in Chapters 4 through 8 of this title only after approval by voter referendum",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County executive form board: 3 to 9 members, four-year terms",
+		"citation": "Va. Code § 15.2-502(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter5/",
+		"quote": "to consist of not less than three nor more than nine members to be elected by the voters of the county at large, or solely by the voters of the respective magisterial or election district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charters are granted or amended only by the General Assembly",
+		"citation": "Va. Code § 15.2-200",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter2/",
+		"quote": "No charter shall be granted to a locality by the General Assembly and no charter of a locality shall be amended by the General Assembly except as provided in this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A locality asks the General Assembly for a charter or amendment after a local election or public hearing",
+		"citation": "Va. Code § 15.2-201",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter2/",
+		"quote": "request the General Assembly to grant to the locality a new charter or to amend its existing charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities and towns hold the uniform charter powers; counties only where specifically conferred",
+		"citation": "Va. Code § 15.2-204",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter2/",
+		"quote": "Counties shall have all powers set forth in Article 1",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Boards of supervisors have the powers of city and town councils, but not inside a town without agreement",
+		"citation": "Va. Code § 15.2-1201",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter12/",
+		"quote": "shall be exercised within the corporate limits of any incorporated town except by agreement with the town council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A community may petition to incorporate as a town",
+		"citation": "Va. Code § 15.2-3600",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter36/",
+		"quote": "requesting that the community be incorporated as a town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town becomes a city only by court order, which needs a population of at least 5,000",
+		"citation": "Va. Code § 15.2-3807(A)(1)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter38/",
+		"quote": "The town has a minimum population of 5,000 persons",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town petitions the circuit court for city status by ordinance",
+		"citation": "Va. Code § 15.2-3800",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter38/",
+		"quote": "petition the circuit court for the county within which the town lies",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Until July 2032 at the latest, no new city charter may be granted except for a consolidated city",
+		"citation": "Va. Code § 15.2-3201",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter32/",
+		"quote": "with the exception of a charter for a proposed consolidated city, no city charter shall be granted or come into force",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "That moratorium ends no later than 1 July 2032",
+		"citation": "Va. Code § 15.2-3201",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter32/",
+		"quote": "terminating on the first to occur of (i) July 1, 2032",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may change to town status",
+		"citation": "Va. Code § 15.2-4100",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter41/",
+		"quote": "A city may change to town status in accordance with the provisions of this chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each school division is supervised by a school board selected as the law provides",
+		"citation": "Va. Const. art. VIII, § 7",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "The supervision of schools in each school division shall be vested in a school board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may petition for a referendum to switch from an appointed to an elected school board",
+		"citation": "Va. Code § 22.1-57.2",
+		"url": "https://law.lis.virginia.gov/vacodefull/title22.1/chapter5/",
+		"quote": "Shall the method of selecting the school board be changed from appointment by the governing body (or the school board selection commission, whichever is applicable) to direct election by the voters?",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may petition to switch back from an elected to an appointed board",
+		"citation": "Va. Code § 22.1-57.4(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title22.1/chapter5/",
+		"quote": "Shall the method of selecting the school board be changed from direct election by the voters to appointment by the governing body",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After any such referendum, no other may be held for four years",
+		"citation": "Va. Code § 22.1-57.5",
+		"url": "https://law.lis.virginia.gov/vacodefull/title22.1/chapter5/",
+		"quote": "no other referendum provided for in this article shall be held within the same locality for the four years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected school board members come from the same districts as the governing body, at large, or a mix",
+		"citation": "Va. Code § 22.1-57.3(B)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title22.1/chapter5/",
+		"quote": "the members shall be elected from the established county or municipal election districts, at large, or a combination thereof",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An elected school board may have an elected tie breaker",
+		"citation": "Va. Code § 22.1-57.3(H)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title22.1/chapter5/",
+		"quote": "Any elected school board may have a position of tie breaker",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No school board employee may serve on the board that employs them",
+		"citation": "Va. Code § 22.1-57.3(G)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title22.1/chapter5/",
+		"quote": "No employee of a school board shall be eligible to serve on the board with whom he is employed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Williamsburg school board members are appointed under a special provision",
+		"citation": "Va. Code § 22.1-57.3:2.1",
+		"url": "https://law.lis.virginia.gov/vacodefull/title22.1/chapter5/",
+		"quote": "Appointment and terms of school board members for City of Williamsburg",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In some counties an appointed school board is chosen by a school board selection commission",
+		"citation": "Va. Code § 22.1-35",
+		"url": "https://law.lis.virginia.gov/vacodefull/title22.1/chapter5/",
+		"quote": "there shall be a school board selection commission",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county manager plan chapter contains a section written for Arlington County",
+		"citation": "Va. Code §§ 15.2-700, 15.2-709.1",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter7/",
+		"quote": "Applicant preemployment information in Arlington County",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county manager plan chapter applies only to counties that adopted it",
+		"citation": "Va. Code § 15.2-700",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter7/",
+		"quote": "The provisions of this chapter shall apply only to counties which have adopted the county manager plan",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town has 1,000 or more people (or became a town before 1971)",
+		"citation": "Va. Const. art. VII, § 1",
+		"url": "https://law.lis.virginia.gov/constitutionfull/",
+		"quote": "which has within defined boundaries a population of 1,000 or more and which has become a town as provided by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A soil and water district board also has two members appointed by the state board",
+		"citation": "Va. Code § 10.1-515(1)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title10.1/chapter5/",
+		"quote": "three to be elected by the registered voters of the district and two appointed by the Board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities and towns automatically hold the uniform charter powers",
+		"citation": "Va. Code § 15.2-204",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter2/",
+		"quote": "Cities and towns shall have all powers set forth in Article 1",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The number of members, terms and other details of a governing body election are set by general or special law",
+		"citation": "Va. Code § 15.2-1400(A)",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter14/",
+		"quote": "The date, place, number, term, and other details of the election shall be as specified by law, general or special",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the county manager form the board has 3 to 9 members, possibly plus one elected at large",
+		"citation": "Va. Code § 15.2-602",
+		"url": "https://law.lis.virginia.gov/vacodefull/title15.2/chapter6/",
+		"quote": "plus one additional member elected at large, depending upon the result of the election held upon the questions submitted to the voters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

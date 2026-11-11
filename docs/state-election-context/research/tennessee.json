@@ -1,0 +1,706 @@
+[
+	{
+		"claim": "The General Assembly meets in organizational session on the second Tuesday in January after the House election",
+		"citation": "Tenn. Const. art. II, § 8",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21HR-00008-00",
+		"quote": "The General Assembly shall meet in organizational session on the second Tuesday in January next succeeding the election of the members of the House of Representatives",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The organizational session lasts no more than 15 days and passes no legislation; the regular session follows",
+		"citation": "Tenn. Const. art. II, § 8",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21HR-00008-00",
+		"quote": "The General Assembly shall remain in session for organizational purposes not longer than fifteen consecutive calendar days, during which session no legislation shall be passed on third and final consideration",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor has ten days, Sundays excepted, to act on a bill or it becomes law",
+		"citation": "Tenn. Const. art. III, § 18",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21K7-00008-00",
+		"quote": "within ten calendar days (Sundays excepted) after it shall have been presented to him, the same shall become a law without his signature",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After adjournment, a bill becomes law unless the governor files a veto within the ten-day period",
+		"citation": "Tenn. Const. art. III, § 18",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21K7-00008-00",
+		"quote": "If the General Assembly by its adjournment prevents the return of any bill within said ten-day period, the bill shall become a law, unless disapproved by the Governor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General laws take effect 40 days after passage unless the act says the public welfare requires sooner",
+		"citation": "Tenn. Const. art. II, § 20",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21J5-00008-00",
+		"quote": "No law of a general nature shall take effect until forty days after its passage unless the same or the caption thereof shall state that the public welfare requires that it should take effect sooner.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local (private) acts are void unless approved by two-thirds of the local legislative body or by local referendum",
+		"citation": "Tenn. Const. art. XI, § 9",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21MW-00008-00",
+		"quote": "shall be void and of no effect unless the act by its terms either requires the approval by a two-thirds vote of the local legislative body of the municipality or county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regular August election is the first Thursday in August of every even-numbered year",
+		"citation": "Tenn. Code Ann. § 2-1-104",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW8-XSW0-R03K-V30S-00008-00",
+		"quote": "means the election held on the first Thursday in August of every even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regular November election is the Tuesday after the first Monday in November of every even-numbered year",
+		"citation": "Tenn. Code Ann. § 2-1-104",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WW8-XSW0-R03K-V30S-00008-00",
+		"quote": "means the election held on the first Tuesday after the first Monday in November in every even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County offices, constables, judges and the county legislative body are elected at the regular August election",
+		"citation": "Tenn. Code Ann. § 2-3-202",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5J80-R03M-X0C6-00008-00",
+		"quote": "Elections for the following offices shall be held at the regular August election when the election immediately precedes the commencement of a full term",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Judicial and other civil officers are elected on the first Thursday in August before their terms expire, with terms starting 1 September",
+		"citation": "Tenn. Const. art. VII, § 5",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21M6-00008-00",
+		"quote": "on the first Thursday in August next preceding the expiration of their respective terms of service",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County primaries for August offices are held on the first Tuesday in May",
+		"citation": "Tenn. Code Ann. § 2-13-203",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X14-71X0-R03N-205H-00008-00",
+		"quote": "shall be held on the first Tuesday in May before the August election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In presidential years a party may hold its county primary on the presidential preference primary day",
+		"citation": "Tenn. Code Ann. § 2-13-203",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X14-71X0-R03N-205H-00008-00",
+		"quote": "a political party primary for offices to be elected in the regular August election may be held on the same day as the presidential preference primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statewide parties must nominate by primary for offices elected on a partisan basis at the August or November election",
+		"citation": "Tenn. Code Ann. § 2-13-202",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J25S-00008-00",
+		"quote": "statewide political parties shall nominate their candidates in primary elections for all offices for which partisan elections are held at the regular August or regular November election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Since 2025, a county party that nominated by another method in 2022 or 2024 may keep doing so (except for governor, legislature and Congress)",
+		"citation": "Tenn. Code Ann. § 2-13-202",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J25S-00008-00",
+		"quote": "nominated a candidate by a method other than a primary election for elections held in 2022 or 2024",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Parties may nominate for offices outside the required list by party rules or by primary",
+		"citation": "Tenn. Code Ann. § 2-13-203",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X14-71X0-R03N-205H-00008-00",
+		"quote": "by any method authorized under the rules of the party or by primary election under this title",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county party that chooses a primary must tell the county election commission in writing at least 180 days before qualifying",
+		"citation": "Tenn. Code Ann. § 2-13-203",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X14-71X0-R03N-205H-00008-00",
+		"quote": "the county executive committee shall, at least one hundred eighty (180) days before the qualifying deadline, direct, in writing, the county election commission",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only a statewide or recognized minor party nominee may carry a party label for a county office",
+		"citation": "Tenn. Code Ann. § 2-13-201",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J25R-00008-00",
+		"quote": "or for any office to be voted on by the voters of a county, unless the political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters do not register by party; a voter may vote in a primary by declaring allegiance to the party and intent to affiliate",
+		"citation": "Tenn. Code Ann. § 2-7-115",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J21V-00008-00",
+		"quote": "the voter declares allegiance to the political party in whose primary the voter seeks to vote and states that the voter intends to affiliate with that party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voting in a party primary without being a bona fide member or without intent to affiliate is a crime",
+		"citation": "Tenn. Code Ann. § 2-7-115",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J21V-00008-00",
+		"quote": "if a person votes in a political party's primary without being a bona fide member of or affiliated with that political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal elections are nonpartisan",
+		"citation": "Tenn. Code Ann. § 2-13-208",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J25Y-00008-00",
+		"quote": "municipal elections shall be nonpartisan",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city charter may allow partisan elections, in which case parties may nominate",
+		"citation": "Tenn. Code Ann. § 2-13-208",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J25Y-00008-00",
+		"quote": "unless the municipality's charter specifically permits partisan elections",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a metropolitan government, the mayor and metro council elections count as municipal (nonpartisan) elections",
+		"citation": "Tenn. Code Ann. § 2-13-208",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J25Y-00008-00",
+		"quote": "the election of the county mayor and the members of the legislative body of such metropolitan government shall be considered to be municipal elections within the meaning of this section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities under the modified city manager-council charter hold only nonpartisan elections",
+		"citation": "Tenn. Code Ann. § 6-31-104",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-BX70-R03M-J37C-00008-00",
+		"quote": "All elections shall be nonpartisan.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Metropolitan counties still hold county primary elections",
+		"citation": "Tenn. Code Ann. § 2-13-206",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J25W-00008-00",
+		"quote": "All counties in the state which have a metropolitan form of government shall bear the expense of holding county primary elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a county over 825,000 people, the county legislative body may make trial court and county judicial elections nonpartisan by two-thirds vote",
+		"citation": "Tenn. Code Ann. § 2-13-203",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X14-71X0-R03N-205H-00008-00",
+		"quote": "may require that all elections to fill state trial court judgeships and county judicial offices in such county shall be conducted in a nonpartisan manner",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board elections may be partisan or nonpartisan",
+		"citation": "Tenn. Code Ann. § 49-2-201",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X55-GPB0-R03M-N3X6-00008-00",
+		"quote": "Elections for school board members may be conducted on a partisan or nonpartisan basis.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If one county primary board of a party opts for partisan school board elections, candidates on any board in that county may run as party nominees",
+		"citation": "Tenn. Code Ann. § 49-2-201",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X55-GPB0-R03M-N3X6-00008-00",
+		"quote": "If at least one (1) county primary board of a political party elects to conduct school board elections on a partisan basis",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members serve four-year terms",
+		"citation": "Tenn. Code Ann. § 49-2-201",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X55-GPB0-R03M-N3X6-00008-00",
+		"quote": "The members of the board shall be elected for a term of four (4) years, and may succeed themselves.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County school board members are elected from districts of substantially equal population",
+		"citation": "Tenn. Code Ann. § 49-2-201",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X55-GPB0-R03M-N3X6-00008-00",
+		"quote": "Members of county boards of education shall be residents of and elected from districts of substantially equal population",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special school district boards are elected as their private act provides, on staggered terms",
+		"citation": "Tenn. Code Ann. § 49-2-201",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X55-GPB0-R03M-N3X6-00008-00",
+		"quote": "Members of special school district boards of education shall be elected according to special or private act",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal school boards may be elected the same way as the city's governing body",
+		"citation": "Tenn. Code Ann. § 49-2-201",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X55-GPB0-R03M-N3X6-00008-00",
+		"quote": "members of municipal boards of education may be elected in the same manner, either from districts or at large, or a combination of both",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No new special school districts may be created after April 30, 1982",
+		"citation": "Tenn. Code Ann. § 49-2-501",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X55-GPB0-R03M-W3XY-00008-00",
+		"quote": "No additional special school districts may be created after April 30, 1982",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a primary the candidate with the most votes is nominated; there is no runoff",
+		"citation": "Tenn. Code Ann. § 2-8-113",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J237-00008-00",
+		"quote": "The candidates who receive the highest number of votes shall be declared elected or nominated",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "On a tie for a county or city office, the county or municipal legislative body breaks it or calls a runoff",
+		"citation": "Tenn. Code Ann. § 2-8-111",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-6910-R03J-J235-00008-00",
+		"quote": "the legislative body may by resolution call for a run-off election between the tied candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Runoffs exist only where a city charter provides for them",
+		"citation": "Tenn. Code Ann. § 2-3-206",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5J80-R03M-X0C9-00008-00",
+		"quote": "in any municipality in which the charter of such municipality provides for a runoff election following a primary election for municipal office",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ranked choice and instant runoff voting are banned for state and local offices",
+		"citation": "Tenn. Code Ann. § 2-8-117",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6528-N0D0-R03N-84MJ-00008-00",
+		"quote": "A county election commission shall not utilize instant runoff voting or ranked choice voting",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates not nominated by a party are called independent candidates",
+		"citation": "Tenn. Code Ann. § 2-5-203",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5J80-R03M-X0DC-00008-00",
+		"quote": "Candidates who are not to be placed on ballots as nominees of a political party shall be known as",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent candidates qualify by nominating petition signed by registered voters eligible to vote for that office",
+		"citation": "Tenn. Code Ann. § 2-5-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6C2Y-XWR0-R03J-J1WX-00008-00",
+		"quote": "registered voters who are eligible to vote to fill the office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independents for offices on the county primary ballot file when primary candidates file",
+		"citation": "Tenn. Code Ann. § 2-5-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6C2Y-XWR0-R03J-J1WX-00008-00",
+		"quote": "Independent candidates for offices which will appear on the county primary ballot shall qualify by filing their petitions at the same time primary candidates qualify.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City candidates file their petition with the county election commission where the city is located",
+		"citation": "Tenn. Code Ann. § 2-5-104",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5J80-R03M-X0D4-00008-00",
+		"quote": "Each candidate for municipal office shall file the candidate's original nominating petition with the county election commission where the municipality is located.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Tennessee has 95 counties, listed in statute",
+		"citation": "Tenn. Code Ann. § 5-1-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-7890-R03K-S3VS-00008-00",
+		"quote": "The state is divided into the following counties:",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a legislative body, county executive, sheriff, trustee, register, county clerk and assessor of property for four-year terms",
+		"citation": "Tenn. Const. art. VII, § 1",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21M2-00008-00",
+		"quote": "The qualified voters of each county shall elect for terms of four years a legislative body, a county executive, a Sheriff, a Trustee, a Register, a County Clerk and an Assessor of Property.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county legislative body has at most 25 members, no more than three per district, reapportioned every ten years",
+		"citation": "Tenn. Const. art. VII, § 1",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21M2-00008-00",
+		"quote": "The legislative body shall not exceed twenty-five members, and no more than three representatives shall be elected from a district.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A consolidated (metropolitan) county is exempt from having the standard county executive and legislative body",
+		"citation": "Tenn. Const. art. VII, § 1",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21M2-00008-00",
+		"quote": "shall be exempt from having a county executive and a county legislative body as described in this paragraph",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The General Assembly may provide alternate forms of county government, including charters, adopted by referendum",
+		"citation": "Tenn. Const. art. VII, § 1",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21M2-00008-00",
+		"quote": "The General Assembly may provide alternate forms of county government including the right to charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county legislative body has 9 to 25 members",
+		"citation": "Tenn. Code Ann. § 5-5-102",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A65HG-KGN0-R03M-21FX-00008-00",
+		"quote": "shall be composed of not less than nine (9) nor more than twenty-five (25) members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Members are called county commissioners and collectively the board of county commissioners",
+		"citation": "Tenn. Code Ann. § 5-5-102",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A65HG-KGN0-R03M-21FX-00008-00",
+		"quote": "The members of the county legislative body shall be known individually as county commissioners and collectively as the board of county commissioners.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners serve four-year terms, all elected at the same August election every four years",
+		"citation": "Tenn. Code Ann. § 5-5-102",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A65HG-KGN0-R03M-21FX-00008-00",
+		"quote": "Members of the county legislative body shall be elected in the regular August election in 1978 and every four (4) years thereafter.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The old quarterly county court and other county legislative forms were abolished in 1978",
+		"citation": "Tenn. Code Ann. § 5-5-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-7890-R03K-S407-00008-00",
+		"quote": "the quarterly county court, county council and any other forms of county legislative bodies are abolished",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Outside metropolitan counties, the county's chief executive is a county mayor elected for four years",
+		"citation": "Tenn. Code Ann. § 5-6-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-7890-R03K-S418-00008-00",
+		"quote": "the chief executive officer of each county shall be a county mayor elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties that titled the office county executive by private act before 28 March 2007 may keep that title",
+		"citation": "Tenn. Code Ann. § 5-6-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-7890-R03K-S418-00008-00",
+		"quote": "Private acts enacted prior to March 28, 2007, designating the title of the chief executive officer of the county as",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county mayor is elected at the August election every four years on the 1978 cycle",
+		"citation": "Tenn. Code Ann. § 5-6-102",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-7890-R03K-S419-00008-00",
+		"quote": "the county mayor shall be elected in the regular August election in 1978 and every four (4) years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a trustee for four years",
+		"citation": "Tenn. Code Ann. § 8-11-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8K-STR0-R03M-51JS-00008-00",
+		"quote": "A county trustee is elected for each county by the qualified voters thereof, and holds office for four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a register for four years",
+		"citation": "Tenn. Code Ann. § 8-13-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8K-STR0-R03M-51KT-00008-00",
+		"quote": "A register is elected for each county by the qualified voters thereof",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Constables are elected by civil district: two in the district with the county seat, one in each other district, for two years",
+		"citation": "Tenn. Code Ann. § 8-10-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVW-RKR0-R03K-J544-00008-00",
+		"quote": "Two (2) constables shall be elected by the qualified voters in the civil district of each county which includes the county town, and one (1) in every other civil district of the county",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county legislative body may abolish constables or set a two- or four-year term by two-thirds vote at two meetings",
+		"citation": "Tenn. Code Ann. § 8-10-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WVW-RKR0-R03K-J544-00008-00",
+		"quote": "abolish the office of constable for that county or set the term of office for the constable at either two (2) or four (4) years",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county may create a coroner office, filled by the county legislative body, not by voters",
+		"citation": "Tenn. Code Ann. § 8-9-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8K-STR0-R03M-51HP-00008-00",
+		"quote": "If such office is created, the county legislative body shall elect a coroner",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any county may adopt a charter by referendum",
+		"citation": "Tenn. Code Ann. § 5-1-203",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-7890-R03K-S3WS-00008-00",
+		"quote": "Each county in this state may adopt a charter form of government as provided in this part.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county charter sets the size and method of election of the county legislative body",
+		"citation": "Tenn. Code Ann. § 5-1-210",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-7890-R03K-S3X1-00008-00",
+		"quote": "For the size, method of election, qualification for holding office, method of removal, and procedures of the county legislative body",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter cannot reduce the duties of the sheriff, register, county clerk, assessor or trustee",
+		"citation": "Tenn. Code Ann. § 5-1-202",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-7890-R03K-S3WR-00008-00",
+		"quote": "may be interpreted or amended to alter, amend, or reduce the duties, qualifications, or privileges of the charter or constitutional county offices of sheriff, register, county clerk, assessor of property, or trustee",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A metropolitan government is the consolidation of a county and its city or cities",
+		"citation": "Tenn. Code Ann. § 7-1-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-CBV0-R03M-Y3Y5-00008-00",
+		"quote": "means the political entity created by consolidation of all, or substantially all, of the political and corporate functions of a county and a city or cities",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City-county consolidation needs a majority inside the city and a majority in the county outside it",
+		"citation": "Tenn. Const. art. XI, § 9",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21MW-00008-00",
+		"quote": "approved by a majority of those voting within the municipal corporation and by a majority of those voting in the county outside the municipal corporation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A metropolitan government covers the whole county",
+		"citation": "Tenn. Code Ann. § 7-2-108",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WT8-T970-R03J-N1VW-00008-00",
+		"quote": "That the territory embraced in the metropolitan government shall be the total area of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A metropolitan government has a general services district and an urban services district",
+		"citation": "Tenn. Code Ann. § 7-2-108",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4WT8-T970-R03J-N1VW-00008-00",
+		"quote": "a general services district and an urban services district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Smaller cities may be excluded from the metro and keep their own government",
+		"citation": "Tenn. Code Ann. § 7-1-106",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-CBV0-R03M-Y3YB-00008-00",
+		"quote": "Any smaller city that has been excluded from a metropolitan government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the mayor-aldermanic charter the board is the mayor and aldermen",
+		"citation": "Tenn. Code Ann. § 6-1-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-B6J0-R03K-J2GB-00008-00",
+		"quote": "means the mayor and the aldermen",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A small mayor-aldermanic town incorporated after June 1991 starts with a mayor and two aldermen at large",
+		"citation": "Tenn. Code Ann. § 6-3-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-B6J0-R03K-J2HK-00008-00",
+		"quote": "its board shall consist of a mayor and two (2) aldermen elected at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor-aldermanic officers serve four-year terms after the first election",
+		"citation": "Tenn. Code Ann. § 6-3-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-B6J0-R03K-J2HK-00008-00",
+		"quote": "At each election thereafter the mayor and aldermen shall be elected to four-year terms",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An older mayor-aldermanic town may set its aldermen between two and eight by ordinance",
+		"citation": "Tenn. Code Ann. § 6-3-102",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-B6J0-R03K-J2HM-00008-00",
+		"quote": "increase or decrease the number of aldermen to no fewer than two (2) and no more than eight (8)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city manager-commission city of 5,000 or more starts with five commissioners",
+		"citation": "Tenn. Code Ann. § 6-20-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-B6J0-R03K-J2JY-00008-00",
+		"quote": "there shall be elected at the first election five (5) commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners in a city manager-commission city serve four-year terms",
+		"citation": "Tenn. Code Ann. § 6-20-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-B6J0-R03K-J2JY-00008-00",
+		"quote": "The term of all commissioners thereafter elected shall be for four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city manager-commission board fixes its own election dates",
+		"citation": "Tenn. Code Ann. § 6-20-102",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-B6J0-R03K-J2K0-00008-00",
+		"quote": "The board of commissioners shall fix the date of all subsequent elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Incorporating under the city manager-commission charter needs at least 1,500 residents",
+		"citation": "Tenn. Code Ann. § 6-18-103",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-B6J0-R03K-J2J9-00008-00",
+		"quote": "No unincorporated territory shall be incorporated under chapters 18-22 of this title unless such territory contains not less than one thousand five hundred (1,500) persons",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Incorporating under the modified city manager-council charter needs at least 5,000 residents",
+		"citation": "Tenn. Code Ann. § 6-30-103",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-BX70-R03M-J372-00008-00",
+		"quote": "unless such territory contains not less than five thousand (5,000) persons, who shall be actual residents of the territory",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the modified city manager-council charter, one council member is elected from each voting precinct",
+		"citation": "Tenn. Code Ann. § 6-31-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-BX70-R03M-J378-00008-00",
+		"quote": "One (1) member of the council shall be elected from each voting precinct of the incorporated area",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Modified city manager-council cities hold a regular municipal election every two years",
+		"citation": "Tenn. Code Ann. § 6-31-102",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-BX70-R03M-J379-00008-00",
+		"quote": "a regular municipal election shall be held biennially thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Modified city manager-council members serve four-year terms",
+		"citation": "Tenn. Code Ann. § 6-31-107",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-BX70-R03M-J37G-00008-00",
+		"quote": "The terms of council members elected at this and all succeeding elections for the office of council shall be four (4) years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any city, even one chartered by private act, may move its elections to the August or November general election by ordinance",
+		"citation": "Tenn. Code Ann. § 6-54-138",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A50KD-WX00-R03M-N0FW-00008-00",
+		"quote": "Notwithstanding any private act of a municipality to the contrary, the legislative body of a municipality may by ordinance change the date of municipal elections to coincide with the August or November general election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Terms may be extended no more than two years to make the move",
+		"citation": "Tenn. Code Ann. § 6-54-138",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A50KD-WX00-R03M-N0FW-00008-00",
+		"quote": "but no term may be extended for more than two (2) years beyond its regular expiration date",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city that moved its election date may move it back once",
+		"citation": "Tenn. Code Ann. § 6-3-104",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-B6J0-R03K-J2HP-00008-00",
+		"quote": "The board may only make an election date change under this subsection (c) one (1) time.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county election commission runs city elections; a city in several counties is run by the county with its city hall",
+		"citation": "Tenn. Code Ann. § 6-53-101",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-BX70-R03M-J3F6-00008-00",
+		"quote": "shall be called and conducted by the county election commission of the county in which the town seat or city hall is located",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City councils and elected school boards may not use nominate-by-district, elect-at-large systems",
+		"citation": "Tenn. Code Ann. § 6-53-110",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A68FC-9KN0-R03K-W17T-00008-00",
+		"quote": "shall be elected to such office through an election procedure requiring candidates to be nominated from a district and elected at-large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city adopts home rule by ordinance and a majority vote of its voters",
+		"citation": "Tenn. Const. art. XI, § 9",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21MW-00008-00",
+		"quote": "Any municipality may by ordinance submit to its qualified voters in a general or special election the question",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The General Assembly may act on a home rule city only by general law",
+		"citation": "Tenn. Const. art. XI, § 9",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21MW-00008-00",
+		"quote": "the General Assembly shall act with respect to such home rule municipality only by laws which are general in terms and effect",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule charter provision is void if it conflicts with a general act (pay excepted)",
+		"citation": "Tenn. Const. art. XI, § 9",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-5X80-R03K-21MW-00008-00",
+		"quote": "no charter provision except with respect to compensation of municipal personnel shall be effective if inconsistent with any general act of the General Assembly",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule city's council may propose charter amendments by ordinance for voter approval",
+		"citation": "Tenn. Code Ann. § 6-53-105",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=025054JABlOTJjNmIyNi0wYjI0LTRjZGEtYWE5ZC0zNGFhOWNhMjFlNDgKAFBvZENhdGFsb2cDFQ14bX2GfyBTaI9WcPX5&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A4X8J-BX70-R03M-J3FB-00008-00",
+		"quote": "the local governing body of any municipality that has adopted home rule may, by ordinance, propose an amendment to the charter of such municipality by a majority vote of the body",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Tennessee's three metropolitan governments are Nashville-Davidson, Lynchburg-Moore and Hartsville-Trousdale",
+		"citation": "CTAS, Metropolitan Government Charters",
+		"url": "https://www.ctas.tennessee.edu/eli/metropolitan-government-charters",
+		"quote": "only Nashville-Davidson County, Lynchburg-Moore County and Hartsville-Trousdale County have adopted a consolidated form of government",
+		"certainty": "statutory",
+		"verified": "state agency publication"
+	},
+	{
+		"claim": "Shelby and Knox are the only charter counties",
+		"citation": "CTAS, County Charters",
+		"url": "https://www.ctas.tennessee.edu/eli/county-charters",
+		"quote": "To date, only Shelby and Knox counties have chosen county charters",
+		"certainty": "varies by place",
+		"verified": "state agency publication"
+	}
+]

@@ -1,0 +1,570 @@
+[
+	{
+		"claim": "The spring election is held on the first Tuesday in April and elects judicial, educational and municipal officers and nonpartisan county officers",
+		"citation": "Wis. Stat. § 5.02(21)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.02?view=section",
+		"quote": "means the election held on the first Tuesday in April to elect judicial, educational and municipal officers, nonpartisan county officers and sewerage commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The spring primary is a nonpartisan primary on the third Tuesday in February",
+		"citation": "Wis. Stat. § 5.02(22)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.02?view=section",
+		"quote": "means the nonpartisan primary held on the 3rd Tuesday in February to nominate nonpartisan candidates to be voted for at the spring election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is held in November of even-numbered years and elects county officers other than supervisors and county executives",
+		"citation": "Wis. Stat. § 5.02(5)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.02?view=section",
+		"quote": "and county officers other than supervisors and county executives",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is held on the Tuesday after the first Monday in November of even-numbered years",
+		"citation": "Wis. Stat. § 5.02(5)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.02?view=section",
+		"quote": "means the election held in even-numbered years on the Tuesday after the first Monday in November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "District attorneys are elected at the November general election",
+		"citation": "Wis. Stat. § 5.02(5)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.02?view=section",
+		"quote": "state senators, representatives to the assembly, district attorneys",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State law classes the district attorney as a state office, though it is elected countywide",
+		"citation": "Wis. Stat. § 5.02(23)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.02?view=section",
+		"quote": "state senator, state representative to the assembly and district attorney",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The partisan primary is held on the second Tuesday in August",
+		"citation": "Wis. Stat. § 5.02(12s)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.02?view=section",
+		"quote": "means the primary held the 2nd Tuesday in August to nominate candidates to be voted for at the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The partisan primary nominates party candidates for national, state and county offices, each party having its own ballot",
+		"citation": "Wis. Stat. § 5.62(1)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.62?view=section",
+		"quote": "the following ballot shall be provided for the nomination of candidates of recognized political parties for national, state and county offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "At the partisan primary the voter picks a party in secret and cannot vote for candidates of more than one party",
+		"citation": "Wis. Stat. § 5.37(4)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.37?view=section",
+		"quote": "the elector may secretly select the party for which he or she wishes to vote",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Votes cast in more than one party's primary are not counted",
+		"citation": "Wis. Stat. § 5.37(4)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.37?view=section",
+		"quote": "the elector cannot vote for candidates of more than one party, whenever the restriction applies",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Plurality wins: the candidate with the most votes is elected",
+		"citation": "Wis. Stat. § 5.01(3)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.01?view=section",
+		"quote": "The person receiving the greatest number of legal votes for the office shall be declared elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election laws apply to all elections, including local ones",
+		"citation": "Wis. Stat. § 5.01(2)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.01?view=section",
+		"quote": "The general provisions of chs. 5 to 12 apply to all elections.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Spring election ballots for county executive and county supervisor carry no party designation",
+		"citation": "Wis. Stat. § 5.60(1)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.60?view=section",
+		"quote": "No party designation may appear on the official ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City ballots carry no party designation",
+		"citation": "Wis. Stat. § 5.60(3)(am)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.60?view=section",
+		"quote": "No party designation shall appear on the official ballot for city offices.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town and village candidates are nominated by caucus or nomination papers under a single nonpartisan section",
+		"citation": "Wis. Stat. § 8.05",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/8.05?view=section",
+		"quote": "Every candidate for an elective office in a town or village shall be nominated under this section.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Where a caucus is used, it is held in January and nominates the top two candidates for each office",
+		"citation": "Wis. Stat. § 8.05(1)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/8.05?view=section",
+		"quote": "When nomination papers are not used, there shall be a caucus to nominate candidates.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Spring election candidates are nominated by nomination papers, and by a primary if one is held",
+		"citation": "Wis. Stat. § 8.10(1)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/8.10?view=section",
+		"quote": "shall be nominated by nomination papers, or by nomination papers and selection at the primary if a primary is held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may hold a spring primary; there is none when candidates do not exceed twice the seats",
+		"citation": "Wis. Stat. § 8.11(1)(a), (d)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/8.11?view=section",
+		"quote": "When the number of candidates for any city office does not exceed twice the number to be elected to the office, no primary may be held for the office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may require a primary by charter ordinance whenever three or more candidates file",
+		"citation": "Wis. Stat. § 8.11(1)(b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/8.11?view=section",
+		"quote": "Any city may provide by charter ordinance, under s. 66.0101 , that whenever 3 or more candidates file nomination pa",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent nominations may be made for any office voted on at the general election, by nomination papers",
+		"citation": "Wis. Stat. § 8.20(1), (2)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/8.20?view=section",
+		"quote": "Independent nominations may be made for any office to be voted for at any general or partisan special election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A signer of an independent's nomination paper declares they have not signed for another candidate for the same office",
+		"citation": "Wis. Stat. § 8.20(2)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/8.20?view=section",
+		"quote": "I have not signed the nomination paper of any other candidate for the same office at this election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A person who files as a party candidate cannot also file as an independent for the same office at the same election",
+		"citation": "Wis. Stat. § 8.15(7)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/8.15?view=section",
+		"quote": "may not file nomination papers as an independent candidate for the same office at the same election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If a person signs nomination papers for two candidates for the same office, only the earlier signature counts",
+		"citation": "Wis. Stat. § 8.04",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/8.04?view=section",
+		"quote": "the earlier signature is valid and the later signature is invalid",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School boards are elected at the spring election, by plurality, for three-year terms by default",
+		"citation": "Wis. Stat. § 120.06(1)-(3)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/120.06?view=section",
+		"quote": "The regular terms of school board members shall be 3 years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members are elected by plurality",
+		"citation": "Wis. Stat. § 120.06(2)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/120.06?view=section",
+		"quote": "by a plurality vote of the electors of the school district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Wisconsin is divided into the counties named in s. 2.01: 71 numbered entries plus Menominee at (39m), 72 in all",
+		"citation": "Wis. Stat. § 2.01",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/2.01?view=section",
+		"quote": "The state is divided into the counties hereinafter named",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Menominee County consists of one town",
+		"citation": "Wis. Stat. § 60.09(2)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/60.09?view=section",
+		"quote": "The county of Menominee consists of one town, known as the town of Menominee.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a county with only one town, the county board is the town board plus one supervisor from each village",
+		"citation": "Wis. Stat. § 59.10(5)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.10?view=section",
+		"quote": "the board shall consist of the members of the town board and one supervisor from every village",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County supervisors serve two-year terms elected in April of even-numbered years",
+		"citation": "Wis. Stat. § 59.10(3)(d)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.10?view=section",
+		"quote": "Supervisors are county officers, shall be elected for 2-year terms at the election to be held on the first Tuesday in April in even-numbered years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county board may organize itself by ordinance and choose concurrent or staggered two-year terms",
+		"citation": "Wis. Stat. § 59.10(1)(b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.10?view=section",
+		"quote": "A board may determine whether the terms shall be concurrent or staggered.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County board size has a population-based ceiling outside Milwaukee County: at most 47, 39, 31 or 21 supervisors",
+		"citation": "Wis. Stat. § 59.10(3)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.10?view=section",
+		"quote": "Counties with a population of less than 25,000 and containing more than one town shall have no more than 21 supervisors.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In Milwaukee County (population 750,000 or more), supervisors are elected for two-year terms",
+		"citation": "Wis. Stat. § 59.10(2)(b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.10?view=section",
+		"quote": "For an election that is held in 2016 and thereafter, supervisors shall be elected for 2-year terms",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county of 750,000 or more must elect a county executive for a four-year term at the spring election",
+		"citation": "Wis. Stat. § 59.17(1)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.17?view=section",
+		"quote": "In each county with a population of 750,000 or more, a county executive shall be elected for a 4-year term",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Smaller counties may create or abolish an elected county executive",
+		"citation": "Wis. Stat. § 59.17(1)(b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.17?view=section",
+		"quote": "Counties with a population of less than 750,000 may by resolution of the board or by petition and referendum create the office of county executive",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Smaller counties may instead appoint a county administrator",
+		"citation": "Wis. Stat. § 59.18(1)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.18?view=section",
+		"quote": "The county administrator shall be appointed by majority vote of the board.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Register of deeds, county clerk and county treasurer are elected at the general election for four-year terms",
+		"citation": "Wis. Stat. § 59.20(2)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.20?view=section",
+		"quote": "a register of deeds, county clerk, and county treasurer shall be chosen at the general election by the electors of each county for the term of 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The sheriff is elected at the general election for a four-year term",
+		"citation": "Wis. Stat. § 59.20(2)(b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.20?view=section",
+		"quote": "a sheriff shall be chosen at the general election by the electors of each county for the term of 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The clerk of circuit court is elected at the general election for a four-year term",
+		"citation": "Wis. Stat. § 59.20(2)(bm)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.20?view=section",
+		"quote": "a clerk of circuit court shall be chosen at the general election for the term of 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties of 750,000 or more elect a comptroller at the spring election and elect no surveyor or coroner",
+		"citation": "Wis. Stat. § 59.20(2)(a), (am), (b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.20?view=section",
+		"quote": "a comptroller shall be chosen at the spring election by the electors of each county having a population of 750,000 or more",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Coroners are elected only where a county has a coroner, not in counties of 750,000 or more or with a medical examiner",
+		"citation": "Wis. Stat. § 59.20(2)(b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.20?view=section",
+		"quote": "No coroner shall be elected in counties having a population of 750,000 or more or in counties in which a medical examiner system is instituted.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties have administrative home rule, limited by statewide enactments that uniformly affect every county",
+		"citation": "Wis. Stat. § 59.03(1)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.03?view=section",
+		"quote": "Every county may exercise any organizational or administrative power, subject only to the constitution and to any enactment of the legislature which is of statewide concern and which uniformly affects every county.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitution lets the Legislature provide for an elected county executive once every four years",
+		"citation": "Wis. Const. art. IV, § 23a",
+		"url": "https://docs.legis.wisconsin.gov/document/wisconsinconstitution/IV,23a",
+		"quote": "the election at large once in every 4 years of a chief executive officer in any county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sheriffs are elected by county voters for four-year terms under the constitution",
+		"citation": "Wis. Const. art. VI, § 4(1)(b)",
+		"url": "https://docs.legis.wisconsin.gov/document/wisconsinconstitution/VI,4",
+		"quote": "sheriffs shall be chosen by the electors of the respective counties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect a three-member town board in April of odd-numbered years, one designated chairperson",
+		"citation": "Wis. Stat. § 60.30(1)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/60.30?view=section",
+		"quote": "One of the supervisors shall be designated on the ballot as town board chairperson.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect officers at the annual spring election in odd-numbered years",
+		"citation": "Wis. Stat. § 60.30(1)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/60.30?view=section",
+		"quote": "At the annual spring election in odd-numbered years, each town shall elect:",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town clerk and treasurer may be made appointed offices by ordinance approved at referendum",
+		"citation": "Wis. Stat. § 60.30(1e)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/60.30?view=section",
+		"quote": "An ordinance enacted under par. (a) may not take effect until it is approved in a referendum",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town board with village powers may grow to five supervisors; a town of 2,500 or more may have a five-member board if the town meeting directs",
+		"citation": "Wis. Stat. § 60.21(1), (2)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/60.21?view=section",
+		"quote": "Any town board authorized to exercise village powers may, by ordinance, increase the number of supervisors to no more than 5.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Villages elect a president, clerk, treasurer and others at the spring election in odd-numbered years",
+		"citation": "Wis. Stat. § 61.19",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/61.19?view=section",
+		"quote": "At the annual spring election in each village in odd-numbered years, except as otherwise provided herein, there shall be chosen: A president",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Villages in Milwaukee County (750,000 or more) elect those officers in even-numbered years",
+		"citation": "Wis. Stat. § 61.19",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/61.19?view=section",
+		"quote": "In villages in counties having a population of 750,000 or more, the officers named shall be elected for a term of 2 years on the first Tuesday of April of each even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Villages have six trustees with two-year terms, three elected each year (two trustees in villages of 350 or less)",
+		"citation": "Wis. Stat. § 61.20(1), (3)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/61.20?view=section",
+		"quote": "Villages shall have 6 trustees, except as provided otherwise in sub. (3) , whose term of office shall be 2 years, 3 of whom shall be elected each year.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village may change its number of trustees by ordinance",
+		"citation": "Wis. Stat. § 61.20(4)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/61.20?view=section",
+		"quote": "Any village may by ordinance change the number of trustees",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities fall into four classes by population",
+		"citation": "Wis. Stat. § 62.05(1)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/62.05?view=section",
+		"quote": "Cities of 150,000 population and over shall constitute 1st class cities.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city changes class only when census, government changes and a mayoral proclamation all occur, so population alone does not set class",
+		"citation": "Wis. Stat. § 62.05(2)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/62.05?view=section",
+		"quote": "when a proclamation of the mayor, declaring the fact, is published according to law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statutory reference to a class of city does not include a city that is merely eligible by population",
+		"citation": "Wis. Stat. § 990.001(15)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/990.001?view=section",
+		"quote": "such reference does not include any city with a population which makes the city eligible to be in that class",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The mayor and alderpersons are elected by the voters; other city officers may be appointed or elected",
+		"citation": "Wis. Stat. § 62.09(3)(a), (b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/62.09?view=section",
+		"quote": "The mayor and alderpersons shall be elected by the voters.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General charter law provides two alderpersons per aldermanic district, which a city can reduce to one by charter ordinance",
+		"citation": "Wis. Stat. § 62.09(1)(a), (b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/62.09?view=section",
+		"quote": "provide that there shall be one alderperson from each aldermanic district",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City elective officers serve two-year terms unless a charter ordinance sets a different tenure",
+		"citation": "Wis. Stat. § 62.09(5)(b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/62.09?view=section",
+		"quote": "Except as otherwise specially provided the regular term of elective officers shall be 2 years. A different tenure for such officers or any of them may be provided by charter ordinance.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city council can split alderpersons into two classes, after which their terms are four years",
+		"citation": "Wis. Stat. § 62.09(5)(c)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/62.09?view=section",
+		"quote": "thereafter the term of alderpersons shall be 4 years",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities and villages have constitutional home rule over local affairs, subject to statewide-concern laws that apply uniformly",
+		"citation": "Wis. Const. art. XI, § 3(1)",
+		"url": "https://docs.legis.wisconsin.gov/document/wisconsinconstitution/XI,3",
+		"quote": "may determine their local affairs and government, subject only to this constitution and to such enactments of the legislature of statewide concern as with uniformity shall affect every city or every village",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule is exercised by charter ordinance, which needs a two-thirds vote and is subject to referendum",
+		"citation": "Wis. Stat. § 66.0101(2)(a)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/66.0101?view=section",
+		"quote": "requires a two-thirds vote of the members-elect of the legislative body of the city or village, and is subject to referendum",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature convenes on the first Monday of January in odd-numbered years",
+		"citation": "Wis. Stat. § 13.02(1)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/13.02?view=section",
+		"quote": "The legislature shall convene in the capitol on the first Monday of January in each odd-numbered year, at 2 p.m.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature meets annually, and the regular session begins on the first Tuesday after 8 January unless the work schedule provides otherwise",
+		"citation": "Wis. Stat. § 13.02(2)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/13.02?view=section",
+		"quote": "The regular session of the legislature shall commence at 2 p.m. on the first Tuesday after the 8th day of January in each year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills not acted on in the odd-numbered year carry over to the even-numbered year",
+		"citation": "Wis. Stat. § 13.02(4)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/13.02?view=section",
+		"quote": "shall carry over to the regular annual session held in the even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature meets when the law provides, and the governor may call special sessions",
+		"citation": "Wis. Const. art. IV, § 11",
+		"url": "https://docs.legis.wisconsin.gov/document/wisconsinconstitution/IV,11",
+		"quote": "The legislature shall meet at the seat of government at such time as shall be provided by law, unless convened by the governor in special session",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor has 6 days, Sundays excepted, after a bill is presented; final adjournment that prevents return kills the bill",
+		"citation": "Wis. Const. art. V, § 10(3)",
+		"url": "https://docs.legis.wisconsin.gov/document/wisconsinconstitution/V,10",
+		"quote": "Any bill not returned by the governor within 6 days (Sundays excepted) after it shall have been presented to the governor shall be law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An act with no stated effective date takes effect the day after publication",
+		"citation": "Wis. Stat. § 991.11",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/991.11?view=section",
+		"quote": "shall take effect on the day after its date of publication",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In first class cities the school board (board of school directors) has an at-large seat on the city ballot and district seats on a separate ballot",
+		"citation": "Wis. Stat. § 5.60(4)(b)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/5.60?view=section",
+		"quote": "In 1st class cities, the names of the candidates for the seat of the member elected at-large to the board of school directors shall be placed on the official city ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Act 126 (2025) requires circulators of nomination papers to be Wisconsin electors",
+		"citation": "Wis. Stat. § 8.20(3); 2025 Wis. Act 126",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/8.20?view=section",
+		"quote": "who is a qualified elector of this state shall be appended to each nomination paper",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The 750,000-population county rules are the Milwaukee County rules",
+		"citation": "Wis. Stat. § 59.10(2)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/59.10?view=section",
+		"quote": "Milwaukee County. In each county with a population of at least 750,000:",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town is designated by its name as \"Town of ...\"",
+		"citation": "Wis. Stat. § 60.01(1)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/60.01?view=section",
+		"quote": "A town shall be designated in all actions and proceedings by its name",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county not divided into towns is treated as one town, so county land outside cities and villages is town territory",
+		"citation": "Wis. Stat. § 60.09(1)",
+		"url": "https://docs.legis.wisconsin.gov/document/statutes/60.09?view=section",
+		"quote": "If a county is not divided into towns, it shall, for purposes of town government, be considered one town.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

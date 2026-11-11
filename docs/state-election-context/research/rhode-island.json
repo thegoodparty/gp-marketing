@@ -1,0 +1,298 @@
+[
+	{
+		"claim": "The General Assembly session begins the first Tuesday of January each year",
+		"citation": "R.I. Const. art. VI, § 3",
+		"url": "https://rilegislature.gov/riconstitution/Constitution/ConstFull.aspx",
+		"quote": "There shall be a session of the general assembly at Providence commencing on the first Tuesday of January in each year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned within six days (Sundays excepted) becomes law",
+		"citation": "R.I. Const. art. IX, § 14",
+		"url": "https://rilegislature.gov/riconstitution/Constitution/ConstFull.aspx",
+		"quote": "If the measure shall not be returned by the governor within six days (Sundays excepted) after it shall have been presented to the governor the same shall become operative",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After adjournment the governor has ten days to transmit a veto, or the bill becomes law",
+		"citation": "R.I. Const. art. IX, § 14",
+		"url": "https://rilegislature.gov/riconstitution/Constitution/ConstFull.aspx",
+		"quote": "disapproval in writing within ten days after such adjournment",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutes without a stated date take effect 1 July if enacted by then, otherwise on passage",
+		"citation": "R.I. Gen. Laws 43-3-25(a)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE43/43-3/43-3-25.htm",
+		"quote": "shall take effect on the first day of July of the calendar year of its enactment into law by the general assembly",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is the Tuesday after the first Monday in November in even years",
+		"citation": "R.I. Gen. Laws 17-1-2(2)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-1/17-1-2.htm",
+		"quote": "means an election held on the first Tuesday next after the first Monday in November in even numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every city and town votes in November of even years for state and federal offices and any other officers chosen that day",
+		"citation": "R.I. Gen. Laws 17-18-5",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-18/17-18-5.htm",
+		"quote": "and for any other officers that are to be chosen on that day",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City and town elective meetings are held biennially in even years on the November date",
+		"citation": "R.I. Gen. Laws 17-18-5",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-18/17-18-5.htm",
+		"quote": "A meeting of the electors of every city, town, senatorial district, representative district, and of every voting district shall be held biennially in the even years on the Tuesday next after the first Monday in November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town elective meetings are held at the times appointed by law",
+		"citation": "R.I. Gen. Laws 17-18-1",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-18/17-18-1.htm",
+		"quote": "shall be held at the times appointed by law",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A town meeting is held annually or biennially as required by law to elect town officers",
+		"citation": "R.I. Gen. Laws 45-3-1",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE45/45-3/45-3-1.htm",
+		"quote": "A town meeting shall be held annually or biennially as required by law in each town, for the election of those town officers as are required by law",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The party primary is held on the eighth Tuesday before the biennial state election",
+		"citation": "R.I. Gen. Laws 17-15-1",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-15/17-15-1.htm",
+		"quote": "on the eighth Tuesday preceding biennial state elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fire, water and sewer district officer meetings are not elections under the election title",
+		"citation": "R.I. Gen. Laws 17-1-2(1)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-1/17-1-2.htm",
+		"quote": "except that it shall not include a financial town meeting or a meeting to elect officers of a fire, water, or sewer district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An election includes town and city offices and party primaries",
+		"citation": "R.I. Gen. Laws 17-1-2(1)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-1/17-1-2.htm",
+		"quote": "includes without limitation any state, town, or city office or question, and any political party primary election for the nomination of any candidate for public office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unaffiliated voters who vote in a party primary remain unaffiliated",
+		"citation": "R.I. Gen. Laws 17-9.1-23(c)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-9.1/17-9.1-23.htm",
+		"quote": "Whenever an unaffiliated voter participates in a party primary, their party affiliation shall remain unaffiliated",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter affiliated with a party may not vote in another party primary until changing affiliation",
+		"citation": "R.I. Gen. Laws 17-15-24",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-15/17-15-24.htm",
+		"quote": "shall be debarred from voting in the primary as a member of the opposite political party until that person has changed his or her party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unaffiliated voters are not barred from a primary because of an earlier primary",
+		"citation": "R.I. Gen. Laws 17-15-24",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-15/17-15-24.htm",
+		"quote": "Any person who is not affiliated with any political party shall not be debarred from voting in a party primary due to their participation in a previous party primary while not affiliated with a party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party member may change affiliation up to the thirtieth day before a primary",
+		"citation": "R.I. Gen. Laws 17-9.1-24(a)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-9.1/17-9.1-24.htm",
+		"quote": "may change the designation on or before the thirtieth day preceding any primary election for which the person is eligible",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Signing nomination papers does not affiliate a voter with a party",
+		"citation": "R.I. Gen. Laws 17-9.1-23(e)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-9.1/17-9.1-23.htm",
+		"quote": "No person shall be affiliated with any political party solely because of that person",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party and independent candidates file declarations of candidacy in late June of even years, including for local office",
+		"citation": "R.I. Gen. Laws 17-14-1",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-14/17-14-1.htm",
+		"quote": "During the last consecutive Monday, Tuesday, and Wednesday in June in the even years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local candidates file with the local board",
+		"citation": "R.I. Gen. Laws 17-14-1",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-14/17-14-1.htm",
+		"quote": "or with the appropriate local board for local officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party candidate must not have been in another party within 90 days of filing",
+		"citation": "R.I. Gen. Laws 17-14-1.1",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-14/17-14-1.1.htm",
+		"quote": "that person shall not have been a member of a political party other than the declared political party within ninety (90) days of the filing of their declaration of candidacy",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent candidate is one with no party affiliation",
+		"citation": "R.I. Gen. Laws 17-1-2(4)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-1/17-1-2.htm",
+		"quote": "means a candidate who has no affiliation with any political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent candidates must be qualified to vote in the district",
+		"citation": "R.I. Gen. Laws 17-14-1.2(a)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-14/17-14-1.2.htm",
+		"quote": "No person shall be eligible to file a declaration of candidacy as an independent candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may sign any number of nomination papers",
+		"citation": "R.I. Gen. Laws 17-14-9",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-14/17-14-9.htm",
+		"quote": "A voter may sign any number of nomination papers for any office the voter may lawfully vote for at the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party and independent nomination papers are checked by the local board",
+		"citation": "R.I. Gen. Laws 17-14-11(a)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-14/17-14-11.htm",
+		"quote": "Each nomination paper for party and independent candidates shall be submitted",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State law refers to nonpartisan council and school elections in Newport, Pawtucket and Woonsocket and partisan ones in North Providence",
+		"citation": "R.I. Gen. Laws 17-19-7.1(a)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-19/17-19-7.1.htm",
+		"quote": "candidates for nonpartisan election in the cities of Newport, Pawtucket, and Woonsocket, and candidates for partisan election in the town of North Providence",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council and school committee elections may be partisan or nonpartisan",
+		"citation": "R.I. Gen. Laws 17-19-7.1(a)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-19/17-19-7.1.htm",
+		"quote": "whether the election is a partisan, nonpartisan, primary, general, or special election",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City mayors are elected by plurality",
+		"citation": "R.I. Gen. Laws 45-4-10",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE45/45-4/45-4-10.htm",
+		"quote": "Mayors of cities shall be elected by a plurality of the electors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every city and town may adopt a charter and local laws not inconsistent with the constitution and state law",
+		"citation": "R.I. Const. art. XIII, § 2",
+		"url": "https://rilegislature.gov/riconstitution/Constitution/ConstFull.aspx",
+		"quote": "Every city and town shall have the power at any time to adopt a charter, amend its charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule is the right of self government in local matters",
+		"citation": "R.I. Const. art. XIII, § 1",
+		"url": "https://rilegislature.gov/riconstitution/Constitution/ConstFull.aspx",
+		"quote": "the right of self government in all local matters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every city and town has an elected legislative body of one or two branches",
+		"citation": "R.I. Const. art. XIII, § 3",
+		"url": "https://rilegislature.gov/riconstitution/Constitution/ConstFull.aspx",
+		"quote": "every city and town shall have a legislative body composed of one or two branches elected by vote of its qualified electors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The General Assembly may legislate for cities and towns by general laws that do not change their form of government",
+		"citation": "R.I. Const. art. XIII, § 4",
+		"url": "https://rilegislature.gov/riconstitution/Constitution/ConstFull.aspx",
+		"quote": "by general laws which shall apply alike to all cities and towns, but which shall not affect the form of government of any city or town",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Towns elect a moderator, town clerk, a town council of 3 to 7 members, treasurer, sergeant and other officers as required",
+		"citation": "R.I. Gen. Laws 45-4-1(a)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE45/45-4/45-4-1.htm",
+		"quote": "a town council to consist of not less than three (3) nor more than seven (7) members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Town officers include a moderator and town clerk",
+		"citation": "R.I. Gen. Laws 45-4-1(a)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE45/45-4/45-4-1.htm",
+		"quote": "a moderator to preside in all the meetings of the town, and a town clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School committees have three members or the number now set, in staggered classes",
+		"citation": "R.I. Gen. Laws 16-2-5",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE16/16-2/16-2-5.htm",
+		"quote": "The school committee of each city or town shall consist of three (3) residents of the city or town, or of any number as at the present time constitute the committee",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In biennial-election places the school committee is split into two classes",
+		"citation": "R.I. Gen. Laws 16-2-5",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE16/16-2/16-2-5.htm",
+		"quote": "In cities or towns having biennial elections the committee shall be divided as equally as may be into two (2) classes",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School committees manage the public schools of each city and town",
+		"citation": "R.I. Gen. Laws 16-2-9(a)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE16/16-2/16-2-9.htm",
+		"quote": "the entire care, control, and management of all public school interests of the several cities and towns shall be vested in the school committees",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The unaffiliated-voter primary rule took effect in 2024",
+		"citation": "R.I. Gen. Laws 17-15-24 (history)",
+		"url": "https://webserver.rilegislature.gov/Statutes/TITLE17/17-15/17-15-24.htm",
+		"quote": "P.L. 2024, ch. 322",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

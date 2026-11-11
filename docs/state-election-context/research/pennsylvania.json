@@ -1,0 +1,787 @@
+[
+	{
+		"claim": "The General Assembly is a continuing body and convenes at noon on the first Tuesday of January each year",
+		"citation": "Pa. Const. art. II, § 4",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.002.004.000..HTM",
+		"quote": "The General Assembly shall be a continuing body during the term for which its Representatives are elected. It shall meet at 12 o'clock noon on the first Tuesday of January each year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A statute without its own effective date takes effect 60 days after final enactment",
+		"citation": "1 Pa.C.S. § 1701(a)(5)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=01&div=0&chpt=17&iFrame=true",
+		"quote": "Final enactment on or after June 6, 1969.-- 60 days after final enactment.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor has ten days to act on a bill, or 30 days after an adjournment that prevents its return",
+		"citation": "Pa. Const. art. IV, § 15",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.004.015.000..HTM",
+		"quote": "If any bill shall not be returned by the Governor within ten days after it shall have been presented to him, the same shall be a law in like manner as if he had signed it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County, city, ward, borough and township officers are elected at the municipal election in odd-numbered years; the legislature may move the day only within an odd-numbered year",
+		"citation": "Pa. Const. art. VII, § 3",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.007.003.000..HTM",
+		"quote": "and for county, city, ward, borough, and township officers, for regular terms of service, shall be held on the municipal election day; namely, the Tuesday next following the first Monday of November in each odd-numbered year, but the General Assembly may by law fix a different day, two-thirds of all the members of each House consenting thereto: Provided, That such elections shall be held in an odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is held in even-numbered years",
+		"citation": "Pa. Const. art. VII, § 2",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.007.002.000..HTM",
+		"quote": "The general election shall be held biennially on the Tuesday next following the first Monday of November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County, city, borough, township, ward, school district and election officers are all elected at the municipal election",
+		"citation": "25 P.S. § 2752 (Election Code § 602)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "and all county, city, borough, township, ward, school district, poor district and election officers shall be elected at the municipal election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The municipal primary is the third Tuesday of May in odd-numbered years, and every office filled at the municipal election is nominated there",
+		"citation": "25 P.S. § 2754 (Election Code § 604)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "There shall be a Municipal primary preceding each municipal election which shall be held on the third Tuesday of May in all odd-numbered years. Candidates for all offices to be filled at the ensuing municipal election shall be nominated at the Municipal primary.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only voters registered and enrolled in a party may vote in that party's primary",
+		"citation": "25 P.S. § 2832 (Election Code § 802)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "No person who is not registered and enrolled as a member of a political party shall be entitled to vote at any primary of such party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party candidates for all elective offices in the state are nominated at primaries",
+		"citation": "25 P.S. § 2862 (Election Code § 902)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "for all other elective public offices within this State, except that of presidential electors, shall be nominated",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary nominees are chosen by plurality",
+		"citation": "25 P.S. § 2882 (Election Code § 922)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "who receive a plurality of votes of their party electors in the State, or in the political district, as the case may be, at the primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party nomination petition may be signed only by enrolled members of that party",
+		"citation": "25 P.S. § 2868 (Election Code § 908)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "and shall declare therein that he is a registered and enrolled member of the party designated in such petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The November ballot prints the name of the nominating party or political body beside every candidate",
+		"citation": "25 P.S. § 2963(b) (Election Code § 1003(b))",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "Opposite or under the name of each candidate shall be printed the name or appellation of the political party or political body nominating him",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates for school director, common pleas and Philadelphia Municipal Court judge and magisterial district judge may seek more than one party's nomination; everyone else swears they are not doing so",
+		"citation": "25 P.S. § 2870(f) (Election Code § 910)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "Philadelphia Municipal Court or for the office of school director in a district where that office is elective or for the office of justice of the peace that he is not a candidate for nomination for the same office of any party other than the one designated in such petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County election boards reject petitions filing the same person on more than one party's ballot, except for school director and the listed judicial offices",
+		"citation": "25 P.S. § 2936(d) (Election Code § 976)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "if nomination petitions have been filed for printing the name of the same person for the same office, except the office of judge of a court of common pleas, the Philadelphia Municipal Court or the office of school director in districts where that office is elective",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "References to justice of the peace now mean magisterial district judge",
+		"citation": "Election Code, compiler's note to Act 207 of 2004",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "to a \"district justice\" or \"justice of the peace\" shall be deemed to be references to a magisterial district judge",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The candidates with the most votes are elected, up to the number of seats",
+		"citation": "25 P.S. § 3167 (Election Code § 1417)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "the persons receiving the highest number of votes for any office at any election shall be declared elected to such office, up to the number required by law to be elected thereto",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A tie is settled by casting lots",
+		"citation": "25 P.S. § 3168 (Election Code § 1418)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "In the case of a tie vote not otherwise provided for by law, the candidates receiving the tie vote shall cast lots",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule charters cannot change the registration of electors or the conduct of elections",
+		"citation": "53 Pa.C.S. § 2962(a)(5)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=53&div=0&chpt=29&iFrame=true",
+		"quote": "(5) The registration of electors and the conduct of elections.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Home Rule Charter and Optional Plans Law covers every municipality except Philadelphia",
+		"citation": "53 Pa.C.S. § 2901(b)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=53&div=0&chpt=29&iFrame=true",
+		"quote": "This subpart applies to all municipalities except cities of the first class and counties of the first class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Philadelphia's charter cannot override acts of the General Assembly that apply in every part of the Commonwealth, or class laws on personal registration of electors",
+		"citation": "53 P.S. § 13133 (First Class City Home Rule Act § 18)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1949&ActNum=0155.&SessInd=0&iFrame=true",
+		"quote": "no city shall exercise powers contrary to, or in limitation or enlargement of, powers granted by acts of the General Assembly which are",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Philadelphia's charter limits include personal registration of electors",
+		"citation": "53 P.S. § 13133(a)(7)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1949&ActNum=0155.&SessInd=0&iFrame=true",
+		"quote": "(7) Providing for the personal registration of electors;",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates may also be nominated by nomination papers signed by qualified electors of the district",
+		"citation": "25 P.S. § 2911(a) (Election Code § 951(a))",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "nomination of candidates for any public office may also be made by nomination papers signed by qualified electors of the State, or of the electoral district for which the nomination is made",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may sign only one nomination paper per office, or as many as there are seats",
+		"citation": "25 P.S. § 2911(c)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "No elector shall sign more than one nomination paper for each office to be filled, unless there are two or more persons to be elected to the same office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A political body candidate must not have been a registered party member from 30 days before the primary through the November election",
+		"citation": "25 P.S. § 2911.1 (Election Code § 951.1)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "Any person who is a registered and enrolled member of a party during any period of time beginning with thirty (30) days before the primary and extending through the general or municipal election of that same year shall be ineligible to be the candidate of a political body",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A political body candidate swears they did not file primary petitions for any office",
+		"citation": "25 P.S. § 2911(e)(5)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "that his name has not been presented as a candidate by nomination petitions for any public office to be voted for at the ensuing primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each election district elects a judge of election and inspectors at the municipal election for four-year terms",
+		"citation": "25 P.S. § 2671 (Election Code § 401)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "The judge and inspectors of election of each election district shall be elected by the electors thereof at the municipal election, and shall hold office for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each voter votes for one inspector, and the runner-up becomes minority inspector",
+		"citation": "25 P.S. § 2671",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1937&ActNum=0320.&SessInd=0&iFrame=true",
+		"quote": "the person receiving the second highest number of votes for inspector shall be declared elected minority inspector of election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Constables are elected in each ward of second and third class cities",
+		"citation": "44 Pa.C.S. § 7112",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=44&div=0&chpt=71&iFrame=true",
+		"quote": "The qualified voters of each ward in a city of the second or third class shall elect a properly qualified person for constable in each ward.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every borough elects a constable",
+		"citation": "44 Pa.C.S. § 7113(a)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=44&div=0&chpt=71&iFrame=true",
+		"quote": "vote for and elect a properly qualified person for constable.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every township elects a constable",
+		"citation": "44 Pa.C.S. § 7114(a)(1)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=44&div=0&chpt=71&iFrame=true",
+		"quote": "The qualified voters of every township shall vote for and elect a properly qualified person for constable.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Lackawanna County's home rule charter keeps the traditional limited voting for county commissioners",
+		"citation": "DCED, Home Rule in Pennsylvania (April 2023)",
+		"url": "https://dced.pa.gov/download/home-rule-pa-pdf/?ind=1710857603358&filename=HomeRule_2023v3.pdf&wpdmdl=57752&refresh=6aeb62ad518211793811117",
+		"quote": "Three charters guarantee minority party representation by limited voting. Lackawanna County continues the",
+		"certainty": "varies by place",
+		"verified": "state agency publication",
+		"manual": true
+	},
+	{
+		"claim": "School directors in second, third and fourth class districts form a nine-member board elected at large at the municipal election, on four-year terms",
+		"citation": "24 P.S. § 3-303(a) (Public School Code § 303)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1949&ActNum=0014.&SessInd=0&iFrame=true",
+		"quote": "there shall be a board of nine (9) school directors, who, except as otherwise provided in this act, shall be elected at large",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School director terms became four years from 1979",
+		"citation": "24 P.S. § 3-303(a)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1949&ActNum=0014.&SessInd=0&iFrame=true",
+		"quote": "the terms of school directors so elected shall be four (4) years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board may adopt a plan to elect directors by region",
+		"citation": "24 P.S. § 3-303(b)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1949&ActNum=0014.&SessInd=0&iFrame=true",
+		"quote": "may develop a plan to elect school directors from regions or to elect some school directors at large and some from regions",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cumulative voting for school director is abolished; one vote per seat",
+		"citation": "24 P.S. § 3-301",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1949&ActNum=0014.&SessInd=0&iFrame=true",
+		"quote": "Any system providing for cumulative voting for the office of school director is hereby abolished.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal authority boards are appointed by the governing body that created them",
+		"citation": "53 Pa.C.S. § 5610(a)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=53&div=0&chpt=56&iFrame=true",
+		"quote": "The governing body of the municipality shall appoint the members of the board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Philadelphia's Board of Education is appointed by the mayor with council consent",
+		"citation": "Philadelphia Home Rule Charter § 12-201",
+		"url": "https://codelibrary.amlegal.com/codes/philadelphia/latest/philadelphia_pa/0-0-0-266160",
+		"quote": "There shall be nine members of the Board of Education who shall be appointed by the Mayor",
+		"certainty": "varies by place",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Pennsylvania has 67 counties",
+		"citation": "16 Pa.C.S. § 301",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=16&div=0&chpt=3&iFrame=true",
+		"quote": "The Commonwealth shall be divided into 67 named counties, as now established by law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties are divided into nine classes by population",
+		"citation": "16 Pa.C.S. § 310",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=16&div=0&chpt=3&iFrame=true",
+		"quote": "shall be divided into nine classes as follows:",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "First class counties have at least 1,500,000 people",
+		"citation": "16 Pa.C.S. § 310(1)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=16&div=0&chpt=3&iFrame=true",
+		"quote": "(1) First class counties, having a population of at least 1,500,000 inhabitants.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The County Code title does not apply to first and second class counties except listed sections",
+		"citation": "16 Pa.C.S. § 102",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=16&div=0&chpt=1&iFrame=true",
+		"quote": "this title does not apply to counties of the first or second classes",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The current County Code is 16 Pa.C.S., replacing the 1955 act",
+		"citation": "16 Pa.C.S. § 102.1",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=16&div=0&chpt=1&iFrame=true",
+		"quote": "\"County Code.\" The former act of August 9, 1955 (P.L.323, No.130), known as The County Code.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The 1955 County Code act is repealed",
+		"citation": "Act 130 of 1955, law information page",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information?SessYr=1955&SessInd=0&ActNum=130",
+		"quote": "This act has been repealed.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers are elected at municipal elections for four-year terms; public defenders are appointed",
+		"citation": "Pa. Const. art. IX, § 4",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.009.004.000..HTM",
+		"quote": "County officers, except for public defenders who shall be appointed as shall be provided by law, shall be elected at the municipal elections and shall hold their offices for the term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Three commissioners per county; each voter votes for no more than two; the top three win",
+		"citation": "Pa. Const. art. IX, § 4",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.009.004.000..HTM",
+		"quote": "Three county commissioners shall be elected in each county. In the election of these officers each qualified elector shall vote for no more than two persons, and the three persons receiving the highest number of votes shall be elected.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county government section does not apply to a county with a home rule charter or optional plan",
+		"citation": "Pa. Const. art. IX, § 4",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.009.004.000..HTM",
+		"quote": "Provisions for county government in this section shall apply to every county except a county which has adopted a home rule charter or an optional form of government.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statutory rule: each voter votes for no more than two commissioners and the top three are elected",
+		"citation": "16 Pa.C.S. § 12501(a)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=16&div=0&chpt=125&iFrame=true",
+		"quote": "In the election of county commissioners, each qualified elector shall vote for no more than two individuals. The three individuals having the highest number of votes shall be elected.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A commissioner vacancy is filled by the court with someone from the departing commissioner's party",
+		"citation": "16 Pa.C.S. § 12501(b)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=16&div=0&chpt=125&iFrame=true",
+		"quote": "who was a member of the same political party as the vacating county commissioner at the time the vacating county commissioner was elected",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County elected officers include commissioners, auditors or a controller, treasurer, coroner, recorder of deeds, prothonotary, clerk of courts, register of wills, sheriff, district attorney and, where kept, jury commissioners",
+		"citation": "16 Pa.C.S. § 12301(a)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=16&div=0&chpt=123&iFrame=true",
+		"quote": "(1) Three county commissioners. (2) Three auditors or, in counties of the second class A and in each county in which the office of auditor has been or shall be abolished, one controller. (3) One treasurer. (4) One coroner.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Jury commissioners are elected except where the office was abolished",
+		"citation": "16 Pa.C.S. § 12301(a)(12)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=16&div=0&chpt=123&iFrame=true",
+		"quote": "(12) Two jury commissioners, except in counties in which the office of jury commissioner has been abolished.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every municipality, including counties, may adopt a home rule charter by referendum",
+		"citation": "Pa. Const. art. IX, § 2",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.009.002.000..HTM",
+		"quote": "Municipalities shall have the right and power to frame and adopt home rule charters. Adoption, amendment or repeal of a home rule charter shall be by referendum.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipality includes a county for Article IX",
+		"citation": "Pa. Const. art. IX, § 14",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.009.014.000..HTM",
+		"quote": "\"Municipality\" means a county, city, borough, incorporated town, township or any similar general purpose unit of government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Allegheny County Council has fifteen members on four-year terms, thirteen by district and two county-wide, under its home rule charter",
+		"citation": "Allegheny County, County Council page",
+		"url": "https://www.alleghenycounty.us/Government/Row-Offices/County-Council",
+		"quote": "consisting of fifteen elected officials serving four-year terms. Thirteen members are elected by district and two elected county-wide, per the Allegheny County Home Rule Charter",
+		"certainty": "varies by place",
+		"verified": "local government publication",
+		"manual": true
+	},
+	{
+		"claim": "Allegheny County voters approved a home rule charter with an elected county executive and county council in 1998",
+		"citation": "DCED, Home Rule in Pennsylvania (April 2023), p. 4",
+		"url": "https://dced.pa.gov/download/home-rule-pa-pdf/?ind=1710857603358&filename=HomeRule_2023v3.pdf&wpdmdl=57752&refresh=6aeb62ad518211793811117",
+		"quote": "The proposed home rule charter drafted by the committee was approved by the voters of Allegheny County in May 1998.",
+		"certainty": "varies by place",
+		"verified": "state agency publication",
+		"manual": true
+	},
+	{
+		"claim": "All county offices in Philadelphia were abolished and the city performs all county functions",
+		"citation": "Pa. Const. art. IX, § 13(a)",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.009.013.000..HTM",
+		"quote": "In Philadelphia all county offices are hereby abolished, and the city shall henceforth perform all functions of county government within its area",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Philadelphia City Council has seventeen members, ten by district and seven at large, on four-year terms",
+		"citation": "Philadelphia Home Rule Charter § 2-100",
+		"url": "https://codelibrary.amlegal.com/codes/philadelphia/latest/philadelphia_pa/0-0-0-263582",
+		"quote": "The Council shall consist of seventeen members, of whom ten shall be elected from districts and seven from the City at large.",
+		"certainty": "varies by place",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Each Philadelphia voter votes for five of the seven at-large seats and no party may nominate more than five",
+		"citation": "Philadelphia Home Rule Charter § 2-101",
+		"url": "https://codelibrary.amlegal.com/codes/philadelphia/latest/philadelphia_pa/0-0-0-263582",
+		"quote": "Each elector shall have the right to vote for one district councilmember and for five councilmembers-at-large. To this end not more than five candidates for councilmembers-at-large shall be nominated pursuant to law by any party or other political body.",
+		"certainty": "varies by place",
+		"verified": "read in city charter",
+		"manual": true
+	},
+	{
+		"claim": "Pennsylvania has 2,555 municipalities: 1 first class city, 1 second class, 1 second class A, 53 third class cities, 953 boroughs, 93 first class townships, 1,452 second class townships and 1 town; 500 school districts; 110 home rule jurisdictions",
+		"citation": "DCED, Local Government in Pennsylvania fact sheet (17 March 2026)",
+		"url": "https://dced.pa.gov/download/local-government-fact-sheet/?filename=LocalGovernment_FactSheet_2025.pdf&ind=1743532008339&refresh=67f8597cdb23b1744329084&wpdmdl=69447",
+		"quote": "2nd Class Townships . . . . . . . . . . . . .1,452",
+		"certainty": "statutory",
+		"verified": "state agency publication",
+		"manual": true
+	},
+	{
+		"claim": "Cities are divided into four classes",
+		"citation": "11 Pa.C.S. § 201",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=11&div=0&chpt=2&iFrame=true",
+		"quote": "shall be divided into four classes as follows:",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second class cities have 250,000 to under 1,000,000 people",
+		"citation": "11 Pa.C.S. § 201(2)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=11&div=0&chpt=2&iFrame=true",
+		"quote": "(2) Cities of the second class, having a population of at least 250,000 inhabitants but less than 1,000,000 inhabitants.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second class A is a city of 80,000 to 250,000 that designates itself so in a home rule charter",
+		"citation": "11 Pa.C.S. § 201(3)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=11&div=0&chpt=2&iFrame=true",
+		"quote": "on the date that the city adopts or amends a home rule charter designating it as a city of the second class A",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City class follows the decennial census, and a city does not drop a class on one census alone",
+		"citation": "11 Pa.C.S. § 202(c)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=11&div=0&chpt=2&iFrame=true",
+		"quote": "the change should not be occasioned by a temporary fluctuation in population",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A third class city elects a mayor, four council members, a controller and a treasurer, each for four years",
+		"citation": "11 Pa.C.S. § 10701(a)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=11&div=0&chpt=107&iFrame=true",
+		"quote": "the elected officers of a city shall be a mayor, four council members, a controller and a treasurer.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may add two council members by referendum",
+		"citation": "11 Pa.C.S. § 10701(c)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=11&div=0&chpt=107&iFrame=true",
+		"quote": "Two additional council members may be elected to form a seven-member council comprised of six council members and the mayor",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Third class city council includes the mayor",
+		"citation": "11 Pa.C.S. § 11002",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=11&div=0&chpt=110&iFrame=true",
+		"quote": "The legislative power of every city shall be vested in a council composed of the mayor and council members.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Third class city nominations and elections follow the Election Code",
+		"citation": "11 Pa.C.S. § 10703",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=11&div=0&chpt=107&iFrame=true",
+		"quote": "Each matter relating to a nomination of a candidate and election of a city officer shall be governed by the Pennsylvania Election Code.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Third class cities may keep an optional charter or adopt a home rule charter or optional plan",
+		"citation": "11 Pa.C.S. § 10107(b)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=11&div=0&chpt=101&iFrame=true",
+		"quote": "pursuant to an optional plan or a home rule charter which has been or may be adopted in accordance with the Home Rule Charter and Optional Plans Law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Borough officers are elected at municipal elections",
+		"citation": "8 Pa.C.S. § 802",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=8&iFrame=true",
+		"quote": "Elections for borough officers shall be at the time and place designated by law for the holding of municipal elections.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A borough elects a mayor every four years",
+		"citation": "8 Pa.C.S. § 806(a)(1)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=8&iFrame=true",
+		"quote": "(1) A mayor, who shall be elected at municipal elections every four years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A borough elects a tax collector every four years",
+		"citation": "8 Pa.C.S. § 806(a)(2)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=8&iFrame=true",
+		"quote": "(2) A tax collector, who shall be elected at municipal elections every four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Boroughs elect three auditors (six-year terms) or a controller, unless they appoint an auditor",
+		"citation": "8 Pa.C.S. § 806(a)(3)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=8&iFrame=true",
+		"quote": "In boroughs providing for three elected auditors, one auditor shall be elected at each municipal election for a term of six years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A borough without wards has seven council members",
+		"citation": "8 Pa.C.S. § 806(a)(4)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=8&iFrame=true",
+		"quote": "in boroughs not divided into wards, seven members of council.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A borough with wards elects one or two council members per ward",
+		"citation": "8 Pa.C.S. § 806(a)(5)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=8&iFrame=true",
+		"quote": "in boroughs divided into wards, at least one and not more than two members of council in each ward.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Borough council members serve four-year terms, elected in halves at each municipal election",
+		"citation": "8 Pa.C.S. § 811",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=8&iFrame=true",
+		"quote": "Members elected under this section shall serve for a term of four years from the first Monday of January succeeding the municipal election.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters in a ward-less borough may change council to three, five or seven by petition and referendum",
+		"citation": "8 Pa.C.S. § 818(a)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=8&iFrame=true",
+		"quote": "the total number of members of council for the borough to five or three or increase the total number of members of council for the borough to five or seven",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The borough mayor presides only at council's organization and votes only to organize it or break ties",
+		"citation": "8 Pa.C.S. § 1003(b)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=10&iFrame=true",
+		"quote": "The mayor shall not vote at the meeting unless the mayor's vote shall, for any reason, be required to effect the organization of council",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The borough mayor breaks tie votes in council",
+		"citation": "8 Pa.C.S. § 1003",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=10&iFrame=true",
+		"quote": "duty of the mayor to cast the tie-breaking vote.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The borough mayor controls the police force",
+		"citation": "8 Pa.C.S. § 1123.1(a)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=11&iFrame=true",
+		"quote": "The mayor shall have full charge and control of the chief of police and the police force.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An incorporated town runs under its own local or special act and may adopt parts or all of the Borough Code",
+		"citation": "8 Pa.C.S. § 107.1",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=08&div=0&chpt=1&iFrame=true",
+		"quote": "An incorporated town incorporated or acting under a local or special act may, by ordinance, elect to be governed by the provisions of this part",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Townships are first or second class; any township not first class or home rule is second class",
+		"citation": "73 Pa.C.S. § 105",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=73&div=0&chpt=1&iFrame=true",
+		"quote": "A township that is not a township of the first class or a home rule municipality shall be classified as a township of the second class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first class township needs at least 300 people per square mile",
+		"citation": "73 Pa.C.S. § 105(b)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=73&div=0&chpt=1&iFrame=true",
+		"quote": "A township of the first class shall be a township having a population of at least 300 inhabitants to the square mile",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second class township becomes first class only by referendum",
+		"citation": "73 Pa.C.S. § 106(a)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=73&div=0&chpt=1&iFrame=true",
+		"quote": "submitting the question of whether the township of the second class shall be established as a township of the first class to the electors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The First Class Township Code is 73 Pa.C.S., enacted February 2026",
+		"citation": "73 Pa.C.S., enactment note",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=73&div=0&chpt=1&iFrame=true",
+		"quote": "Part I was added February 11, 2026 (P.L.19, No.7), effective in 60 days.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The 1931 First Class Township Code act is repealed",
+		"citation": "Act 331 of 1931, law information page",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information?SessYr=1931&SessInd=0&ActNum=331",
+		"quote": "This act has been repealed.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first class township elects at least five commissioners on four-year terms, by ward where it has wards",
+		"citation": "73 Pa.C.S. § 1703(a)(1)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=73&div=0&chpt=17&iFrame=true",
+		"quote": "(1) At least five township commissioners, and the following shall apply:",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first class township without wards elects five commissioners at large, two or three at each municipal election",
+		"citation": "73 Pa.C.S. § 1703(a)(1)(ii)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=73&div=0&chpt=17&iFrame=true",
+		"quote": "In townships not divided into wards, there shall be five township commissioners who shall be elected at large by the electors of the township.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first class township elects a tax collector every four years",
+		"citation": "73 Pa.C.S. § 1703(a)(2)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=73&div=0&chpt=17&iFrame=true",
+		"quote": "The township tax collector shall be elected at municipal elections every four years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first class township elects auditors on six-year terms, or a controller, or appoints an auditor",
+		"citation": "73 Pa.C.S. § 1703(a)(3)",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=73&div=0&chpt=17&iFrame=true",
+		"quote": "At each municipal election, one auditor shall be elected for a term of six years.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Second Class Township Code (Act 69 of 1933) is still in force and unconsolidated",
+		"citation": "Act 69 of 1933, law information page",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information?SessYr=1933&SessInd=0&ActNum=69",
+		"quote": "known as the Second Class Township Code",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second class township elects three supervisors, three auditors and a tax collector",
+		"citation": "53 P.S. § 65402(a) (Second Class Township Code § 402)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1933&ActNum=0069.&SessInd=0&iFrame=true",
+		"quote": "the electors of each township shall elect three supervisors, three auditors and one tax collector.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters can expand the board to five supervisors by referendum",
+		"citation": "53 P.S. § 65402(b)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1933&ActNum=0069.&SessInd=0&iFrame=true",
+		"quote": "there shall be elected two additional supervisors.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "At each municipal election, one supervisor is elected for six years",
+		"citation": "53 P.S. § 65403(a)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1933&ActNum=0069.&SessInd=0&iFrame=true",
+		"quote": "at each municipal election, the electors of each township shall elect one supervisor to serve for a term of six years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "At each municipal election, one second class township auditor is elected for six years",
+		"citation": "53 P.S. § 65404(a)",
+		"url": "https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?txtType=HTM&SessYr=1933&ActNum=0069.&SessInd=0&iFrame=true",
+		"quote": "at each municipal election, the electors of each township shall elect one auditor to serve for a term of six years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule charters may choose at-large, district or combined elections",
+		"citation": "53 Pa.C.S. § 2924",
+		"url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=53&div=0&chpt=29&iFrame=true",
+		"quote": "whether elections shall be on an at-large, district or combination district and at-large",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Pittsburgh has a home rule charter and elects council by district since 1987",
+		"citation": "DCED, Home Rule in Pennsylvania (April 2023)",
+		"url": "https://dced.pa.gov/download/home-rule-pa-pdf/?ind=1710857603358&filename=HomeRule_2023v3.pdf&wpdmdl=57752&refresh=6aeb62ad518211793811117",
+		"quote": "In 1987, Pittsburgh voters amended their charter, changing from at large to district election of council members.",
+		"certainty": "varies by place",
+		"verified": "state agency publication",
+		"manual": true
+	},
+	{
+		"claim": "Scranton has a home rule charter",
+		"citation": "DCED, Home Rule in Pennsylvania (April 2023)",
+		"url": "https://dced.pa.gov/download/home-rule-pa-pdf/?ind=1710857603358&filename=HomeRule_2023v3.pdf&wpdmdl=57752&refresh=6aeb62ad518211793811117",
+		"quote": "Home Rule Charter of the City of Scranton",
+		"certainty": "varies by place",
+		"verified": "state agency publication",
+		"manual": true
+	},
+	{
+		"claim": "The legislature classifies counties, cities, boroughs, school districts and townships by population",
+		"citation": "Pa. Const. art. III, § 20",
+		"url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/00/00.003.020.000..HTM",
+		"quote": "The Legislature shall have power to classify counties, cities, boroughs, school districts, and townships according to population",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

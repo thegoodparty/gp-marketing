@@ -1,0 +1,345 @@
+[
+	{
+		"claim": "The Legislature convenes every year at 10 a.m. on the third Wednesday in January",
+		"citation": "Haw. Const. art. III, § 10",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0003-0010.htm",
+		"quote": "The legislature shall convene annually in regular session at 10:00 o'clock a.m. on the third Wednesday in January.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regular sessions are limited to sixty days, extendable by up to fifteen",
+		"citation": "Haw. Const. art. III, § 10",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0003-0010.htm",
+		"quote": "Regular sessions shall be limited to a period of sixty days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor may call a special session",
+		"citation": "Haw. Const. art. III, § 10",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0003-0010.htm",
+		"quote": "The governor may convene both houses or the senate alone in special session.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Presiding officers must convene a special session at the written request of two-thirds of each house",
+		"citation": "Haw. Const. art. III, § 10",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0003-0010.htm",
+		"quote": "At the written request of two-thirds of the members to which each house is entitled, the presiding officers of both houses shall convene the legislature in special session.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills presented ten or more days before adjournment: governor has ten days",
+		"citation": "Haw. Const. art. III, § 16",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0003-0016.htm",
+		"quote": "The governor shall have ten days to consider bills presented to the governor ten or more days before the adjournment of the legislature sine die",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills presented late or after adjournment: governor has forty-five days after adjournment",
+		"citation": "Haw. Const. art. III, § 16",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0003-0016.htm",
+		"quote": "The governor shall have forty-five days, after the adjournment of the legislature sine die, to consider bills presented to the governor less than ten days before such adjournment, or presented after adjournment",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor must give ten days' notice of intent to veto such a bill",
+		"citation": "Haw. Const. art. III, § 16",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0003-0016.htm",
+		"quote": "unless the governor by proclamation shall have given ten days' notice to the legislature that the governor plans to return such bill",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The day counts exclude Saturdays, Sundays and holidays",
+		"citation": "Haw. Const. art. III, § 16",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0003-0016.htm",
+		"quote": "the following days shall be excluded: Saturdays, Sundays, holidays",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General elections are in November of even-numbered years",
+		"citation": "Haw. Const. art. II, § 8",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0002-0008.htm",
+		"quote": "General elections shall be held on the first Tuesday after the first Monday in November in all even-numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No voter may be required to declare a party preference to vote in a primary",
+		"citation": "Haw. Const. art. II, § 4",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0002-0004.htm",
+		"quote": "no person shall be required to declare a party preference or nonpartisan",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary is the second Saturday of August in even-numbered years",
+		"citation": "HRS § 12-2",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/HRS0012/HRS_0012-0002.htm",
+		"quote": "The primary shall be held on the second Saturday of August in every even numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only candidates nominated in the primary may run in the general",
+		"citation": "HRS § 12-2",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/HRS0012/HRS_0012-0002.htm",
+		"quote": "No person shall be a candidate for any general or special general election unless the person has been nominated in the immediately preceding primary or special primary.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each voter receives every party's ballot and the nonpartisan ballot, with no party declaration required",
+		"citation": "HRS § 12-31",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/HRS0012/HRS_0012-0031.htm",
+		"quote": "No person eligible to vote in any primary or special primary election shall be required to state a party preference or nonpartisanship as a condition of voting.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may vote for one party's candidates or only nonpartisan candidates",
+		"citation": "HRS § 12-31",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/HRS0012/HRS_0012-0031.htm",
+		"quote": "A voter shall be entitled to vote only for candidates of one party or only for nonpartisan candidates.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The top vote-getter in a party primary is the party's general election candidate",
+		"citation": "HRS § 12-41(a)",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/HRS0012/HRS_0012-0041.htm",
+		"quote": "The person or persons receiving the greatest number of votes at the primary or special primary as a candidate of a party for an office shall be the candidate of the party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county office candidate who will be unopposed in the general is declared elected after the primary",
+		"citation": "HRS § 12-41(a)",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/HRS0012/HRS_0012-0041.htm",
+		"quote": "any candidate for any county office who is the sole candidate for that office at the primary or special primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Nonpartisan candidates advance with 10 percent of the vote or the lowest nominated partisan vote",
+		"citation": "HRS § 12-41(b)",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/HRS0012/HRS_0012-0041.htm",
+		"quote": "Any nonpartisan candidate receiving at least ten per cent of the total votes cast for the office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No one may sign nomination papers for more than one candidate for the same office",
+		"citation": "HRS § 12-4(a)",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/HRS0012/HRS_0012-0004.htm",
+		"quote": "No person shall sign the nomination papers of more than one candidate, partisan or nonpartisan, for the same office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every candidate files a nomination paper to appear on a primary ballot",
+		"citation": "HRS § 12-3(a)",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/HRS0012/HRS_0012-0003.htm",
+		"quote": "unless a nomination paper was filed on the candidate's behalf",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature creates counties and gives them powers by general law",
+		"citation": "Haw. Const. art. VIII, § 1",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0008-0001.htm",
+		"quote": "The legislature shall create counties, and may create other political subdivisions within the State, and provide for the government thereof.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county may adopt a self-government charter",
+		"citation": "Haw. Const. art. VIII, § 2",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0008-0002.htm",
+		"quote": "Each political subdivision shall have the power to frame and adopt a charter for its own self-government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter provisions on structure are superior to statute, subject to general laws",
+		"citation": "Haw. Const. art. VIII, § 2",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0008-0002.htm",
+		"quote": "Charter provisions with respect to a political subdivision's executive, legislative and administrative structure and organization shall be superior to statutory provisions",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Real property taxation is exclusively for the counties, except Kalawao",
+		"citation": "Haw. Const. art. VIII, § 3",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0008-0003.htm",
+		"quote": "shall be exercised exclusively by the counties, with the exception of the county of Kalawao",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The local government article does not limit laws of statewide concern",
+		"citation": "Haw. Const. art. VIII, § 6",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0008-0006.htm",
+		"quote": "This article shall not limit the power of the legislature to enact laws of statewide concern.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The board of education is appointed by the governor with Senate consent",
+		"citation": "Haw. Const. art. X, § 2",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0010-0002.htm",
+		"quote": "The governor shall nominate and, by and with the advice and consent of the senate, appoint the members of the board of education",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The board of education sets statewide policy and appoints the superintendent of the public school system",
+		"citation": "Haw. Const. art. X, § 3",
+		"url": "https://www.capitol.hawaii.gov/hrscurrent/Vol01_Ch0001-0042F/05-CONST/CONST_0010-0003.htm",
+		"quote": "to formulate statewide educational policy and appoint the superintendent of education as the chief executive officer of the public school system",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Honolulu city elective officers are elected by nonpartisan special elections",
+		"citation": "Revised Charter of Honolulu § 13-116",
+		"url": "https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf",
+		"quote": "all city elective officers shall be elected by nonpartisan special elections",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "In Honolulu, with three or more candidates, a majority in the first special election elects",
+		"citation": "Revised Charter of Honolulu § 13-116",
+		"url": "https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf",
+		"quote": "If any candidate receives a majority of votes cast in the first special election for that office, that candidate shall be deemed elected",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Honolulu has nine council members, one per district, four-year terms, two consecutive terms at most",
+		"citation": "Revised Charter of Honolulu § 3-102",
+		"url": "https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf",
+		"quote": "The council shall consist of nine members. One member shall be elected from each of the nine districts",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Honolulu limits councilmembers to two consecutive four-year terms",
+		"citation": "Revised Charter of Honolulu § 3-102",
+		"url": "https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf",
+		"quote": "No person shall be elected to the office of councilmember for more than two consecutive four-year terms",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Honolulu's prosecuting attorney is elected for four years",
+		"citation": "Revised Charter of Honolulu § 8-102",
+		"url": "https://www.honolulu.gov/cor/wp-content/uploads/sites/17/2025/09/Charter-FINAL-9-11-25.pdf",
+		"quote": "The term of office of the prosecuting attorney shall be four years",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Hawaii County candidates win outright with a majority in the first special election",
+		"citation": "Hawaii County Charter § 13-27",
+		"url": "https://www.hawaiicounty.gov/home/showpublisheddocument/310928/639247414732130000",
+		"quote": "Any candidate for mayor, prosecuting attorney or council receiving a majority of all votes validly cast for candidates for that office, excluding blank and spoiled ballots, shall be deemed elected",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Hawaii County has nine council districts with two-year terms, at most four consecutive",
+		"citation": "Hawaii County Charter § 3-2",
+		"url": "https://www.hawaiicounty.gov/home/showpublisheddocument/310928/639247414732130000",
+		"quote": "There shall be nine council districts, each of which shall be represented by a resident elected from that district. The terms of the council members shall be two years",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Hawaii County's prosecuting attorney is elected for four years",
+		"citation": "Hawaii County Charter § 9-1",
+		"url": "https://www.hawaiicounty.gov/home/showpublisheddocument/310928/639247414732130000",
+		"quote": "The prosecuting attorney shall be elected for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Maui's council members are elected at large, each from a residency area, and every voter votes on every seat",
+		"citation": "Maui County Charter § 3-1",
+		"url": "https://www.mauicounty.us/wp-content/uploads/2025/08/2025-Charter_202506191830273398.pdf",
+		"quote": "The ballots shall, nevertheless, be prepared to give every voter in the County the right to vote for each and every council seat",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Maui council races with three or more candidates send the top two to the second special election",
+		"citation": "Maui County Charter § 3-2",
+		"url": "https://www.mauicounty.us/wp-content/uploads/2025/08/2025-Charter_202506191830273398.pdf",
+		"quote": "the names of the two candidates receiving the highest number of votes for each council seat in the first special election shall be placed on the ballot for the second special election",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Maui councilmembers serve two-year terms, at most five full terms",
+		"citation": "Maui County Charter § 3-2",
+		"url": "https://www.mauicounty.us/wp-content/uploads/2025/08/2025-Charter_202506191830273398.pdf",
+		"quote": "No councilmember shall serve more than five full terms of office",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Maui's prosecuting attorney is appointed by the mayor",
+		"citation": "Maui County Charter § 8-3.2",
+		"url": "https://www.mauicounty.us/wp-content/uploads/2025/08/2025-Charter_202506191830273398.pdf",
+		"quote": "The prosecuting attorney is appointed by the mayor from a list of nominees presented to the mayor by the independent nomination board",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Kauai county officers are elected by nonpartisan elections",
+		"citation": "Kauai County Charter § 1.03",
+		"url": "https://www.kauai.gov/files/assets/public/v/1/county-council/documents/the-charter-of-the-county-of-kauai-2024.pdf",
+		"quote": "all elective county officers shall be elected by nonpartisan elections",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Kauai sends the top two for mayor and prosecuting attorney to the general election",
+		"citation": "Kauai County Charter § 1.03",
+		"url": "https://www.kauai.gov/files/assets/public/v/1/county-council/documents/the-charter-of-the-county-of-kauai-2024.pdf",
+		"quote": "the names of the two candidates receiving the highest number of votes for these offices in the primary election shall be placed on the ballot for the general election",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	},
+	{
+		"claim": "Kauai has a seven-member council elected at large",
+		"citation": "Kauai County Charter § 3.02",
+		"url": "https://www.kauai.gov/files/assets/public/v/1/county-council/documents/the-charter-of-the-county-of-kauai-2024.pdf",
+		"quote": "There shall be a council of seven members elected at",
+		"certainty": "statutory",
+		"verified": "read in county charter",
+		"manual": true
+	}
+]

@@ -24,23 +24,8 @@ import { PageHeader } from '~/components/PageHeader';
 import { PageFooter } from '~/components/PageFooter';
 import { PromoBannerSection } from '~/components/PromoBannerSection';
 import { fetchNavigation } from '~/components/navigationData';
-import { Outfit, Open_Sans } from 'next/font/google';
+import { primaryFont, secondaryFont } from '~/ui/_fonts/fonts';
 
-const primaryFont = Outfit({
-	display: 'swap',
-	preload: true,
-	subsets: ['latin'],
-	variable: '--font-primary',
-	weight: ['400', '600'],
-});
-
-const secondaryFont = Open_Sans({
-	display: 'swap',
-	preload: true,
-	subsets: ['latin'],
-	variable: '--font-secondary',
-	weight: ['400', '600'],
-});
 type Props = {
 	children: ReactNode;
 };

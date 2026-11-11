@@ -1,0 +1,746 @@
+[
+	{
+		"claim": "The Legislature meets in an organizational session of up to ten days on the second Tuesday in January after its election",
+		"citation": "Ala. Const. 2022 § 48.01(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%2248.01%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "The legislature shall convene on the second Tuesday in January next succeeding their election and shall remain in session for not longer than ten consecutive calendar days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regular sessions are annual, on a day the Legislature may set by law, limited to 30 legislative days and 105 calendar days",
+		"citation": "Ala. Const. 2022 § 48.01(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%2248.01%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "regular sessions of the legislature shall be held annually on the first Tuesday in May, or on such other day as may be prescribed by law, and shall be limited to 30 legislative days and 105 calendar days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special sessions are limited to 12 legislative days and 30 calendar days",
+		"citation": "Ala. Const. 2022 § 48.01(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%2248.01%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "Special sessions of the legislature convened in the manner provided by this Constitution shall be limited to 12 legislative days and 30 calendar days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "By statute, regular sessions start the first Tuesday of February in the first three years of the term and the second Tuesday in January in the fourth year",
+		"citation": "Code of Ala. § 29-1-4",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2229-1-4%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "the annual regular sessions of the Alabama Legislature shall commence on the first Tuesday of February of the first, second, and third years of the term and on the second Tuesday in January of the fourth year of the term",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The organizational session statute matches the constitution: second Tuesday in January after the election, up to 10 days",
+		"citation": "Code of Ala. § 29-1-4",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2229-1-4%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "The Legislature shall convene in organizational session on the second Tuesday in January following its election and shall remain in session for not longer than 10 consecutive calendar days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "29-1-4 was last amended in 2023",
+		"citation": "Code of Ala. § 29-1-4 (history)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2229-1-4%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "Act 2023-224",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned by the governor within six days (Sundays excepted) becomes law unless adjournment prevents its return",
+		"citation": "Ala. Const. 2022 § 125",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22125%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "If any bill shall not be returned by the governor within six days, Sunday excepted, after it shall have been presented, the same shall become a law in like manner as if he had signed it, unless the legislature, by its adjournment, prevent the return, in which case it shall not be a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills presented in the last five days of the session may be approved within ten days after adjournment",
+		"citation": "Ala. Const. 2022 § 125",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22125%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "bills presented to the governor within five days before the final adjournment of the legislature may be approved by the governor at any time within ten days after such adjournment",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor may call a special session by proclamation",
+		"citation": "Ala. Const. 2022 § 122",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22122%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "The governor may, by proclamation, on extraordinary occasions, convene the legislature",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Penal acts take effect no sooner than 60 days after approval unless the act says otherwise",
+		"citation": "Code of Ala. § 1-1-8",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%221-1-8%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "No penal act shall take effect until 60 days after the approval thereof, unless otherwise specially provided in the act",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State and county officers not otherwise provided for, including the sheriff and coroner, are elected in November every fourth year from 2006 (the governor’s cycle)",
+		"citation": "Code of Ala. § 17-14-3",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-14-3%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "a sheriff in each county, one coroner in all counties having a coroner, and other officers not otherwise provided for, shall be elected on the first Tuesday after the first Monday in November 2006, and every fourth year thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commission members are elected in November every fourth year from 2008 (the presidential cycle), unless a local law says otherwise",
+		"citation": "Code of Ala. § 17-14-4",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-14-4%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "Except as otherwise provided by local law, members of county commissions, one county treasurer in all counties having a county treasurer, and one constable for each election precinct shall be elected on the first Tuesday after the first Monday in November 2008, and every fourth year thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Probate judges and circuit clerks serve six-year terms, on a cycle from 2006",
+		"citation": "Code of Ala. § 17-14-6",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-14-6%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "the judge of probate, the judges of the courts of appeals, and clerks of the circuit court shall be elected on the first Tuesday after the first Monday in November 2006, and they shall hold their respective offices for the term of six years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County board of education members are elected at the November general election for six-year terms, with seats up every two years, unless local law says otherwise",
+		"citation": "Code of Ala. § 17-14-5",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-14-5%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "Except as otherwise provided by local law, at the general election of state and county officers in November 2006, and biennially thereafter, a member or members of the county board of education shall be elected for a term of six years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The default county board of education has five members elected by county voters",
+		"citation": "Code of Ala. § 16-8-1(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2216-8-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "The county board of education shall be composed of five members, who shall be elected by the qualified electors of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County boards may switch to five or seven single-member districts",
+		"citation": "Code of Ala. § 16-8-1(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2216-8-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "School boards exercising this option may establish five or seven such districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City boards of education default to five members chosen by the city council or commission, for five-year terms",
+		"citation": "Code of Ala. §§ 16-11-2(b), 16-11-3",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2216-11-3%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "the council or commission shall elect a member or members of the board of education to succeed those whose term or terms of office expire that year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City board members serve five-year terms",
+		"citation": "Code of Ala. § 16-11-3",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2216-11-3%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "The terms of office of members of the city board of education shall be five years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The city board default applies unless a local law under the constitution provides otherwise",
+		"citation": "Code of Ala. § 16-11-2(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2216-11-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "The provisions of this chapter shall apply to city boards of education unless otherwise provided by local law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature by local law, after a local referendum, may make a city board of education elected",
+		"citation": "Ala. Const. 2022 § 104.01",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22104.01%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "the Legislature, from time to time, by local law may provide for the election of a city board of education in that municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city over 125,000 that approved it elects its city board of education",
+		"citation": "Ala. Const. 2022 § 104.02",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22104.02%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "The members of the city board of education of any municipality in the state with a population exceeding 125,000 shall be elected by the qualified electors of the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The county board appoints the county superintendent under the general law",
+		"citation": "Code of Ala. § 16-9-1",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2216-9-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "The county board of education of each county shall appoint a superintendent of schools",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regular municipal elections are the fourth Tuesday in August, every four years from 2025, with a runoff on the fourth Tuesday after",
+		"citation": "Code of Ala. § 11-46-21(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-21%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "The regular municipal elections in cities and towns shall be held on the fourth Tuesday in August 2025, and quadrennially thereafter, and, when necessary as provided in subsection (d) of Section 11-46-55, a second or runoff election shall be held on the fourth Tuesday following the regular election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal officers take office the first Monday in November after the election",
+		"citation": "Code of Ala. § 11-46-21(c)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-21%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "shall assume the duties of their respective offices on the first Monday in November following their election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The August timing does not apply where a general or local act sets a different municipal election time",
+		"citation": "Code of Ala. § 11-46-21(d)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-21%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "This section shall not apply to any municipal election required by general or local act at a time different from the dates provided for in this section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The 2021 act moved the municipal runoff to the fourth Tuesday after the election",
+		"citation": "Act 2021-157 (summary)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7Binstruments%28where:%5B%7BactNbr:%7Beq:%222021-157%22%7D%7D%5D%29%7Bdata%7BactNbr%20shortTitle%20actSummary%7D%7D%7D",
+		"quote": "provide that a runoff election for regular municipal elections shall be held on the fourth Tuesday following the regular election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class 1 municipalities and commission-form cities are outside the general municipal election article",
+		"citation": "Code of Ala. § 11-46-20(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-20%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "in all municipalities except Class 1 municipalities and except cities and towns organized under a commission form of government, shall be held and conducted at the times and in the manner prescribed in this article",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The city or town pays for its own elections",
+		"citation": "Code of Ala. § 11-46-20(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-20%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "the expenses and costs incident to the conduct of all such elections shall be paid out of the treasury of the city or town holding the election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality on a different date by local act may move to the general dates by ordinance",
+		"citation": "Code of Ala. § 11-46-5",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-5%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "may elect by ordinance to have the election at the same time required by Article 2",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality whose dates were set by classification or local act may keep them unless its governing body votes to use the general dates",
+		"citation": "Code of Ala. § 11-46-74",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-74%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "may continue to use said election dates unless a majority of the members of the governing body vote to use the election dates established in this article",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A Class 5 city may, by resolution, hold elections on the second Tuesday in July every three years",
+		"citation": "Code of Ala. § 11-46-6(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-6%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "with the city election every three years thereafter to be held at the same appointed time, upon adoption of a resolution by the city governing body",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a Class 1 municipality the mayor and council are elected together for four-year terms",
+		"citation": "Code of Ala. § 11-46-8(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-8%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "the mayor and the members of the city council shall be elected at the same election for a four-year term of office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local acts change individual cities’ election schedules (example: Scottsboro terms extended in 2025)",
+		"citation": "Act 2025-50 (title)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7Binstruments%28where:%5B%7BactNbr:%7Beq:%222025-50%22%7D%7D%5D%29%7Bdata%7BactNbr%20shortTitle%20actSummary%7D%7D%7D",
+		"quote": "Scottsboro, municipal elections for Mayor and City Council and City Board of Education extended",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Class 1 polling-place law is written around Birmingham, part of which lies in Shelby County",
+		"citation": "Code of Ala. § 11-46-7(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-7%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "except for those citizens of Birmingham that reside in Shelby County and those citizens of Birmingham that vote in the general election outside the Birmingham city limits, the polling places for municipal elections in any Class 1 municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primaries are on the Tuesday in May before Memorial Day, with any runoff four weeks later",
+		"citation": "Code of Ala. § 17-13-3(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-13-3%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "shall be held on the Tuesday in May preceding Memorial Day. When necessary, as provided in this chapter, a second or runoff primary election shall be held on the fourth Tuesday following the primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In presidential primary years the primary is the first Tuesday in March",
+		"citation": "Code of Ala. § 17-13-3(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-13-3%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "In years in which a presidential primary is conducted, the primary election shall be the first Tuesday in March",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The May date changed in 2025 from the fourth Tuesday in May",
+		"citation": "Act 2025-283 (summary)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7Binstruments%28where:%5B%7BactNbr:%7Beq:%222025-283%22%7D%7D%5D%29%7Bdata%7BactNbr%20shortTitle%20actSummary%7D%7D%7D",
+		"quote": "to change the primary election in off-presidential years from the fourth Tuesday in May to the Tuesday in May preceding Memorial Day",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter receives only one party’s primary ballot; parties set who may vote in their primary",
+		"citation": "Code of Ala. § 17-13-7(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-13-7%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "shall receive the official primary ballot of that political party, and no other",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party may require primary voters to sign a poll list pledging preference for that party and support for its nominees",
+		"citation": "Code of Ala. § 17-13-7(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-13-7%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "by participating in the primary election a voter shall indicate a preference for the party holding the primary, and will support the nominees of that party in the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter who voted in one party’s primary may vote only in that same party’s runoff",
+		"citation": "Code of Ala. § 17-13-7.1(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-13-7.1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "he or she may vote in a subsequent primary runoff election only if he or she voted in the primary election of the same political party for which the runoff election is being held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary nominees need a majority; otherwise the top two meet in a runoff",
+		"citation": "Code of Ala. § 17-13-18(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-13-18%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "If no candidate receives a majority of all of the votes cast in such primary election for any one office or offices for the nomination to which there were more than two candidates, then there shall be held a second primary election on the fourth Tuesday following the primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "General election ballots carry party nominees chosen by primary or by party convention, and independents by petition",
+		"citation": "Code of Ala. § 17-9-3(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-9-3%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "All candidates who have been put in nomination by primary election and certified in writing by the chair and secretary of the canvassing board of the party holding the primary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County offices elected at the general election include probate judge, sheriff, circuit clerk, tax assessor, tax collector, coroner, county commission and constables",
+		"citation": "Code of Ala. § 17-14-2",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-14-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "a judge of the probate court, sheriff, clerks of the circuit courts, tax assessor, tax collector, a county treasurer in counties of more than 56,000 population, as provided by law, coroner, and members of the county commission in each county, and constables in each precinct of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party primaries and partisan elections are abolished for municipal governing bodies in cities and towns of 300,000 or fewer at the latest census",
+		"citation": "Code of Ala. § 11-46-3",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-3%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "Primary elections of political parties are hereby abolished in cities and towns of this state which have a population of 300,000 inhabitants or less, according to the latest federal decennial census, and election of the members of the municipal governing body of said cities and towns shall be by and on a nonpartisan ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The municipal ballot lists every qualified candidate under the office title, with no party",
+		"citation": "Code of Ala. § 11-46-25(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-25%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "There shall be but one form of ballot for all the candidates for municipal office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipal candidate qualifies by filing a sworn statement of candidacy with the clerk",
+		"citation": "Code of Ala. § 11-46-25(g)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-25%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "has filed a statement of candidacy, accompanied by an affidavit taken and certified by an officer authorized to take acknowledgments in this state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Write-in votes are not allowed in municipal elections",
+		"citation": "Code of Ala. § 11-46-43(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-43%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "no elector shall write in the name of any person on the ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal elections need a majority; otherwise a runoff between the top two on the fourth Tuesday after",
+		"citation": "Code of Ala. § 11-46-55(d)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-55%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "the municipal governing body shall order a second or runoff election to be held on the fourth Tuesday following the regular election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a group of seats, majority is computed by dividing the total vote by the number of seats and then by two",
+		"citation": "Code of Ala. § 11-46-55(c)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-55%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "dividing the total vote cast for all candidates for the offices by the number of positions to be filled and then dividing the result by two",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A 2026 act changed runoff withdrawal and tie rules, effective 1 June 2026",
+		"citation": "Act 2026-579 (summary)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7Binstruments%28where:%5B%7BactNbr:%7Beq:%222026-579%22%7D%7D%5D%29%7Bdata%7BactNbr%20shortTitle%20actSummary%7D%7D%7D",
+		"quote": "if a candidate in a second municipal election withdraws or dies, the second election need not be held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a general election the person with the highest number of legal votes is elected (election contests turn on it)",
+		"citation": "Code of Ala. § 17-16-41",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-16-41%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "is shown not to have received the highest number of legal votes",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent qualifies by petition signed by electors qualified to vote for that office, filed with the probate judge for county office",
+		"citation": "Code of Ala. § 17-9-3(a)(3)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-9-3%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "Each candidate who has been requested to be an independent candidate for a specified office by written petition signed by electors qualified to vote in the election to fill the office when the petition has been filed with the judge of probate, in the case of a county office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate who ran in that year’s primary cannot appear on the general ballot as an independent",
+		"citation": "Code of Ala. § 17-9-3(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-9-3%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "The judge of probate may not print on the ballot the name of any independent candidate who was a candidate in the primary election of that year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The probate judge is the county’s chief elections official",
+		"citation": "Code of Ala. § 17-1-3(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-1-3%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "The judge of probate is the chief elections official of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Title 17 applies to county and municipal elections except where a specific municipal or county election law conflicts",
+		"citation": "Code of Ala. § 17-1-1",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-1-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "except in cases where the provisions of this title are inconsistent or in conflict with the provisions of a law governing special primary, county or municipal elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Alabama has 67 counties",
+		"citation": "Code of Ala. § 11-1-1",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-1-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "The state is divided into 67 counties",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every county governing body is called the county commission",
+		"citation": "Code of Ala. § 11-1-5(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-1-5%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "shall, after October 1, 1970, be designated and known as the __________ county commission",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The name change did not alter any commission’s composition or method of election",
+		"citation": "Code of Ala. § 11-1-5(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-1-5%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "shall effect a change in name only and shall in no way affect the existing organization, establishment, composition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The default county commission is the probate judge as chair plus four elected commissioners serving four years, unless local law or court order provides otherwise",
+		"citation": "Code of Ala. § 11-3-1(c)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-3-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "Unless otherwise provided by local law, by court order, or governed by Section 11-80-12, and as otherwise provided in subsection (d), there shall be in every county a county commission, composed of the judge of probate, who shall serve as chairman, and four commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners elected by district must live in the district",
+		"citation": "Code of Ala. § 11-3-1(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-3-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "any person seeking office as county commissioner shall be a qualified elector of and reside within the district which he or she seeks to represent",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A commission elected from single-member districts may redraw them by resolution after each census",
+		"citation": "Code of Ala. § 11-3-1.1(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-3-1.1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "may, by resolution, alter the boundaries of the districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a sheriff for a four-year term",
+		"citation": "Ala. Const. 2022 § 138",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22138%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "A sheriff shall be elected in each county by the qualified electors thereof who shall hold office for a term of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a coroner for four years",
+		"citation": "Code of Ala. § 11-5-1",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-5-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "A coroner for each county shall be elected by the qualified voters thereof and shall hold office for four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected officers include county treasurers only in counties over 56,000 where law provides, and constables",
+		"citation": "Code of Ala. § 17-14-1",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2217-14-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "county treasurers in counties of more than 56,000 population, as provided by law, members of county commissions, constables",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Limited Self-Governance Act gives county commissions only a short list of nuisance and public-health powers",
+		"citation": "Code of Ala. § 11-3A-2(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-3A-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "The powers granted herein to provide for the public welfare, health, and safety of its citizens shall only include the following",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Those powers do not extend to municipalities or courts",
+		"citation": "Code of Ala. § 11-3A-2(d)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-3A-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "Any action affecting any court or the personnel thereof",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local laws may not be passed where a general law covers the case",
+		"citation": "Ala. Const. 2022 § 105",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22105%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "No special, private, or local law, except a law fixing the time of holding courts, shall be enacted in any case which is provided for by a general law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A law for a population class of municipalities counts as a general law, and up to eight classes may be set",
+		"citation": "Ala. Const. 2022 § 110",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22110%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "the legislature may also enact and change from time to time a general schedule of not more than eight classes of municipalities based on population",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A constitutional amendment affecting only one county can be ratified by that county’s voters alone",
+		"citation": "Ala. Const. 2022 § 284.01(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22284.01%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "the amendment may be adopted as a valid part of the constitution only by a favorable vote of a majority of the qualified electors of the affected county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities cannot be authorized to pass laws inconsistent with general law",
+		"citation": "Ala. Const. 2022 § 89",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%2289%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "The legislature shall not have power to authorize any municipal corporation to pass any laws inconsistent with the general laws of this state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The 2022 recompilation rearranged the constitution and grouped local amendments by county",
+		"citation": "Ala. Const. 2022 § 286.02",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22286.02%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "arrange all local amendments by county of application",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Amendments under the 1901 constitution were renumbered and placed in the 2022 constitution by the Code Commissioner",
+		"citation": "Ala. Const. 2022 § 286.03(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22286.03%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "The Code Commissioner shall number and place any constitutional amendment ratified on the date of ratification of this amendment as appropriate in the Constitution of Alabama of 2022",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities of 2,000 or more are cities; under 2,000 are towns; the last census decides",
+		"citation": "Code of Ala. § 11-40-6",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-40-6%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "containing 2,000 or more inhabitants shall be called cities. All incorporated municipalities containing less than 2,000 inhabitants shall be called towns",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A change of government after a new census takes effect at the next election",
+		"citation": "Code of Ala. § 11-40-6",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-40-6%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "if the municipality shows a population which authorizes a change in its government under this title, the proper officers for such a city shall be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Eight municipal classes are fixed by the 1970 census",
+		"citation": "Code of Ala. § 11-40-12(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-40-12%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "There are hereby established eight classes of municipalities based on the population as certified by the 1970 federal decennial census",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class 1 is 300,000 or more and Class 8 is 5,999 or fewer (1970 figures)",
+		"citation": "Code of Ala. § 11-40-12(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-40-12%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "Class 1: All cities with a population of 300,000 inhabitants or more",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class 8 covers cities and towns of 5,999 or fewer",
+		"citation": "Code of Ala. § 11-40-12(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-40-12%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "Class 8: All cities and towns with a population of 5,999 inhabitants or less",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality incorporated after 28 June 1979 takes its class from its population when incorporated",
+		"citation": "Code of Ala. § 11-40-12(c)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-40-12%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "shall be placed in one of the above classes according to the population of the municipality at the time of its incorporation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every city and town elects a mayor every four years at the regular election",
+		"citation": "Code of Ala. § 11-43-2(a)(1)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "in all cities and towns at the general election to be held at the time provided by law, and quadrennially thereafter, there shall be elected a mayor",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In places under 12,000 the mayor and five council members form the council and the mayor presides",
+		"citation": "Code of Ala. § 11-43-2(b)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "the legislative functions shall be exercised by the mayor and five aldermen. The mayor shall preside over all deliberations of the council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In cities of 12,000 or more the mayor does not sit on the council",
+		"citation": "Code of Ala. § 11-43-2(a)(1)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "in cities having a population of 12,000 or more according to the last or any subsequent federal census, shall not sit with the council nor have a vote in its proceedings",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities of 12,000 to 25,000 may opt by ordinance for the small-city council form",
+		"citation": "Code of Ala. § 11-43-2(c)(1)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "may elect to operate pursuant to subsection (b) as it relates to the exercise of the legislative functions of the mayor",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council members are elected at large or from wards as the council decides at least six months before an election",
+		"citation": "Code of Ala. § 11-43-2(d)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "shall be elected by the city or town at large at the general election held at the time provided by law and quadrennially thereafter, or from wards as the councils may determine not less than six months before an election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In cities of 12,000 or more, council members and the council president serve four years",
+		"citation": "Code of Ala. § 11-43-40(a)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43-40%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "who shall compose the city council for the cities and who shall hold office for four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city of 12,000 or more may by two-thirds vote switch to a council of five elected at large",
+		"citation": "Code of Ala. § 11-43-40(a)(4)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43-40%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "provide that the city council of the city shall consist of five aldermen to be elected from the city at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A council may divide the place into five to seven single-member districts by ordinance, up to nine in Class 1, 2 or 3",
+		"citation": "Code of Ala. § 11-43-63",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43-63%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "divide the municipality into single-member districts (wards) of not less than five nor more than seven districts (wards)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class 1, 2 and 3 municipalities may have up to nine districts",
+		"citation": "Code of Ala. § 11-43-63",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43-63%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "the number of districts (wards) in any Class 1, 2, or 3 municipality may not exceed nine districts (wards)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities and towns may by ordinance provide for other elected or appointed officers and set their terms",
+		"citation": "Code of Ala. § 11-46-1",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-46-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "by ordinance provide for the election at any regular municipal election or for the appointment of such officers as are deemed needful or proper",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A petition by voters forces a vote on adopting council-manager government",
+		"citation": "Code of Ala. § 11-43A-2",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43A-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "asking that the question of the adoption of the council-manager form of government for such municipality be submitted to the qualified voters thereof",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A 2026 act let mayors break council ties in places with an even number of council seats, if the council allows it by resolution",
+		"citation": "Code of Ala. § 11-43-2(a)(2); Act 2026-594",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-43-2%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "In all cities and towns with an even number of council seats, the mayor may vote as a member of the council in the case of any tie vote of the council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Incorporation is by petition to the probate judge for a community of at least 300 people; a local law cannot incorporate a city or town",
+		"citation": "Code of Ala. § 11-41-1; Ala. Const. 2022 § 104(5)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BcodesOfAlabama%28where:%7Btype:%7Beq:Section%7D,displayId:%7Beq:%2211-41-1%22%7D%7D%29%7Bdata%7BdisplayId%20content%20history%7D%7D%7D",
+		"quote": "which has a population of not less than 300",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local laws may not incorporate a city, town or village",
+		"citation": "Ala. Const. 2022 § 104(5)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7BconstitutionItem%28where:%7BisContentNode:%7Beq:true%7D,displayId:%7Beq:%22104%22%7D%7D%29%7BdisplayId%20content%20history%7D%7D",
+		"quote": "Incorporating a city, town, or village",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A 2026 act proposes a constitutional amendment letting contiguous county school boards consolidate",
+		"citation": "Act 2026-378 (summary)",
+		"url": "https://alison.legislature.state.al.us/graphql?query=%7Binstruments%28where:%5B%7BactNbr:%7Beq:%222026-378%22%7D%7D%5D%29%7Bdata%7BactNbr%20shortTitle%20actSummary%7D%7D%7D",
+		"quote": "authorize two or more contiguous county boards of education to consolidate the administration of their county school systems under one multi-county board of education",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

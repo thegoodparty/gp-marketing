@@ -1056,15 +1056,15 @@ describe('gp-api person-profile reads carry the service credential', () => {
 		expect(lastCacheCall.options).toEqual({ revalidate: 300, tags: ['people-removals'] });
 	});
 
-	test('the published list caches by URL with a 5-minute revalidate', async () => {
+	test('the published list caches by URL with its published tag and 5-minute revalidate', async () => {
 		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		process.env['NEXT_RUNTIME'] = 'nodejs';
 		const calls = captureFetch(200, []);
 
 		await getPublishedPersonProfileIds();
 
-		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '300']);
-		expect(lastCacheCall.options).toEqual({ revalidate: 300 });
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '300', 'people-published']);
+		expect(lastCacheCall.options).toEqual({ revalidate: 300, tags: ['people-published'] });
 	});
 
 	test('a 410 from the render gate is gone and a 404 is absent', async () => {
@@ -1151,15 +1151,17 @@ describe('gp-api voter-density and public-campaigns reads carry the service cred
 		for (const call of calls) expect(authorizationOf(call.init)).toBe('Bearer service-token');
 	});
 
-	test('voter-density caches by URL with its per-person tag and 1-hour revalidate', async () => {
+	// The density surface is rebuilt by the nightly election load, so it carries
+	// the election-data tag as well as the person's own.
+	test('voter-density caches by URL with its per-person and election-data tags and 1-hour revalidate', async () => {
 		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		process.env['NEXT_RUNTIME'] = 'nodejs';
 		const calls = captureFetch(404, {});
 
 		expect(await getVoterDensityForDistrict(PERSON_ID)).toBeNull();
 		expect(calls).toHaveLength(1);
-		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '3600', `person:${PERSON_ID}`]);
-		expect(lastCacheCall.options).toEqual({ revalidate: 3600, tags: [`person:${PERSON_ID}`] });
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '3600', `person:${PERSON_ID}`, 'election-data']);
+		expect(lastCacheCall.options).toEqual({ revalidate: 3600, tags: [`person:${PERSON_ID}`, 'election-data'] });
 	});
 
 	test('public-campaigns sets no revalidate, so Next does not cache it at runtime', async () => {

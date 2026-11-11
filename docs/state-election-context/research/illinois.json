@@ -1,0 +1,682 @@
+[
+	{
+		"claim": "The General Assembly convenes each year on the second Wednesday of January and is a continuous body",
+		"citation": "Ill. Const. art. IV, § 5(a)",
+		"url": "https://www.ilga.gov/commission/lrb/con4.htm",
+		"quote": "The General Assembly shall convene each year on the second Wednesday of January.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill passed after May 31 cannot take effect before the next June 1 without a three-fifths vote",
+		"citation": "Ill. Const. art. IV, § 10",
+		"url": "https://www.ilga.gov/commission/lrb/con4.htm",
+		"quote": "A bill passed after May 31 shall not become effective prior to June 1 of the next calendar year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill passed before June 1 with no effective date takes effect January 1 of the following year",
+		"citation": "5 ILCS 75/1",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200005/Act%200075/000500750K1.html",
+		"quote": "shall become effective on January 1 of the following year, or upon its becoming a law, whichever is later",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Governor has 60 calendar days after presentment to act on a bill",
+		"citation": "Ill. Const. art. IV, § 9(b)",
+		"url": "https://www.ilga.gov/commission/lrb/con4.htm",
+		"quote": "Any bill not so returned by the Governor within 60 calendar days after it is presented to him shall become law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Bills must be presented to the Governor within 30 days of passage",
+		"citation": "Ill. Const. art. IV, § 9(a)",
+		"url": "https://www.ilga.gov/commission/lrb/con4.htm",
+		"quote": "shall be presented to the Governor within 30 calendar days after its passage",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Even years: general election the first Tuesday after the first Monday of November; general primary the third Tuesday in March",
+		"citation": "10 ILCS 5/2A-1.1(a)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.1.html",
+		"quote": "an election to be known as the general primary election shall be held on the third Tuesday in March",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Odd years: consolidated election the first Tuesday in April; consolidated primary the last Tuesday in February",
+		"citation": "10 ILCS 5/2A-1.1(b)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.1.html",
+		"quote": "consolidated election shall be held on the first Tuesday in April",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Odd years: consolidated primary the last Tuesday in February",
+		"citation": "10 ILCS 5/2A-1.1(b)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.1.html",
+		"quote": "consolidated primary election shall be held on the last Tuesday in February",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The consolidated election moves when it conflicts with Passover",
+		"citation": "10 ILCS 5/2A-1.1a",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.1a.html",
+		"quote": "that election shall be postponed to the first Tuesday following the last day of Passover",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers, including county board members, are filled at the even-year general election",
+		"citation": "10 ILCS 5/2A-1.2(a)(5)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "County elected officers, including State's Attorney, County Board member, County Commissioners, and elected President of the County Board or County Chief Executive",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal officers are filled at the odd-year consolidated election",
+		"citation": "10 ILCS 5/2A-1.2(c)(1)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "At the consolidated election in the appropriate odd-numbered years, the following offices shall be filled: (1) Municipal officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township officers, highway commissioners, park, library and fire protection district boards are filled at the consolidated election",
+		"citation": "10 ILCS 5/2A-1.2(c)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "Township officers, including township park commissioners, township library directors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Highway commissioners and road district clerks are filled at the consolidated election",
+		"citation": "10 ILCS 5/2A-1.2(c)(8)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "Highway commissioners and road district clerks",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members (outside Chicago) and community college boards are filled at the consolidated election",
+		"citation": "10 ILCS 5/2A-1.2(c)(12)-(13)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "Members of Community College district boards",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected school boards are filled at the consolidated election",
+		"citation": "10 ILCS 5/2A-1.2(c)(12)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "Elected members of school boards, school trustees, directors of boards of school directors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chicago Board of Education members are elected at the even-year general election in a nonpartisan election",
+		"citation": "10 ILCS 5/2A-1.2(a)(12)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "the election of members of the Chicago Board of Education shall be a nonpartisan election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party nominations at the consolidated primary do not apply to school, community college, fire protection and similar nonpartisan offices",
+		"citation": "10 ILCS 5/2A-1.2(d)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "and except those offices listed in paragraphs (12) through (17) of subsection (c)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No election may be held on a date other than the consolidated schedule, notwithstanding any municipal charter",
+		"citation": "10 ILCS 5/2A-1(b)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.html",
+		"quote": "No election may be held on any date other than a date on which an election is scheduled under Section 2A-1.1",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Election Code governs nominations and elections notwithstanding any other statute or municipal charter",
+		"citation": "10 ILCS 5/2A-1(a)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.html",
+		"quote": "notwithstanding the provisions of any other statute or municipal charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality with annual elections may fill some offices at the even-year general primary",
+		"citation": "10 ILCS 5/2A-1.2(b)(3)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "where the municipality has provided for annual elections to elect municipal officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter must declare a party to vote in a primary",
+		"citation": "10 ILCS 5/7-43(a)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K7-43.html",
+		"quote": "Unless he declares his party affiliations as required by this Article.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter states a party affiliation to the judges and receives only that party's ballot; refusal means no primary ballot",
+		"citation": "10 ILCS 5/7-44",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K7-44.html",
+		"quote": "No person who refuses to state his party affiliation shall be allowed to vote at a primary.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voting a party ballot at the general primary bars running as an independent at the following general election",
+		"citation": "10 ILCS 5/7-43",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K7-43.html",
+		"quote": "who voted the ballot of an established political party at a general primary election may not file a statement of candidacy as a candidate of a different established political party, a new political party, or as an independent candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter may also vote in the primary of a party established only in a local subdivision",
+		"citation": "10 ILCS 5/7-44",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K7-44.html",
+		"quote": "may nonetheless also declare his affiliation with a political party established only within a political subdivision",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The party primary covers county and city, village and town officers, but not school elections, most township elections, park districts, special charter cities, or municipalities of 5,000 or less unless they opt in",
+		"citation": "10 ILCS 5/7-1",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K7-1.html",
+		"quote": "the nomination of municipal officers for cities, villages, and incorporated towns with a population of 5,000 or less",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School elections are outside the party primary article",
+		"citation": "10 ILCS 5/7-1(b)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K7-1.html",
+		"quote": "This Article 7 shall not apply to (i) the nomination of candidates for school elections and township elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary nominee is the person with the most votes (no primary runoff)",
+		"citation": "10 ILCS 5/7-59(a)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K7-59.html",
+		"quote": "The person receiving the highest number of votes at a primary as a candidate of a party for the nomination for an office shall be the candidate of that party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities of under 5,000 may nominate party candidates by caucus",
+		"citation": "10 ILCS 5/10-1",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K10-1.html",
+		"quote": "make one nomination for each office therein to be filled at any election for officers of a municipality with a population of less than 5,000",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Article 4 (commission) and Article 5 (managerial) municipalities elect on a nonpartisan basis",
+		"citation": "10 ILCS 5/10-3.1",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K10-3.1.html",
+		"quote": "requires election to such office on a nonpartisan basis and does not permit political party nominations (including without limitation Articles 4 and 5 of the Municipal Code)",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Villages may elect in nonpartisan primary and general elections; villages partisan before 1992 may stay partisan; voters can switch by referendum",
+		"citation": "65 ILCS 5/3.1-25-20",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-25-20.html",
+		"quote": "Villages that have nominated and elected candidates for president and trustees in partisan elections prior to January 1, 1992, may continue to hold partisan elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village can vote to stop nonpartisan elections",
+		"citation": "65 ILCS 5/3.1-25-65",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-25-65.html",
+		"quote": "Shall candidates for president and trustees of (name of village) no longer be elected in nonpartisan primary and general elections?",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village can vote to adopt nonpartisan elections",
+		"citation": "65 ILCS 5/3.1-25-60",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-25-60.html",
+		"quote": "Shall candidates for president and trustees of (name of village) be elected in nonpartisan primary and general elections?",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township officers in most townships are nominated by party caucus",
+		"citation": "60 ILCS 1/45-10",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200060/Act%200001/006000010K45-10.html",
+		"quote": "a caucus shall be held by the voters of each established political party in a township to nominate its candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Larger townships may choose a party primary instead of a caucus",
+		"citation": "60 ILCS 1/45-55",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200060/Act%200001/006000010K45-55.html",
+		"quote": "determine that its candidates for township offices shall be nominated by primary in accordance with the general election law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Independent candidates for local office get on the ballot by nomination papers",
+		"citation": "10 ILCS 5/10-3",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K10-3.html",
+		"quote": "Nominations of independent candidates for public office within any district or political subdivision less than the State, may be made by nomination papers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A circulator may not circulate for more than one party, or for an independent plus a party, for the same election",
+		"citation": "10 ILCS 5/10-4",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K10-4.html",
+		"quote": "no person shall circulate or certify petitions for candidates of more than one political party, or for an independent candidate or candidates in addition to one political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party primary petition signer may not sign for more than one party",
+		"citation": "10 ILCS 5/7-10",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K7-10.html",
+		"quote": "may not sign petitions for or be a candidate in the primary of more than one party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers are elected by plurality",
+		"citation": "10 ILCS 5/22-2",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K22-2.html",
+		"quote": "to each of the persons having the highest number of votes, for the several county offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a sheriff, clerk and treasurer, and may elect or appoint other officers; county officers serve four-year terms",
+		"citation": "Ill. Const. art. VII, § 4(c)",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "Each county shall elect a sheriff, county clerk and treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected county officers serve four-year terms at general elections",
+		"citation": "Ill. Const. art. VII, § 4(c)",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "elected county officers shall be elected for terms of four years at general elections as provided by law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Every county elects a county board, with size set by ordinance within limits",
+		"citation": "Ill. Const. art. VII, § 3(a)",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "A county board shall be elected in each county.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township counties under 3 million set a board of 5 to 29 members, at large or by districts, at each reapportionment",
+		"citation": "55 ILCS 5/2-3002",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200055/Act%200005/005500050K2-3002.html",
+		"quote": "may consist of not less than 5 nor more than 29 members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County board seats rotate through 2- and 4-year terms after each redistricting",
+		"citation": "55 ILCS 5/2-3009",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200055/Act%200005/005500050K2-3009.html",
+		"quote": "successive terms of 2 years, 4 years and 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county board may let voters elect its chairman",
+		"citation": "55 ILCS 5/2-3007",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200055/Act%200005/005500050K2-3007.html",
+		"quote": "may provide that the chairman of the county board shall be elected by the voters of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties not under township organization may use a three-member commission elected at large to six-year terms",
+		"citation": "55 ILCS 5/2-4006",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200055/Act%200005/005500050K2-4006.html",
+		"quote": "In every county not under township organization that is organized as a commission form of government having 3 commissioners elected at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners in such counties serve six-year terms, one elected each general election",
+		"citation": "55 ILCS 5/2-4006(b)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200055/Act%200005/005500050K2-4006.html",
+		"quote": "one commissioner shall be elected to serve for a term of 6 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county with an elected chief executive, and a municipality over 25,000, is a home rule unit automatically",
+		"citation": "Ill. Const. art. VII, § 6(a)",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "A County which has a chief executive officer elected by the electors of the county and any municipality which has a population of more than 25,000 are home rule units.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule counties provide for officers only in the manner set in art. VII § 4",
+		"citation": "Ill. Const. art. VII, § 6(f)",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "A home rule county shall have the power to provide for its officers, their manner of selection and terms of office in the manner set forth in Section 4 of this Article.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cook County elects 17 commissioners every four years",
+		"citation": "55 ILCS 5/2-6001",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200055/Act%200005/005500050K2-6001.html",
+		"quote": "There shall be elected every 4 years by the legal voters of Cook County 17 county commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The President of the Cook County Board is elected at large and is the county's chief executive",
+		"citation": "Ill. Const. art. VII, § 4(b)",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "The President of the Cook County Board shall be elected from the County at large and shall be the chief executive officer of the County.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cook County may change how its board is elected by ordinance or referendum; other counties only by referendum",
+		"citation": "Ill. Const. art. VII, § 3(b)",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "No county, other than Cook County, may change its method of electing board members except as approved by county-wide referendum.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters in a county decide by referendum whether to have township organization",
+		"citation": "Ill. Const. art. VII, § 5",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "The General Assembly shall provide by law for the formation of townships in any county when approved by county-wide referendum.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Townships elect a supervisor, clerk, assessor and collector to four-year terms",
+		"citation": "60 ILCS 1/50-5",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200060/Act%200001/006000010K50-5.html",
+		"quote": "there shall be elected a township supervisor. The supervisor shall be ex-officio supervisor of general assistance. The supervisor shall hold office for a term of 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The township board is the supervisor and four trustees elected at large",
+		"citation": "60 ILCS 1/80-5",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200060/Act%200001/006000010K80-5.html",
+		"quote": "the township board shall consist of the supervisor and 4 other members elected at large from the township",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Townships hold an annual town meeting of voters each April",
+		"citation": "60 ILCS 1/30-5",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200060/Act%200001/006000010K30-5.html",
+		"quote": "The annual township meeting in the respective townships for the transaction of the business of the township shall be held on the second Tuesday of April in each year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township elections follow the consolidated schedule",
+		"citation": "60 ILCS 1/30-5",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200060/Act%200001/006000010K30-5.html",
+		"quote": "Elections for township officers shall be held in accordance with the consolidated schedule of elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities are cities, villages and incorporated towns; school districts are not units of local government",
+		"citation": "Ill. Const. art. VII, § 1",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "\"Municipalities\" means cities, villages and incorporated towns.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities elect a mayor, alderpersons, a clerk and a treasurer (treasurer may be appointed under 10,000); villages and incorporated towns elect a president, trustees and a clerk",
+		"citation": "65 ILCS 5/3.1-15-5",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-15-5.html",
+		"quote": "In all villages and incorporated towns, there shall be elected a president, trustees, and a clerk",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities elect a mayor, alderpersons, a city clerk and a city treasurer",
+		"citation": "65 ILCS 5/3.1-15-5",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-15-5.html",
+		"quote": "there shall be elected a mayor, alderpersons, a city clerk, and a city treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village president may also be called mayor; the chief executive serves four years unless a two-year term was adopted",
+		"citation": "65 ILCS 5/3.1-15-10",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-15-10.html",
+		"quote": "The chief executive officer of a village shall be a village president, who may also be called a mayor.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal chief executives serve 4-year terms by default",
+		"citation": "65 ILCS 5/3.1-15-10",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-15-10.html",
+		"quote": "The chief executive officer shall hold office for 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Villages elect six trustees to four-year terms",
+		"citation": "65 ILCS 5/3.1-25-5",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-25-5.html",
+		"quote": "the electors of the village shall elect 6 trustees. The term of office of the trustees shall be 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Villages under 5,000 can cut the board to four trustees by referendum",
+		"citation": "65 ILCS 5/3.1-25-10",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-25-10.html",
+		"quote": "whether the board of trustees shall be comprised of 4 members rather than 6 members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The number of alderpersons in a city is set by population brackets",
+		"citation": "65 ILCS 5/3.1-20-10",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-20-10.html",
+		"quote": "in cities not exceeding 3,000 inhabitants, 6 alderpersons",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities have half as many wards as alderpersons (two per ward by default)",
+		"citation": "65 ILCS 5/3.1-20-15",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-20-15.html",
+		"quote": "every city shall have one-half as many wards as the total number of alderpersons to which the city is entitled",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities under 100,000 can halve the council to one alderperson per ward by referendum",
+		"citation": "65 ILCS 5/3.1-20-20",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-20-20.html",
+		"quote": "a proposition to restrict the number of alderpersons to one-half of the total authorized by Section 3.1-20-10, with one alderperson representing each ward",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities under 500,000 can cut terms from four years to two by referendum",
+		"citation": "65 ILCS 5/3.1-10-65",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K3.1-10-65.html",
+		"quote": "a proposition to reduce the terms of the elective officers of the municipality from 4 years to 2 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village or town of 2,500 or more may choose to become a city; class does not change automatically with population",
+		"citation": "65 ILCS 5/2-2-4",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200005/006500050K2-2-4.html",
+		"quote": "Any incorporated town or village having a population of not less than 2,500 persons including 2,000 living in immobile dwellings, may incorporate as a city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality over 25,000 is home rule automatically; smaller ones may become home rule by referendum; any may opt out by referendum",
+		"citation": "Ill. Const. art. VII, § 6(a)-(b)",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "Other municipalities may elect by referendum to become home rule units.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule unit may vote by referendum not to be home rule",
+		"citation": "Ill. Const. art. VII, § 6(b)",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "A home rule unit by referendum may elect not to be a home rule unit.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A home rule municipality may change its officers, their selection and terms only by referendum or as authorized by law",
+		"citation": "Ill. Const. art. VII, § 6(f)",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "A home rule municipality shall have the power to provide for its officers, their manner of selection and terms of office only as approved by referendum or as otherwise authorized by law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Non-home-rule municipalities may change their officers and form of government by referendum",
+		"citation": "Ill. Const. art. VII, § 7",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "in the case of municipalities, to provide by referendum for their officers, manner of selection and terms of office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A form-of-government ordinance under art. VII § 7 may provide for runoff elections",
+		"citation": "10 ILCS 5/2A-1.2(c)(1)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "such offices shall be filled by election or by runoff election as may be provided by such ordinance",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Townships, school districts and special districts have only powers granted by law",
+		"citation": "Ill. Const. art. VII, § 8",
+		"url": "https://www.ilga.gov/commission/lrb/con7.htm",
+		"quote": "Townships, school districts, special districts and units, designated by law as units of local government, which exercise limited governmental powers or powers in respect to limited governmental subjects shall have only powers granted by law.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Most school districts of 1,000 to 500,000 are governed by a seven-member board of education with four-year terms",
+		"citation": "105 ILCS 5/10-10",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200105/Act%200005/010500050K10-10.html",
+		"quote": "shall be governed by a board of education consisting of 7 members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Chicago mayor is elected in a nonpartisan election; a majority at the February consolidated primary wins, otherwise a top-two runoff in April",
+		"citation": "65 ILCS 20/21-5",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200020/006500200K21-5.html",
+		"quote": "The candidate receiving a majority of the votes cast for mayor at the consolidated primary election shall be declared mayor.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chicago mayoral runoff is held at the consolidated election",
+		"citation": "65 ILCS 20/21-5",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200020/006500200K21-5.html",
+		"quote": "If no candidate receives a majority of the votes, a runoff election shall be held at the consolidated election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chicago mayor is elected in a nonpartisan election",
+		"citation": "65 ILCS 20/21-5",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200020/006500200K21-5.html",
+		"quote": "quadrennially thereafter in a nonpartisan election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chicago city clerk and treasurer are also elected nonpartisan with majority and runoff",
+		"citation": "65 ILCS 20/21-12",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200020/006500200K21-12.html",
+		"quote": "there shall be elected also in a nonpartisan election a city clerk and a city treasurer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chicago has 50 wards",
+		"citation": "65 ILCS 20/21-36",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200020/006500200K21-36.html",
+		"quote": "The city of Chicago shall be divided into fifty wards.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "One alderperson per ward, four-year terms",
+		"citation": "65 ILCS 20/21-22",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200020/006500200K21-22.html",
+		"quote": "one alderperson shall be elected from each of the 50 wards provided for by this Article",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An alderperson needs a majority; otherwise a supplementary (runoff) election",
+		"citation": "65 ILCS 20/21-26",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200020/006500200K21-26.html",
+		"quote": "The candidate receiving a majority of the votes cast for alderperson in each ward at any general or special election shall be declared elected.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Chicago alderperson elections are held on the last Tuesday of February, with runoffs in April",
+		"citation": "65 ILCS 20/21-25",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200065/Act%200020/006500200K21-25.html",
+		"quote": "on the last Tuesday of February of such year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sanitary district trustees, including the Metropolitan Water Reclamation District, are elected at the November general election",
+		"citation": "10 ILCS 5/2A-1.2(a)(10)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K2A-1.2.html",
+		"quote": "Trustee of the Metropolitan Water Reclamation District of Greater Chicago, and elected Trustee of other Sanitary Districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Officers of cities and villages organized under special charters are not nominated through the party primary",
+		"citation": "10 ILCS 5/7-1(b)",
+		"url": "https://www.ilga.gov/ftp/ILCS/Ch%200010/Act%200005/001000050K7-1.html",
+		"quote": "the nomination of officers of cities and villages organized under special charters",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

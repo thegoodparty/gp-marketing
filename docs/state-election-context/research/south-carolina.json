@@ -1,0 +1,459 @@
+[
+	{
+		"claim": "The General Assembly convenes every year on the second Tuesday of January",
+		"citation": "S.C. Const. art. III, § 9",
+		"url": "https://www.scstatehouse.gov/getfile.php?TYPE=CONSTITUTION&ARTICLE=A03",
+		"quote": "shall convene at the State Capitol Building in the City of Columbia on the second Tuesday of January of each year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The regular session adjourns sine die by 5 p.m. on the second Thursday in May unless extended",
+		"citation": "S.C. Code § 2-1-180(A)",
+		"url": "https://www.scstatehouse.gov/code/t02c001.php",
+		"quote": "shall adjourn sine die each year not later than five o'clock p.m. on the second Thursday in May",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The presiding officers may call the houses back until the end of June to finish the budget",
+		"citation": "S.C. Code § 2-1-180(A)(2)",
+		"url": "https://www.scstatehouse.gov/code/t02c001.php",
+		"quote": "may call their respective bodies into session at any time after the date of sine die adjournment and until the last day in June",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned by the governor within five days, Sundays excepted, becomes law; if adjournment prevents return, within two days after the next meeting",
+		"citation": "S.C. Const. art. IV, § 21",
+		"url": "https://www.scstatehouse.gov/getfile.php?TYPE=CONSTITUTION&ARTICLE=A04",
+		"quote": "within five days after it shall have been presented to him, Sundays excepted",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "If adjournment prevents return, the bill becomes law unless returned within two days after the next meeting",
+		"citation": "S.C. Const. art. IV, § 21",
+		"url": "https://www.scstatehouse.gov/getfile.php?TYPE=CONSTITUTION&ARTICLE=A04",
+		"quote": "unless returned within two days after the next meeting",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "General elections for state and county officers are on the first Tuesday after the first Monday in November of even-numbered years",
+		"citation": "S.C. Code § 7-13-10",
+		"url": "https://www.scstatehouse.gov/code/t07c013.php",
+		"quote": "shall be held on the first Tuesday following the first Monday in November in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County supervisors, superintendents of education, sheriffs, coroners and clerks of court are elected every four years, counting from 1960",
+		"citation": "S.C. Code § 7-13-20",
+		"url": "https://www.scstatehouse.gov/code/t07c013.php",
+		"quote": "held in each county at every alternate general election, reckoning from the year 1960",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Probate judges are elected every four years, counting from 1958",
+		"citation": "S.C. Code § 7-13-30",
+		"url": "https://www.scstatehouse.gov/code/t07c013.php",
+		"quote": "The probate judge in every county shall be elected at every alternate general election, reckoning from the year 1958",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County council members are elected at the general election for two- or four-year terms set by the General Assembly",
+		"citation": "S.C. Code § 4-9-90",
+		"url": "https://www.scstatehouse.gov/code/t04c009.php",
+		"quote": "shall be elected in the general election for terms of two years or four years as the General Assembly may determine for each county",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council members are elected from single-member districts unless otherwise determined",
+		"citation": "S.C. Code § 4-9-90",
+		"url": "https://www.scstatehouse.gov/code/t04c009.php",
+		"quote": "Council members must be elected from defined single-member election districts unless otherwise determined",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each county elects a clerk of court, sheriff and coroner for four years; each judicial circuit elects a solicitor",
+		"citation": "S.C. Const. art. V, § 24",
+		"url": "https://www.scstatehouse.gov/getfile.php?TYPE=CONSTITUTION&ARTICLE=A05",
+		"quote": "There shall be elected in each county by the electors thereof a clerk of the circuit court, a sheriff, and a coroner; and in each judicial circuit a solicitor shall be elected by the electors thereof",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "From 1 January 2027, municipal general elections are held in odd-numbered years, in April or November",
+		"citation": "S.C. Code § 5-15-50(B) (eff. 1 Jan. 2027)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "The time for general elections within a municipality must be established in odd-numbered years as follows",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The April option is the first Tuesday after the first Monday in April",
+		"citation": "S.C. Code § 5-15-50(B)(1)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "on the first Tuesday after the first Monday in April; or",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality that votes in November of odd years cannot change",
+		"citation": "S.C. Code § 5-15-50(C)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "then the municipal governing body must not establish a different time for its general elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality that failed to choose defaults to November of odd years",
+		"citation": "S.C. Code § 5-15-50(D)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "then the time for the general elections within that municipality is the first Tuesday after the first Monday in November in odd-numbered years unless subsection (E) applies",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality whose last elections were in April or November of an even year may keep that even-year date",
+		"citation": "S.C. Code § 5-15-50(E)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "then the municipality may retain the first Tuesday after the first Monday in April in even-numbered years",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Terms are adjusted in the transition so current terms end at the new odd-year dates",
+		"citation": "S.C. Code § 5-15-45",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "Notwithstanding Section 5-15-40, if the unexpired four-year term of a mayor or member of council began following a general election held",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Until 1 January 2027 a municipality sets its election time by ordinance",
+		"citation": "S.C. Code § 5-15-50 (eff. until 1 Jan. 2027)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "Each municipal governing body may by ordinance establish municipal ward lines and the time for general and special elections within the municipality",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Mayor and council serve two- or four-year terms; four-year terms are staggered unless an ordinance says otherwise",
+		"citation": "S.C. Code § 5-15-40",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "The mayor and councilmen of each municipality shall be elected for terms of two or four years",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Two-year terms are not staggered",
+		"citation": "S.C. Code § 5-15-40",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "Two-year terms shall not be staggered",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party nominates by primary, convention, or petition candidates qualify by petition",
+		"citation": "S.C. Code § 7-11-10(A)",
+		"url": "https://www.scstatehouse.gov/code/t07c011.php",
+		"quote": "may be by political party primary, by political party convention, or by petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate defeated in a party primary or convention cannot appear on the general election ballot for that office",
+		"citation": "S.C. Code § 7-11-10(A)",
+		"url": "https://www.scstatehouse.gov/code/t07c011.php",
+		"quote": "a person who was defeated as a candidate for nomination to an office in a party primary or party convention must not have his name placed on the ballot for the ensuing general or special election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party primaries are held on the second Tuesday in June of general election years, with runoffs two weeks later",
+		"citation": "S.C. Code § 7-13-40",
+		"url": "https://www.scstatehouse.gov/code/t07c013.php",
+		"quote": "on the second Tuesday in June of each general election year, and a second and third primary each two weeks successively thereafter, if necessary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State-run June primaries include all school boards and special purpose district offices where parties nominate",
+		"citation": "S.C. Code § 7-13-15(B)(2)",
+		"url": "https://www.scstatehouse.gov/code/t07c013.php",
+		"quote": "countywide and less than countywide offices, specifically including, but not limited to, all school boards and school trustees",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No person may vote in more than one party primary on the same day",
+		"citation": "S.C. Code § 7-13-1040",
+		"url": "https://www.scstatehouse.gov/code/t07c013.php",
+		"quote": "No person shall be entitled to vote in more than one party primary election held the same day",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first primary needs a majority to nominate",
+		"citation": "S.C. Code § 7-17-600",
+		"url": "https://www.scstatehouse.gov/code/t07c017.php",
+		"quote": "No candidate shall be declared nominated in a first primary election unless he received a majority of the votes cast for the office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The second primary is between the top two, two weeks later, and the leader wins",
+		"citation": "S.C. Code § 7-13-50",
+		"url": "https://www.scstatehouse.gov/code/t07c013.php",
+		"quote": "A second primary, when necessary, must be held two weeks after the first",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In the second primary the candidate with the most votes is nominated even without a majority",
+		"citation": "S.C. Code § 7-13-50",
+		"url": "https://www.scstatehouse.gov/code/t07c013.php",
+		"quote": "must be declared the nominee for the office whether or not he has received a majority of the votes cast for that office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election ballot groups candidates under party names, with columns for petition candidates",
+		"citation": "S.C. Code § 7-13-330",
+		"url": "https://www.scstatehouse.gov/code/t07c013.php",
+		"quote": "with a column or columns added in case of nomination by petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each municipality adopts by ordinance one of three methods for nonpartisan elections",
+		"citation": "S.C. Code § 5-15-60(A)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "shall adopt by ordinance one of the following alternative methods of nominating candidates for and determining the results of its nonpartisan elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "From 2027, partisan municipal nominations are allowed only in municipalities under 39,000 people",
+		"citation": "S.C. Code § 5-15-60(B)(1) (eff. 1 Jan. 2027)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "only in municipalities with populations under thirty-nine thousand according to the most recent official United States census",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality over 39,000 with partisan nominations must adopt a nonpartisan method by 1 April 2027 or default to plurality",
+		"citation": "2026 S.C. Acts, editor's note to S.C. Code § 5-15-60",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "must, by April 1, 2027, adopt by ordinance a method of nominating candidates prescribed in Section 5-15-61, 5-15-62, or 5-15-63",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality that holds partisan elections pays for its municipal primary",
+		"citation": "S.C. Code § 5-15-60",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "any municipality which elects to hold partisan elections for municipal offices must pay all costs and expenses associated with the conduct of a municipal primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the nonpartisan plurality method the candidate with the most votes wins",
+		"citation": "S.C. Code § 5-15-61",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "the candidate who receives the highest number of votes shall be declared elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the election-and-runoff method a majority is needed, with a runoff two weeks later",
+		"citation": "S.C. Code § 5-15-62(b)(1)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "a second election shall be conducted two weeks later between the two candidates receiving the largest number of votes in the first election who do not withdraw",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The third method is a nonpartisan primary followed by a general election",
+		"citation": "S.C. Code § 5-15-60(A)(3)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "The nonpartisan primary election and general election method prescribed in Section 5-15-63",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petition candidates file with the county board of voter registration and elections for county offices and with the municipal clerk for municipal offices",
+		"citation": "S.C. Code § 7-11-70",
+		"url": "https://www.scstatehouse.gov/code/t07c011.php",
+		"quote": "with the county board of voter registration and elections in the case of countywide or less than countywide offices with the exception of municipal offices; with the clerk of a municipality in case of a municipal office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petitions must be signed by qualified registered electors of the office's area",
+		"citation": "S.C. Code § 7-11-70",
+		"url": "https://www.scstatehouse.gov/code/t07c011.php",
+		"quote": "qualified registered electors of the geographical area of the office for which he offers as a candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No more than 46 counties may exist",
+		"citation": "S.C. Const. art. VIII, § 3",
+		"url": "https://www.scstatehouse.gov/getfile.php?TYPE=CONSTITUTION&ARTICLE=A08",
+		"quote": "counties shall exist at any time, but the General Assembly may provide for a lesser number",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The General Assembly sets county structure by general law, with no more than five forms, and may pass no law for a specific county",
+		"citation": "S.C. Const. art. VIII, § 7",
+		"url": "https://www.scstatehouse.gov/getfile.php?TYPE=CONSTITUTION&ARTICLE=A08",
+		"quote": "No laws for a specific county shall be enacted and no county shall be exempted from the general laws",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The five county forms are council, council-supervisor, council-administrator, council-manager and board of commissioners",
+		"citation": "S.C. Code § 4-9-20",
+		"url": "https://www.scstatehouse.gov/code/t04c009.php",
+		"quote": "The alternate forms of government which may be adopted pursuant to Section 4-9-10 shall be one of the following",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The council-administrator form council has 3 to 12 members",
+		"citation": "S.C. Code § 4-9-610",
+		"url": "https://www.scstatehouse.gov/code/t04c009.php",
+		"quote": "shall consist of not less than three nor more than twelve members who are qualified electors of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Under the council-supervisor form the supervisor is elected at large, chairs the council and votes only to break ties",
+		"citation": "S.C. Code § 4-9-410",
+		"url": "https://www.scstatehouse.gov/code/t04c009.php",
+		"quote": "The supervisor shall serve as chairman and vote only to break tie votes",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The council picks its chair unless the chair is elected as a separate office",
+		"citation": "S.C. Code § 4-9-110",
+		"url": "https://www.scstatehouse.gov/code/t04c009.php",
+		"quote": "The council shall select one of its members as chairman, except where the chairman is elected as a separate office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County powers are liberally construed",
+		"citation": "S.C. Code § 4-9-25",
+		"url": "https://www.scstatehouse.gov/code/t04c009.php",
+		"quote": "The powers of a county must be liberally construed in favor of the county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule laws cannot set aside general law on election and suffrage qualifications",
+		"citation": "S.C. Const. art. VIII, § 14",
+		"url": "https://www.scstatehouse.gov/getfile.php?TYPE=CONSTITUTION&ARTICLE=A08",
+		"quote": "election and suffrage qualifications",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A municipality is a city or town with a certificate of incorporation, or a township created by act",
+		"citation": "S.C. Code § 5-1-20(1)",
+		"url": "https://www.scstatehouse.gov/code/t05c001.php",
+		"quote": "\"Municipality\" means a city or town issued a certificate of incorporation, or township created by act of the General Assembly",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal forms: mayor-council, council, council-manager, chosen by ordinance",
+		"citation": "S.C. Code § 5-5-10",
+		"url": "https://www.scstatehouse.gov/code/t05c005.php",
+		"quote": "the mayor-council form provided for in Chapter 9",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The council-manager form is one of the three",
+		"citation": "S.C. Code § 5-5-10",
+		"url": "https://www.scstatehouse.gov/code/t05c005.php",
+		"quote": "the council-manager form provided for in Chapter 13",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No more than five municipal forms; structure set by general law",
+		"citation": "S.C. Const. art. VIII, § 9",
+		"url": "https://www.scstatehouse.gov/getfile.php?TYPE=CONSTITUTION&ARTICLE=A08",
+		"quote": "that not more than five alternative forms of government shall be authorized",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "No law may be enacted for a specific municipality",
+		"citation": "S.C. Const. art. VIII, § 10",
+		"url": "https://www.scstatehouse.gov/getfile.php?TYPE=CONSTITUTION&ARTICLE=A08",
+		"quote": "No laws for a specific municipality shall be enacted",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Each municipality chooses by ordinance how council is elected (at large, wards, or a mix); the mayor is always elected at large",
+		"citation": "S.C. Code § 5-15-20",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "Regardless of the form adopted by the municipality, the mayor shall be elected at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council or voters by petition can call a referendum to change council size or method of election",
+		"citation": "S.C. Code § 5-15-30",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "to change the number of council members to a number authorized by the form of government under which the municipality is then operating or to change the method of election of council members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "From 2027 elections in towns under 10,000 are run by the county election board",
+		"citation": "S.C. Code § 5-15-175(B) (eff. 1 Jan. 2027)",
+		"url": "https://www.scstatehouse.gov/code/t05c015.php",
+		"quote": "Elections for municipalities with a population of less than ten thousand, according to the most recent official United States census, must be conducted and certified by the county boards of voter registration and elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Default school trustee boards are three appointed members for three years, unless a law provides otherwise",
+		"citation": "S.C. Code § 59-19-20",
+		"url": "https://www.scstatehouse.gov/code/t59c019.php",
+		"quote": "Unless it be specially provided otherwise by law, the boards of school trustees in this State shall be composed of three members",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Public service district commissioners can be elected at the general election, nominated by petition",
+		"citation": "S.C. Code § 7-11-71",
+		"url": "https://www.scstatehouse.gov/code/t07c011.php",
+		"quote": "petitions to nominate candidates elected in the general election to serve as commissioners of public service districts",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	}
+]

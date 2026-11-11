@@ -1,0 +1,506 @@
+[
+	{
+		"claim": "Annual general sessions begin on the day in January set by statute",
+		"citation": "Utah Const. art. VI, § 2",
+		"url": "https://le.utah.gov/xcode/UC_1800010118000101.xml",
+		"quote": "Annual general sessions of the Legislature shall be held at the seat of government and shall begin on the day in January designated by statute.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The annual general session begins the first Tuesday after the third Monday in January",
+		"citation": "Utah Code § 36-3-201",
+		"url": "https://le.utah.gov/xcode/Title36/Chapter3/C36-3_2020051220200512.xml",
+		"quote": "The annual general session of the Legislature shall begin the first Tuesday after the third Monday in January.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A general session may not exceed 45 calendar days, excluding holidays",
+		"citation": "Utah Const. art. VI, § 16",
+		"url": "https://le.utah.gov/xcode/UC_1800010118000101.xml",
+		"quote": "no annual general session of the Legislature may exceed 45 calendar days, excluding state holidays and federal holidays",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature can convene itself on a two-thirds poll for a fiscal crisis or emergency",
+		"citation": "Utah Const. art. VI, § 2(3)",
+		"url": "https://le.utah.gov/xcode/UC_1800010118000101.xml",
+		"quote": "two-thirds of all members elected to each house are in favor of convening the Legislature into session",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned within ten days (Sundays and day received excepted) becomes law",
+		"citation": "Utah Const. art. VII, § 8",
+		"url": "https://le.utah.gov/xcode/UC_1800010118000101.xml",
+		"quote": "If any bill is not returned by the governor within ten days after it has been presented to the governor, Sunday and the day it was received excepted, it shall become a law without a signature.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After adjournment the governor has twenty days to file objections",
+		"citation": "Utah Const. art. VII, § 8",
+		"url": "https://le.utah.gov/xcode/UC_1800010118000101.xml",
+		"quote": "it shall become a law unless the governor within twenty days after adjournment files the objections to it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Acts take effect sixty days after adjournment unless two-thirds of each house direct otherwise",
+		"citation": "Utah Const. art. VI, § 25",
+		"url": "https://le.utah.gov/xcode/UC_1800010118000101.xml",
+		"quote": "no act shall take effect until sixty days after the adjournment of the session at which it passed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regular general election is in November of even-numbered years",
+		"citation": "Utah Code § 20A-1-201",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter1/C20A-1_1800010118000101.xml",
+		"quote": "A regular general election shall be held throughout the state on the first Tuesday after the first Monday in November of each even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County officers and local school board members are chosen at the regular general election",
+		"citation": "Utah Code § 20A-1-201",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter1/C20A-1_1800010118000101.xml",
+		"quote": "county officers; State School Board members; local school board members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal general elections are in November of odd-numbered years, with odd-year special district elections",
+		"citation": "Utah Code § 20A-1-202",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter1/C20A-1_1800010118000101.xml",
+		"quote": "a municipal general election shall be held in municipalities, and special districts as applicable, on the first Tuesday after the first Monday in November of each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The regular primary is the fourth Tuesday of June in even years, for national, state, school board and county offices",
+		"citation": "Utah Code § 20A-1-201.5",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter1/C20A-1_1800010118000101.xml",
+		"quote": "The regular primary election shall be held throughout the state on the fourth Tuesday of June of each even numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipal primary, if necessary, is the second Tuesday after the first Monday in August",
+		"citation": "Utah Code § 20A-1-201.5",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter1/C20A-1_1800010118000101.xml",
+		"quote": "A municipal primary election shall be held, if necessary, on the second Tuesday following the first Monday in August before the regular municipal election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal officers serve four-year terms beginning the first Monday in January",
+		"citation": "Utah Code § 10-3-201",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter3/C10-3_1800010118000101.xml",
+		"quote": "The officers elected shall continue in the office to which they were elected for four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In five- and six-member council cities, about half the council and the mayor are elected the year after a presidential election",
+		"citation": "Utah Code § 10-3-205",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter3/C10-3_1800010118000101.xml",
+		"quote": "in the year following a year in which a presidential election is held, the offices of: approximately half the council members",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special district board elections are held with the municipal general election or the regular general election",
+		"citation": "Utah Code § 17B-1-306",
+		"url": "https://le.utah.gov/xcode/Title17B/Chapter1/C17B-1_2023022720230227.xml",
+		"quote": "at the same time as the municipal general election or the regular general election, as applicable",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special district candidates go in the nonpartisan section of the ballot",
+		"citation": "Utah Code § 17B-1-306",
+		"url": "https://le.utah.gov/xcode/Title17B/Chapter1/C17B-1_2023022720230227.xml",
+		"quote": "in the nonpartisan section of the ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special district board terms are four years",
+		"citation": "Utah Code § 17B-1-303",
+		"url": "https://le.utah.gov/xcode/Title17B/Chapter1/C17B-1_2023022720230227.xml",
+		"quote": "the term of each member of a board of trustees is four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party candidates for county and other regular offices are nominated in a regular primary",
+		"citation": "Utah Code § 20A-9-403",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "Candidates for elective office that are to be filled at the next regular general election shall be nominated in a regular primary election by direct vote of the people",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each party declares which other parties' members, and whether unaffiliated voters, may vote for its candidates",
+		"citation": "Utah Code § 20A-9-403",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "identify one or more registered political parties whose members may vote for the registered political party's candidates and whether individuals identified as unaffiliated with a political party may vote for the registered political party's candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate may not appear as the candidate of more than one party",
+		"citation": "Utah Code § 20A-9-201",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "appear on the ballot as the candidate of more than one political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A signer of a party nomination petition may not sign another candidate's petition for the same office",
+		"citation": "Utah Code § 20A-9-411",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "may not sign a petition to nominate another candidate for the same office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local school board candidates are nonpartisan and nominated in the regular primary",
+		"citation": "Utah Code § 20A-1-102",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter1/C20A-1_1800010118000101.xml",
+		"quote": "candidates for nonpartisan local school board positions to advance to the regular general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "All municipal candidates are nominated at a municipal primary",
+		"citation": "Utah Code § 20A-9-404",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "Candidates for municipal office in all municipalities shall be nominated at a municipal primary election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "There is no municipal primary if candidates do not exceed twice the seats",
+		"citation": "Utah Code § 20A-9-404",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "If the number of candidates for a particular municipal office does not exceed twice the number of individuals needed to fill that office, a primary election for that office may not be held and the candidates are considered nominated.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Third, fourth and fifth class cities and towns may instead nominate by municipal party convention or committee",
+		"citation": "Utah Code § 20A-9-404",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "any third, fourth, or fifth class city or town may exempt itself from a primary election by providing that the nomination of candidates for municipal office to be voted upon at a municipal election be nominated by a municipal party convention or committee",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "When a municipality nominates by convention, the party name appears with the candidate's name",
+		"citation": "Utah Code § 20A-6-402",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter6/C20A-6_1800010118000101.xml",
+		"quote": "When a municipality has chosen to nominate candidates by convention or committee, the election officer shall ensure that the party name is included with the candidate's name on the ballot",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City officers are elected at large unless the city provides for districts by ordinance",
+		"citation": "Utah Code § 10-3-205.5",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter3/C10-3_1800010118000101.xml",
+		"quote": "the officers of each city shall be elected in an at-large election held at the time and in the manner provided for electing municipal officers",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city may elect some or all council members by district by ordinance",
+		"citation": "Utah Code § 10-3-205.5",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter3/C10-3_1800010118000101.xml",
+		"quote": "The governing body of a city may by ordinance provide for the election of some or all commissioners or council members, as the case may be, by district",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal candidates must have lived in the municipality for 12 months",
+		"citation": "Utah Code § 20A-9-203",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "has resided within the municipality in which the individual seeks to hold elective office for the 12 consecutive months immediately before the date of the election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The candidate with the most votes is elected or nominated",
+		"citation": "Utah Code § 20A-1-303",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter1/C20A-1_1800010118000101.xml",
+		"quote": "the person receiving the highest number of votes at any: election for any office to be filled at that election is elected to that office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The municipal alternate voting methods (ranked-choice) pilot has been repealed",
+		"citation": "Utah Code § 20A-1-102",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter1/C20A-1_1800010118000101.xml",
+		"quote": "before the pilot project was repealed, the Municipal Alternate Voting Methods Pilot Project",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidates who do not affiliate with a party may get on the ballot by certificate of nomination",
+		"citation": "Utah Code § 20A-9-501",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "Candidates for public office who do not wish to affiliate with a registered political party may obtain a position on the ballot by following the procedures and requirements of this part.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A candidate who filed a declaration of candidacy may not file as unaffiliated the same year",
+		"citation": "Utah Code § 20A-9-501",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "A candidate who has filed a declaration of candidacy may not file a certificate of nomination as an unaffiliated candidate in the same year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Signing an unaffiliated petition more than once for the same candidate is a misdemeanor",
+		"citation": "Utah Code § 20A-9-502",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter9/C20A-9_1800010118000101.xml",
+		"quote": "more than once for the same candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties are recognized subdivisions and continue until changed by statute",
+		"citation": "Utah Const. art. XI, § 1",
+		"url": "https://le.utah.gov/xcode/UC_1800010118000101.xml",
+		"quote": "The counties now existing shall continue until changed as provided by statute.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The legislature provides optional forms of county government subject to voter approval",
+		"citation": "Utah Const. art. XI, § 4",
+		"url": "https://le.utah.gov/xcode/UC_1800010118000101.xml",
+		"quote": "The selection of an optional form shall be subject to voter approval as provided by statute.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties choose among four forms: commission, expanded commission, executive-council, council-manager",
+		"citation": "Utah Code § 17-62-102",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter62/C17-62_2025110620251206.xml",
+		"quote": "the county commission form under Section 17-62-201 ; the expanded county commission form under Section 17-62-202 ; the county executive and council form under Section 17-62-203 ; or the council-manager form under Section 17-62-204",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county uses the three-member commission form unless it adopts another",
+		"citation": "Utah Code § 17-62-102",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter62/C17-62_2025110620251206.xml",
+		"quote": "Unless a county adopts another form of government as provided in this chapter, the county shall operate under the county commission form of government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The commission form has three commissioners serving as both legislative body and executive",
+		"citation": "Utah Code § 17-62-201",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter62/C17-62_2025110620251206.xml",
+		"quote": "A county commission consisting of three members shall govern each county operating under the county commission form of government.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners serve four-year staggered terms and are elected at large unless a court orders otherwise",
+		"citation": "Utah Code § 17-62-201",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter62/C17-62_2025110620251206.xml",
+		"quote": "the term of office of each county commission member is four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The expanded commission form has five or seven commissioners",
+		"citation": "Utah Code § 17-62-202",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter62/C17-62_2025110620251206.xml",
+		"quote": "A county commission consisting of five or seven members shall govern each county operating under an expanded county commission form of government.",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An optional plan may not provide for nonpartisan election of county officers",
+		"citation": "Utah Code § 17-62-404",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter62/C17-62_2025110620251206.xml",
+		"quote": "provides for the nonpartisan election of elected officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county with partisan elections may not change to nonpartisan elections",
+		"citation": "Utah Code § 17-62-404",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter62/C17-62_2025110620251206.xml",
+		"quote": "A county that provides for the election of the county's elected officers through a partisan election may not change to a process that provides for the election of the county's elected officers through a nonpartisan election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fifth and sixth class counties may only use the commission or expanded commission form",
+		"citation": "Utah Code § 17-62-404",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter62/C17-62_2025110620251206.xml",
+		"quote": "for a county of the fifth or sixth class: the county commission form under Section 17-62-201 ; or the expanded county commission form under Section 17-62-202",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected county officers include the assessor, attorney, auditor, clerk, recorder, sheriff, surveyor and treasurer",
+		"citation": "Utah Code § 17-66-102",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter66/C17-66_2025110620251206.xml",
+		"quote": "the county assessor, with powers and duties described in Chapter 67, County Assessor",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties under the executive-council or council-manager form elect council members and a county executive",
+		"citation": "Utah Code § 17-66-102",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter66/C17-66_2025110620251206.xml",
+		"quote": "the county legislative body members and the county executive",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Elected county officers are elected every four years at the regular general election",
+		"citation": "Utah Code § 17-66-202",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter66/C17-66_2025110620251206.xml",
+		"quote": "each elected county officer shall be elected at the regular general election every four years",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county may consolidate county offices by ordinance",
+		"citation": "Utah Code § 17-66-104",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter66/C17-66_2025110620251206.xml",
+		"quote": "consolidates county offices and establishes the duties of consolidated county offices",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties are classified by population into six classes",
+		"citation": "Utah Code § 17-60-104",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter60/C17-60_2025110620251206.xml",
+		"quote": "A county with a population less than 5,000 is a county of the sixth class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities are classified by population: first class city at 100,000",
+		"citation": "Utah Code § 10-2-301",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter2/C10-2_1800010118000101.xml",
+		"quote": "A municipality with a population of 100,000 or more is a city of the first class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Fifth class city is 1,000 to 9,999",
+		"citation": "Utah Code § 10-2-301",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter2/C10-2_1800010118000101.xml",
+		"quote": "A municipality with a population of 1,000 or more but less than 10,000 is a city of the fifth class.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality under 1,000 is a town",
+		"citation": "Utah Code § 10-2-301",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter2/C10-2_1800010118000101.xml",
+		"quote": "A municipality with a population under 1,000 is a town.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality keeps its class until changed through the lieutenant governor's certificate",
+		"citation": "Utah Code § 10-2-302",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter2/C10-2_1800010118000101.xml",
+		"quote": "Each municipality shall retain its classification under Section 10-2-301 until changed as provided in this section",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any city or town may adopt a charter through an elected charter commission",
+		"citation": "Utah Const. art. XI, § 5",
+		"url": "https://le.utah.gov/xcode/UC_1800010118000101.xml",
+		"quote": "Any incorporated city or town may frame and adopt a charter for its own government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Charter commission candidates run without party designation",
+		"citation": "Utah Const. art. XI, § 5",
+		"url": "https://le.utah.gov/xcode/UC_1800010118000101.xml",
+		"quote": "but without party designation",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal forms include council-mayor, six-member council and five-member council",
+		"citation": "Utah Code § 10-3b-102",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter3B/C10-3b_1800010118000101.xml",
+		"quote": "\"Council-mayor form of government\" means the form of municipal government that",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A council-mayor form may not be adopted without voter approval",
+		"citation": "Utah Code § 10-3b-102",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter3B/C10-3b_1800010118000101.xml",
+		"quote": "may not be adopted without voter approval",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School boards have five, seven or nine members depending on enrollment",
+		"citation": "Utah Code § 20A-14-202",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter14/C20A-14_1800010118000101.xml",
+		"quote": "The board of education of a school district with a student population of less than 10,000 students comprises five members.",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members are elected at each regular general election, staggered",
+		"citation": "Utah Code § 20A-14-202",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter14/C20A-14_1800010118000101.xml",
+		"quote": "Members of a local board of education shall be elected at each regular general election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members serve four-year terms",
+		"citation": "Utah Code § 20A-14-203",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter14/C20A-14_1800010118000101.xml",
+		"quote": "The term of office for an individual elected to a local board of education is four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School boards are elected from board districts drawn by the county or city",
+		"citation": "Utah Code § 20A-14-201",
+		"url": "https://le.utah.gov/xcode/Title20A/Chapter14/C20A-14_1800010118000101.xml",
+		"quote": "shall divide the local school district into local school board districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Title 17 county sections were renumbered in the 2025 special session",
+		"citation": "Utah Code § 17-62-102 (history)",
+		"url": "https://le.utah.gov/xcode/Title17/Chapter62/C17-62_2025110620251206.xml",
+		"quote": "Renumbered and Amended by Chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The council-mayor form has two separate, independent and equal branches",
+		"citation": "Utah Code § 10-3b-102",
+		"url": "https://le.utah.gov/xcode/Title10/Chapter3B/C10-3b_1800010118000101.xml",
+		"quote": "consists of two separate, independent, and equal branches of municipal government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

@@ -1,0 +1,648 @@
+[
+	{
+		"claim": "Local races appear on the ballot in four ways: party primary then November, nonpartisan May election, city election by charter",
+		"citation": "O.C.G.A. § 21-2-9",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2KX-00008-00",
+		"quote": "shall be elected in the November election next preceding the expiration of the term of office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "The November election is the general election on the Tuesday after the first Monday in November of even-numbered years",
+		"citation": "O.C.G.A. § 21-2-2",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6C0H-GND3-S75K-V01C-00008-00",
+		"quote": "means the general election held on the Tuesday next following the first Monday in November in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Judges, county judicial officers, local school boards and nonpartisan offices are elected at the nonpartisan general election",
+		"citation": "O.C.G.A. § 21-2-9",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2KX-00008-00",
+		"quote": "shall be elected in the nonpartisan general election next preceding the expiration of the term of office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "City general elections are held in November of odd-numbered years",
+		"citation": "O.C.G.A. § 21-2-9",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2KX-00008-00",
+		"quote": "All general municipal elections to fill municipal offices shall be held on the Tuesday next following the first Monday in November in each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A local act may move a city to even-year November elections",
+		"citation": "O.C.G.A. § 21-2-541.2",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W32C-00008-00",
+		"quote": "For general municipal elections to fill such offices to be held on the Tuesday next following the first Monday in November in even-numbered years",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A local act may set two-year terms for city offices",
+		"citation": "O.C.G.A. § 21-2-541.2",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W32C-00008-00",
+		"quote": "For terms of two years for municipal offices",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "City offices default to four-year terms unless a local law says otherwise",
+		"citation": "O.C.G.A. § 21-2-541.1",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W32B-00008-00",
+		"quote": "All municipal offices elected at general municipal elections shall be for terms of four years unless otherwise provided by local law",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "The general primary is in the 24th week before the November election in even-numbered years",
+		"citation": "O.C.G.A. § 21-2-150",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2PT-00008-00",
+		"quote": "such primary shall be held on the Tuesday of the twenty-fourth week prior to the November general election in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Nonpartisan judicial elections are held with the general primary, with no party or independent nominations",
+		"citation": "O.C.G.A. § 21-2-138",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FVG-01B3-RTVH-T0SN-00008-00",
+		"quote": "shall be placed on the ballot in a nonpartisan election to be held and conducted jointly with the general primary in each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "No candidate in a nonpartisan judicial race is nominated by a party or runs as an independent",
+		"citation": "O.C.G.A. § 21-2-138",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FVG-01B3-RTVH-T0SN-00008-00",
+		"quote": "No candidates for any such office shall be nominated by a political party or by a petition as a candidate of a political body or as an independent candidate.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A local act may make probate judge, school board and consolidated government offices nonpartisan",
+		"citation": "O.C.G.A. § 21-2-139",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FVF-YWM3-RVSN-H1T4-00008-00",
+		"quote": "the General Assembly may provide by local Act for the election in nonpartisan elections of candidates to fill offices of judges of probate courts, offices of local boards of education, and offices of consolidated governments",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Nonpartisan local offices are elected with the general primary in even years, with no prior primary",
+		"citation": "O.C.G.A. § 21-2-139",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FVF-YWM3-RVSN-H1T4-00008-00",
+		"quote": "Such officers shall be elected in nonpartisan elections held and conducted in conjunction with the general primary in even-numbered years in accordance with this chapter without a prior nonpartisan primary.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Consolidated government nonpartisan elections count as county elections",
+		"citation": "O.C.G.A. § 21-2-139",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FVF-YWM3-RVSN-H1T4-00008-00",
+		"quote": "shall be considered county elections and not municipal elections for the purposes of this Code section",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Nonpartisan city elections run on the dates in the city charter",
+		"citation": "O.C.G.A. § 21-2-139",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FVF-YWM3-RVSN-H1T4-00008-00",
+		"quote": "Nonpartisan elections for municipal offices shall be conducted on the dates provided in the municipal charter.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A party may hold a municipal primary",
+		"citation": "O.C.G.A. § 21-2-139",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FVF-YWM3-RVSN-H1T4-00008-00",
+		"quote": "may conduct a municipal primary for the purpose of electing its own officials or nominating candidates for municipal elections",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A city may bar party primaries by charter or ordinance",
+		"citation": "O.C.G.A. § 21-2-139",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FVF-YWM3-RVSN-H1T4-00008-00",
+		"quote": "Municipalities may provide by their charter or by ordinance that no political party shall conduct primaries for the purpose of nominating candidates for municipal elections",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A 2025 change to 21-2-139 (probate judges nonpartisan) depends on a constitutional amendment on the November 2026 ballot",
+		"citation": "O.C.G.A. § 21-2-139",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FVF-YWM3-RVSN-H1T4-00008-00",
+		"quote": "upon the ratification of a resolution at the November, 2026, state-wide general election that amends the Constitution so as to authorize the election of probate court judges in nonpartisan elections",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "From 2028, county offices in a county that has abolished its elected coroner become nonpartisan",
+		"citation": "O.C.G.A. § 21-2-140",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6JMC-M173-SBW5-026V-00008-00",
+		"quote": "all candidates to fill elected county offices in a consolidated law enforcement county shall be elected in nonpartisan elections",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A consolidated law enforcement county is one that has abolished its elected coroner",
+		"citation": "O.C.G.A. § 21-2-140",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6JMC-M173-SBW5-026V-00008-00",
+		"quote": "means any county where the elected office of county coroner has been abolished",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "The 2028 nonpartisan rule excludes the sheriff",
+		"citation": "O.C.G.A. § 21-2-140",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6JMC-M173-SBW5-026V-00008-00",
+		"quote": "The office of county sheriff",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "21-2-140 takes effect 1 January 2028",
+		"citation": "O.C.G.A. § 21-2-140",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6JMC-M173-SBW5-026V-00008-00",
+		"quote": "This Code section becomes effective January 1, 2028.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A city may call its own nonpartisan primary",
+		"citation": "O.C.G.A. § 21-2-157",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2R3-00008-00",
+		"quote": "The governing authority of any municipality may call and hold a nonpartisan primary for the purpose of nominating candidates to seek municipal office in a subsequent election.",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Parties nominate their candidates in a primary",
+		"citation": "O.C.G.A. § 21-2-151",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2PV-00008-00",
+		"quote": "A political party shall nominate its candidates for public office in a primary.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A voter who votes in one party primary may not vote in another party primary for the same election",
+		"citation": "O.C.G.A. § 21-2-224",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2SR-00008-00",
+		"quote": "shall not vote in a primary held by any other party for the nomination of candidates to seek public offices to be filled in the same such election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A primary voter may vote only in their own party runoff",
+		"citation": "O.C.G.A. § 21-2-152",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2PW-00008-00",
+		"quote": "Any elector who votes in the primary of one party shall not be eligible to vote in a primary runoff of any other party",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Voters who do not want a party ballot can take a nonpartisan-only ballot at the primary",
+		"citation": "O.C.G.A. § 21-2-285.1",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2V0-00008-00",
+		"quote": "there shall be a ballot that contains just the official nonpartisan election ballot available for electors who choose not to vote in a party primary",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A majority of votes is required to win a primary or election",
+		"citation": "O.C.G.A. § 21-2-501",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W31K-00008-00",
+		"quote": "unless such candidate shall have received a majority of the votes cast to fill such nomination or public office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Runoffs between the top two are held 28 days later",
+		"citation": "O.C.G.A. § 21-2-501",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W31K-00008-00",
+		"quote": "such runoff shall be held on the twenty-eighth day after the day of holding the preceding general or special primary or general or special election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A city charter or ordinance may allow plurality wins",
+		"citation": "O.C.G.A. § 21-2-501",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W31K-00008-00",
+		"quote": "provide that a candidate may be nominated or elected by a plurality of the votes cast to fill such nomination or public office, such provision shall prevail",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Cities over 100,000 must require a majority",
+		"citation": "O.C.G.A. § 21-2-501",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W31K-00008-00",
+		"quote": "In all cities having a population in excess of 100,000 according to the United States decennial census of 1980 or any future such census",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A runoff is a continuation of the general election",
+		"citation": "Ga. Const. art. II, § II, ¶ II",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W0F3-00008-00",
+		"quote": "A run-off election shall be a continuation of the general election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Independents for non-city office get on the ballot by nomination petition; for city office only if the charter or an ordinance allows it",
+		"citation": "O.C.G.A. § 21-2-170",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2R6-00008-00",
+		"quote": "such nomination by petition may also be made for municipal public office if provided for by the municipality’s charter or by municipal ordinance",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Petition candidates without a political body nomination are listed in the independent column",
+		"citation": "O.C.G.A. § 21-2-170",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2R6-00008-00",
+		"quote": "All petition candidates not so designated as the nominee of a political body shall be listed on the ballot in the independent column.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Petition signers must be registered voters entitled to vote for the office; no one may sign twice",
+		"citation": "O.C.G.A. § 21-2-170",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2R6-00008-00",
+		"quote": "No person shall sign the same petition more than once.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Georgia may have no more than 159 counties",
+		"citation": "Ga. Const. art. IX, § I, ¶ II",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W12K-00008-00",
+		"quote": "There shall not be more than 159 counties in this state.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "County governing authorities stay as set by law (local acts)",
+		"citation": "Ga. Const. art. IX, § I, ¶ I",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W12H-00008-00",
+		"quote": "The governing authorities of the several counties shall remain as prescribed by law on June 30, 1983, until otherwise provided by law.",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "The county governing authority is a board of commissioners, a sole commissioner, or a consolidated government",
+		"citation": "O.C.G.A. § 1-3-3",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FR61-DYB7-W4C2-00008-00",
+		"quote": "means the board of county commissioners, the sole county commissioner, or the governing authority of a consolidated government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Clerk of superior court, probate judge, sheriff and tax commissioner (or receiver and collector) are elected countywide for four years",
+		"citation": "Ga. Const. art. IX, § I, ¶ III",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W12N-00008-00",
+		"quote": "shall be elected by the qualified voters of their respective counties for terms of four years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "The constitutional county officers listed",
+		"citation": "Ga. Const. art. IX, § I, ¶ III",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W12N-00008-00",
+		"quote": "The clerk of the superior court, judge of the probate court, sheriff, tax receiver, tax collector, and tax commissioner",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Coroners are elected like clerks of superior court, for four years",
+		"citation": "O.C.G.A. § 45-16-1",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-G021-DYB7-W499-00008-00",
+		"quote": "coroners shall hold their offices for four years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "County home rule does not reach elective county offices",
+		"citation": "Ga. Const. art. IX, § II, ¶ I",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W12W-00008-00",
+		"quote": "Action affecting any elective county office, the salaries thereof, or the personnel thereof",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "County home rule does not reach the composition or election of the county governing authority",
+		"citation": "Ga. Const. art. IX, § II, ¶ I",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W12W-00008-00",
+		"quote": "Action affecting the composition, form, procedure for election or appointment, compensation, and expenses and allowances in the nature of compensation of the county governing authority.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Cities may amend their charters by ordinance as part of home rule",
+		"citation": "O.C.G.A. § 36-35-3",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FXW1-DYB7-W259-00008-00",
+		"quote": "a municipal corporation may, as an incident of its home rule power, amend its charter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "City home rule does not reach the composition, form or election of the governing authority",
+		"citation": "O.C.G.A. § 36-35-6",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FXW1-DYB7-W25F-00008-00",
+		"quote": "Action affecting the composition and form of the municipal governing authority, the procedure for election or appointment of the members thereof",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Cities are created, dissolved or merged only by local act or general law",
+		"citation": "O.C.G.A. § 36-35-2",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FXW1-DYB7-W258-00008-00",
+		"quote": "No municipal corporation shall be incorporated, dissolved, merged, or consolidated with any other municipal corporation, or have its municipal boundaries changed except by local Act of the General Assembly or by such methods as may be provided by general law.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A new city needs at least 200 residents",
+		"citation": "O.C.G.A. § 36-31-3",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FXW1-DYB7-W22X-00008-00",
+		"quote": "A total resident population of at least 200 persons",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "City, town and village mean the same thing in Georgia law",
+		"citation": "O.C.G.A. § 36-30-1",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FXW1-DYB7-W229-00008-00",
+		"quote": "such words shall be construed as synonymous",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "City-county consolidation needs separate voter approval in county and city",
+		"citation": "Ga. Const. art. IX, § III, ¶ II",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W13N-00008-00",
+		"quote": "no such consolidation shall become effective unless separately approved by a majority of the qualified voters of the county",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A city charter may be repealed so the county takes over its functions",
+		"citation": "O.C.G.A. § 36-68-1",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FXW1-DYB7-W2N7-00008-00",
+		"quote": "whereby the charter of a municipality is repealed in order for the county in which the municipality is located to succeed to the corporate powers",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "A county with no city in it may become a consolidated government",
+		"citation": "O.C.G.A. § 36-68-4",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FXW1-DYB7-W2NB-00008-00",
+		"quote": "deemed to be and constituted as a consolidated government",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Each school system has an elected board of education, elected as provided by law",
+		"citation": "Ga. Const. art. VIII, § V, ¶ II",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W117-00008-00",
+		"quote": "Each school system shall be under the management and control of a board of education, the members of which shall be elected as provided by law.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "County and existing independent (city) school systems continue; no new independent systems",
+		"citation": "Ga. Const. art. VIII, § V, ¶ I",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W115-00008-00",
+		"quote": "No independent school system shall hereafter be established.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "The General Assembly convenes the second Monday in January for up to 40 days",
+		"citation": "Ga. Const. art. III, § IV, ¶ I",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W0GK-00008-00",
+		"quote": "The General Assembly shall meet in regular session on the second Monday in January of each year, or otherwise as provided by law, and may continue in session for a period of no longer than 40 days in the aggregate each year.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "The governor has six days during session",
+		"citation": "Ga. Const. art. III, § V, ¶ XIII",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W0J9-00008-00",
+		"quote": "within six days from the date any such bill or resolution is transmitted to the Governor",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "After sine die the governor has 40 days to act",
+		"citation": "Ga. Const. art. III, § V, ¶ XIII",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W0J9-00008-00",
+		"quote": "the same shall become law if approved or not vetoed by the Governor within 40 days from the date of any such adjournment",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "General acts signed January to June take effect 1 July",
+		"citation": "O.C.G.A. § 1-3-4",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FR61-DYB7-W4C3-00008-00",
+		"quote": "shall become effective on the first day of July",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Local acts take effect on approval unless they say otherwise",
+		"citation": "O.C.G.A. § 1-3-4",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FR61-DYB7-W4C3-00008-00",
+		"quote": "Such local legislation and resolutions intended to have the effect of law become effective immediately upon approval by the Governor",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Superior court judges, and county judges where law provides, run nonpartisan",
+		"citation": "O.C.G.A. § 21-2-138",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6FVG-01B3-RTVH-T0SN-00008-00",
+		"quote": "when nonpartisan elections have been authorized by law for such county judicial office",
+		"certainty": "varies by place",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Soil and water district supervisor is not a public office under the Election Code",
+		"citation": "O.C.G.A. § 21-2-2",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6C0H-GND3-S75K-V01C-00008-00",
+		"quote": "except that the term shall not include the office of soil and water conservation district supervisor",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "City petitions only if the charter or an ordinance allows",
+		"citation": "O.C.G.A. § 21-2-170",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-FW71-DYB7-W2R6-00008-00",
+		"quote": "candidates for municipal offices may be nominated by petitions as provided for in this Code section only if the municipality authorizes such nominations by petitions in its charter or by ordinance",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Nonpartisan city candidates file with the municipal superintendent",
+		"citation": "O.C.G.A. § 21-2-132",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6C0H-GDM3-RS3W-V0TN-00008-00",
+		"quote": "Each candidate for a nonpartisan municipal office or a designee shall file a notice of candidacy in the office of the municipal superintendent",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Existing county and independent school systems continue",
+		"citation": "Ga. Const. art. VIII, § V, ¶ I",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W115-00008-00",
+		"quote": "Existing county and independent school systems shall be continued",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Only voters entitled to vote in the general election may vote in the runoff",
+		"citation": "Ga. Const. art. II, § II, ¶ II",
+		"url": "https://advance.lexis.com/documentpage/?pdmfid=1000516&config=00JAA1MDBlYzczZi1lYjFlLTQxMTgtYWE3OS02YTgyOGM2NWJlMDYKAFBvZENhdGFsb2feed0oM9qoQOMCSJFX5qkd&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation%2Furn%3AcontentItem%3A6348-HF31-DYB7-W0F3-00008-00",
+		"quote": "only persons who were entitled to vote in the general election shall be entitled to vote therein",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true,
+		"checked": "in-app browser on advance.lexis.com with verify-ledger --browser matching, 63/63 found, 27 October 2026"
+	},
+	{
+		"claim": "Athens and Clarke County are one unified government; Winterville is a separate city",
+		"citation": "Athens-Clarke County Unified Government, About Us",
+		"url": "https://www.accgov.com/27/About-Us",
+		"quote": "a topical guide to the Athens-Clarke County Unified Government",
+		"certainty": "varies by place",
+		"verified": "local government publication"
+	},
+	{
+		"claim": "Columbus and Muscogee County are a consolidated government",
+		"citation": "Columbus Consolidated Government home page",
+		"url": "https://www.columbusga.gov/",
+		"quote": "Columbus Consolidated Government is Georgia's first consolidated government",
+		"certainty": "varies by place",
+		"verified": "local government publication"
+	}
+]

@@ -1,0 +1,826 @@
+[
+	{
+		"claim": "The Legislature convenes each year at 10 a.m. on the first Wednesday after the first Monday in January",
+		"citation": "Neb. Const. art. III, § 10",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=III-10",
+		"quote": "commencing at 10 a.m. on the first Wednesday after the first Monday in January of each year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Regular sessions are limited to 90 legislative days in odd-numbered years and 60 in even-numbered years unless four-fifths of members vote to extend",
+		"citation": "Neb. Const. art. III, § 10",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=III-10",
+		"quote": "shall not exceed ninety legislative days in odd-numbered years unless extended by a vote of four-fifths",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The governor has five days, Sundays excepted, to act on a bill; after adjournment, a vetoed bill must be filed within five days or it becomes law",
+		"citation": "Neb. Const. art. IV, § 15",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=IV-15",
+		"quote": "within five days (Sundays excepted) after it shall have been presented to him",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned because the Legislature adjourned must be filed with objections within five days after adjournment, or it becomes law",
+		"citation": "Neb. Const. art. IV, § 15",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=IV-15",
+		"quote": "in the office of the Secretary of State within five days after such adjournment, or become a law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "New laws take effect three calendar months after the session adjourns unless an emergency clause is passed by two-thirds",
+		"citation": "Neb. Const. art. III, § 27",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=III-27",
+		"quote": "No act shall take effect until three calendar months after the adjournment of the session at which it passed",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature is unicameral, between 30 and 50 members, with annual sessions",
+		"citation": "Neb. Const. art. III, § 6",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=III-6",
+		"quote": "The Legislature shall consist of not more than fifty members and not less than thirty members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "State senators are nominated and elected without party labels",
+		"citation": "Neb. Const. art. III, § 7",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=III-7",
+		"quote": "Each member shall be nominated and elected in a nonpartisan manner and without any indication on the ballot that he or she is affiliated with or endorsed by any political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "There are 49 legislative districts; members serve four-year terms on the nonpartisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-508",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-508",
+		"quote": "The members of the Legislature shall be elected on the nonpartisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The statewide primary is in May of even-numbered years and also elects officers of subdivisions that hold their general elections at the primary",
+		"citation": "Neb. Rev. Stat. § 32-401",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-401",
+		"quote": "The statewide primary election shall be held on the first Tuesday after the second Monday in May in even-numbered years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The statewide general election is the first Tuesday after the first Monday in November of even-numbered years",
+		"citation": "Neb. Rev. Stat. § 32-403",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-403",
+		"quote": "The statewide general election shall be held on the first Tuesday following the first Monday in November in each even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any other primary is held on the Tuesday four weeks before its general election",
+		"citation": "Neb. Rev. Stat. § 32-402",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-402",
+		"quote": "shall be held on Tuesday four weeks before the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City and village elections of officers, except in home rule charter cities, are held with the statewide primary or general election",
+		"citation": "Neb. Rev. Stat. § 32-556",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-556",
+		"quote": "All city and village elections involving the election of officers, except cities with home rule charters, shall be held in accordance with the Election Act and in conjunction with the statewide primary or general election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule charter cities hold their elections under the charter, except as the Election Act provides, and may hold them with the statewide elections",
+		"citation": "Neb. Rev. Stat. § 32-556",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-556",
+		"quote": "All city elections in cities with home rule charters shall be held in accordance with the home rule charter except as otherwise provided in the Election Act",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Omaha (metropolitan class) holds its primary on the first Tuesday of April and its general election on the first Tuesday after the second Monday in May, every four years from 1993",
+		"citation": "Neb. Rev. Stat. § 14-201(1)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=14-201",
+		"quote": "shall be held on the first Tuesday after the second Monday in May 1993 and every four years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A metropolitan class city may by charter move its city elections to the statewide primary and general election of presidential election years",
+		"citation": "Neb. Rev. Stat. § 14-201(2)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=14-201",
+		"quote": "schedule candidates for elective office of such city to be nominated at the statewide primary election and elected at the statewide general election of each presidential election year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Lincoln (primary class) holds general city elections on the first Tuesday in May of odd-numbered years, or with the statewide general election if its charter says so",
+		"citation": "Neb. Rev. Stat. § 15-301",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=15-301",
+		"quote": "The general city elections in cities of the primary class shall be held on the first Tuesday in May of every odd-numbered year or, by provision of such city's home rule charter, in conjunction with the statewide general election.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City, village and school offices are nonpartisan unless a city or village adopts a partisan ballot by ordinance",
+		"citation": "Neb. Rev. Stat. § 32-557",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-557",
+		"quote": "All elective city, village, and school officers shall be nominated and elected on a nonpartisan ballot unless a city or village provides for a partisan ballot by ordinance.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A partisan-ballot ordinance must take effect at least 60 days before the filing deadline",
+		"citation": "Neb. Rev. Stat. § 32-557",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-557",
+		"quote": "shall be adopted and effective not less than sixty days prior to the filing deadline",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioners serve four-year staggered terms and are elected on the partisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-528",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-528",
+		"quote": "The county commissioners shall be elected on the partisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In counties up to 150,000 people (and over 400,000), each commissioner is nominated and elected by the voters of a district",
+		"citation": "Neb. Rev. Stat. § 32-528(3)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-528",
+		"quote": "one commissioner shall be nominated and elected from each district by the registered voters of the district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County supervisors in township-organized counties serve four-year terms, elected by district on the partisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-529",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-529",
+		"quote": "The county supervisors shall be elected on the partisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township boards have three officers elected on the nonpartisan ballot at the statewide general election every four years from 1994; the three top vote-getters decide among themselves who is clerk, treasurer and chair",
+		"citation": "Neb. Rev. Stat. § 32-530",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-530",
+		"quote": "The three candidates receiving the highest number of votes at the general election shall be the officers of the township board",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township officers are elected on the nonpartisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-530",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-530",
+		"quote": "The township officers shall be elected on the nonpartisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township officers are elected in counties under township government at the general election in 1994 and every four years after",
+		"citation": "Neb. Rev. Stat. § 32-530",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-530",
+		"quote": "shall be elected in counties under township government at the statewide general election in 1994 and every four years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County clerk is elected on the partisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-517",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-517",
+		"quote": "The county clerk shall be elected on the partisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sheriff serves a four-year term on the partisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-520",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-520",
+		"quote": "The county sheriff shall be elected on the partisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Treasurer is elected in every county for a four-year term on the partisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-521",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-521",
+		"quote": "A county treasurer shall be elected in each county at the statewide general election in 1990 and each four years thereafter.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County attorney is elected on the partisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-522",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-522",
+		"quote": "The county attorney shall be elected on the partisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County assessor is elected in counties over 3,500 people (and 1,200 tax returns) on the partisan ballot; voters may abolish it and give the duties to the clerk",
+		"citation": "Neb. Rev. Stat. § 32-519",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-519",
+		"quote": "a county assessor shall be elected in each county having a population of more than three thousand five hundred inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Register of deeds is elected only in counties over 20,000",
+		"citation": "Neb. Rev. Stat. § 32-518",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-518",
+		"quote": "a register of deeds shall be elected in each county having a population of more than twenty thousand",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Clerk of the district court is elected in counties of 7,000 or more; smaller counties elect one only if the board and judge decide",
+		"citation": "Neb. Rev. Stat. § 32-524",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-524",
+		"quote": "In counties having a population of seven thousand inhabitants or more, there shall be elected one clerk of the district court",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Public defender is elected in counties over 100,000, and in other counties after the county board approves",
+		"citation": "Neb. Rev. Stat. § 32-523",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-523",
+		"quote": "The public defender shall be elected on the partisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county may consolidate the clerk of district court, assessor, clerk, engineer, surveyor and register of deeds offices with voter approval",
+		"citation": "Neb. Rev. Stat. § 22-417",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=22-417",
+		"quote": "Any county may consolidate the office of clerk of the district court, county assessor, county clerk, county engineer, county surveyor, or register of deeds",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county board of commissioners has three members in counties up to 400,000, and voters may choose five",
+		"citation": "Neb. Rev. Stat. § 23-148",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=23-148",
+		"quote": "may vote at any general election as to whether their county board shall consist of three or five commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties have three, five or seven commissioner districts; counties over 400,000 have seven",
+		"citation": "Neb. Rev. Stat. § 23-151",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=23-151",
+		"quote": "Each county having more than four hundred thousand inhabitants as determined by the most recent federal decennial census shall be divided into seven districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any county may adopt township organization by majority vote at a general election, and may later vote to discontinue it",
+		"citation": "Neb. Const. art. IX, § 5",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=IX-5",
+		"quote": "under which any county may organize whenever a majority of the legal voters of such county voting at any general election shall so determine",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Switching to township organization means a seven-member county board of supervisors",
+		"citation": "Neb. Rev. Stat. § 23-202",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=23-202",
+		"quote": "For changing to township organization with a seven-member county board of supervisors",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township organization can be discontinued by county vote, which also sets the number of commissioners",
+		"citation": "Neb. Rev. Stat. § 23-148(2)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=23-148",
+		"quote": "The registered voters of any county under township organization voting to discontinue township organization may also vote as to the number of county commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The constitution has the Legislature provide by law for county and township officers; there is no county charter provision",
+		"citation": "Neb. Const. art. IX, § 4",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=IX-4",
+		"quote": "The Legislature shall provide by law for the election of such county and township officers as may be necessary",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Merger of counties or local governments requires a majority vote in each municipality or county to be merged",
+		"citation": "Neb. Const. art. XV, § 18(2)",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=XV-18",
+		"quote": "No merger or consolidation of municipalities or counties shall occur without the approval of a majority of the people voting in each municipality or county",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The statutes describe each county, Adams (22-101) through York (22-193)",
+		"citation": "Neb. Rev. Stat. § 22-193",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=22-193",
+		"quote": "The county of York is bounded as follows",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Metropolitan class: 400,000 people or more",
+		"citation": "Neb. Rev. Stat. § 14-101",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=14-101",
+		"quote": "All cities in this state which have attained a population of four hundred thousand inhabitants or more",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary class: over 100,000 and under 400,000",
+		"citation": "Neb. Rev. Stat. § 15-101",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=15-101",
+		"quote": "All cities having more than one hundred thousand and less than four hundred thousand inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "First class: over 5,000 and up to 100,000",
+		"citation": "Neb. Rev. Stat. § 16-101",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=16-101",
+		"quote": "All cities having more than five thousand and not more than one hundred thousand inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second class: over 800 and up to 5,000, unless the place keeps or adopts village government",
+		"citation": "Neb. Rev. Stat. § 17-101",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-101",
+		"quote": "Each municipality containing more than eight hundred and not more than five thousand inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Village: 100 to 800 people, plus villages that voted to keep village government and second-class cities that chose it",
+		"citation": "Neb. Rev. Stat. § 17-201",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-201",
+		"quote": "Any municipality containing not less than one hundred nor more than eight hundred inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village is governed by a board of trustees of three or five members",
+		"citation": "Neb. Rev. Stat. § 17-202",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-202",
+		"quote": "The corporate powers and duties of every village shall be vested in a board of trustees which shall consist of three or five members.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Village trustees serve four-year terms and are elected at the statewide general election",
+		"citation": "Neb. Rev. Stat. § 32-532",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-532",
+		"quote": "The members of a village board of trustees shall be elected at the statewide general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The village board elects its own chairperson",
+		"citation": "Neb. Rev. Stat. § 17-204",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-204",
+		"quote": "elect a chairperson of the board of trustees",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Village clerk, treasurer and other officers are appointed by the board",
+		"citation": "Neb. Rev. Stat. § 17-208",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-208",
+		"quote": "The village board of trustees may appoint a village clerk, treasurer, attorney, engineer",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Village trustee candidates file for the general election ballot directly, with no primary",
+		"citation": "Neb. Rev. Stat. § 32-606(2)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-606",
+		"quote": "the board of trustees of a village",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second class city officers are nominated at the statewide primary and elected at the general election for four-year terms",
+		"citation": "Neb. Rev. Stat. § 32-533",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-533",
+		"quote": "all elected officers in all cities of the second class shall be nominated at the statewide primary election and elected at the statewide general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second class city council has 4 to 12 members",
+		"citation": "Neb. Rev. Stat. § 17-103",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-103",
+		"quote": "shall consist of not less than four nor more than twelve residents of the city",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The mayor of a second class city is elected",
+		"citation": "Neb. Rev. Stat. § 17-107",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-107",
+		"quote": "A mayor of a city of the second class shall be elected in the manner provided in the Election Act.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a first class city without the commission or manager plan, the mayor is elected at large and the council by ward or partly at large, at least four members, four-year terms",
+		"citation": "Neb. Rev. Stat. § 32-534",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-534",
+		"quote": "a mayor shall be elected at large and council members shall be elected by ward or at large and by ward",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "First class city officers serve four-year terms; council members are nominated at the statewide primary and elected at the general",
+		"citation": "Neb. Rev. Stat. § 32-534(2)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-534",
+		"quote": "All elected officers in a city of the first class shall serve for terms of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first class city council may make the clerk and treasurer elected by a two-thirds ordinance",
+		"citation": "Neb. Rev. Stat. § 16-302.01",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=16-302.01",
+		"quote": "by a two-thirds vote of its members, provide by ordinance for the election of the treasurer and clerk",
+		"certainty": "usual case",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any city of 2,000 or more may adopt the commission plan",
+		"citation": "Neb. Rev. Stat. § 19-401",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=19-401",
+		"quote": "having not less than two thousand inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The city manager plan is open to cities of 1,000 to under 200,000; council members are nominated at the statewide primary and elected at the general, at large unless the council creates wards",
+		"citation": "Neb. Rev. Stat. §§ 19-602, 32-538",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-538",
+		"quote": "City council members shall be elected from the city at large unless the city council by ordinance provides for the election of all or some of the city council members by wards",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City manager plan applies to cities of 1,000 to under 200,000",
+		"citation": "Neb. Rev. Stat. § 19-602",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=19-602",
+		"quote": "city means any city having a population of one thousand or more and less than two hundred thousand inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary class city council members serve four-year terms, elected at the general city election",
+		"citation": "Neb. Rev. Stat. § 32-535",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-535",
+		"quote": "The members of the city council of a city of the primary class shall be elected at the general city election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Metropolitan class city elects a mayor and seven council members by district for four-year terms",
+		"citation": "Neb. Rev. Stat. § 32-536",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-536",
+		"quote": "the mayor and seven city council members shall be elected for terms of four years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In a home rule charter city, the charter sets the number of council members",
+		"citation": "Neb. Rev. Stat. § 32-537",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-537",
+		"quote": "the number of city council members shall be determined by the home rule charter",
+		"certainty": "varies by place",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city of more than 5,000 people may frame a home rule charter, consistent with and subject to state law",
+		"citation": "Neb. Const. art. XI, § 2",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=XI-2",
+		"quote": "Any city having a population of more than five thousand (5000) inhabitants may frame a charter for its own government, consistent with and subject to the constitution and laws of this state",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A city over 100,000 may adopt its existing charter as a home rule charter by majority vote",
+		"citation": "Neb. Const. art. XI, § 5",
+		"url": "https://nebraskalegislature.gov/laws/articles.php?article=XI-5",
+		"quote": "The charter of any city having a population of more than one hundred thousand inhabitants may be adopted as the home rule charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Legislature declares that elections and candidate qualifications are a matter of statewide concern notwithstanding any home rule charter",
+		"citation": "Neb. Rev. Stat. § 32-501",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-501",
+		"quote": "are a matter of general statewide concern notwithstanding the provisions of any home rule charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second class city that reaches more than 5,000 people becomes a first class city by proclamation after certification",
+		"citation": "Neb. Rev. Stat. § 16-102",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=16-102",
+		"quote": "Whenever any city of the second class attains a population of more than five thousand inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A village that grows past 800 may vote to stay a village",
+		"citation": "Neb. Rev. Stat. § 17-312",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-312",
+		"quote": "the registered voters of the village may vote to retain a village form of government",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second class city may vote to become a village",
+		"citation": "Neb. Rev. Stat. § 17-306",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-306",
+		"quote": "may vote to discontinue organization as a city of the second class and organize as a village",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A first class city that falls under 4,000 becomes a second class city; between 4,000 and 5,000 it may choose to stay first class for a time",
+		"citation": "Neb. Rev. Stat. § 17-301",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-301",
+		"quote": "If a city of the first class has a population of less than four thousand inhabitants but more than eight hundred inhabitants",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A second class city that falls under 800 may choose by ordinance to stay a city",
+		"citation": "Neb. Rev. Stat. § 17-310",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=17-310",
+		"quote": "the mayor and city council may decide by ordinance to remain a city of the second class",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Cities not under home rule, villages, counties and school districts may switch between at-large and ward or district elections by a vote of the people",
+		"citation": "Neb. Rev. Stat. § 32-554",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-554",
+		"quote": "submit, at a general election, the question of nominating and electing members to its governing board by district or ward",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Registered party members get their own party ballot plus the nonpartisan ballot; unaffiliated voters get only the nonpartisan ballot unless a party opens its primary or for Congress",
+		"citation": "Neb. Rev. Stat. § 32-912(1)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-912",
+		"quote": "a registered voter who is not affiliated with any political party shall receive only nonpartisan ballots at a primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party members receive the partisan ballot of the party on their registration",
+		"citation": "Neb. Rev. Stat. § 32-912(1)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-912",
+		"quote": "the partisan ballot of the political party indicated on his or her voter registration",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unaffiliated voter may ask for one party ballot for U.S. Senate and House races",
+		"citation": "Neb. Rev. Stat. § 32-912(3)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-912",
+		"quote": "may request a partisan ballot for either or both of such offices from any political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party may file a rule letting unaffiliated voters vote in its primary; the rule covers only the next primary",
+		"citation": "Neb. Rev. Stat. § 32-702.01",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-702.01",
+		"quote": "shall apply only to the primary election immediately following the adoption of the rule",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party may require its primary candidates to be registered members of the party",
+		"citation": "Neb. Rev. Stat. § 32-702",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-702",
+		"quote": "require that any individual whose name is placed on such party's partisan primary election ballot be a registered voter affiliated with such party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "For a nonpartisan office, the top two primary vote-getters per seat advance to the general election",
+		"citation": "Neb. Rev. Stat. § 32-814(2)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-814",
+		"quote": "no more than twice as many names as there are places to be filled at the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Where the primary is held, the two highest vote-getters per position go on the general ballot",
+		"citation": "Neb. Rev. Stat. § 32-814(2)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-814",
+		"quote": "the names of the two persons who received the highest number of votes in the primary election for the position",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "If no more than two candidates per seat file for certain nonpartisan offices (first and second class city officers, many school boards), the primary is skipped for them",
+		"citation": "Neb. Rev. Stat. § 32-811(1)(a)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-811",
+		"quote": "do not exceed two candidates for each position to be filled, any such candidates shall be declared nominated and their names shall not appear on any primary election ballots",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unopposed party candidates for county office do not appear on the primary ballot",
+		"citation": "Neb. Rev. Stat. § 32-811(1)(b)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-811",
+		"quote": "does not exceed the number of candidates to be nominated by that party for that office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The person with the highest vote receives the certificate of election for county, city and village offices (plurality)",
+		"citation": "Neb. Rev. Stat. § 32-1033",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-1033",
+		"quote": "declared to have received the highest vote for county, city, or village offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party nominee must receive at least 5% of the party primary ballots cast in the district to get a certificate of nomination",
+		"citation": "Neb. Rev. Stat. § 32-1033",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-1033",
+		"quote": "at least equal to five percent of the total ballots cast at the primary election by registered voters affiliated with that political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A voter not registered with a party on or after March 1 of the election year, and who did not run in the primary, may get on the general ballot for a partisan office by petition",
+		"citation": "Neb. Rev. Stat. § 32-616(1)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-616",
+		"quote": "who was not registered to vote with a party affiliation on or after March 1 and before the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petition candidates are labeled \"By Petition\" on the ballot",
+		"citation": "Neb. Rev. Stat. § 32-617(3)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-617",
+		"quote": "The words \"By Petition\" shall be printed upon the ballot after the name of each candidate by petition.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Petitions for both partisan and nonpartisan offices are signed by registered voters living in the district",
+		"citation": "Neb. Rev. Stat. § 32-617(1)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-617",
+		"quote": "Petitions shall be signed by registered voters residing in the district or political subdivision in which the officer is to be elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A petition route onto the general election ballot exists for both partisan and nonpartisan offices (counts deliberately not reproduced)",
+		"citation": "Neb. Rev. Stat. § 32-618",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-618",
+		"quote": "The number of signatures of registered voters needed to place the name of a candidate upon the nonpartisan ballot for the general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A signer may not sign more than once for the same petition effort and must be a registered voter",
+		"citation": "Neb. Rev. Stat. § 32-630(3)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-630",
+		"quote": "Knowingly sign his or her name more than once for the same petition effort or measure",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class I to III school boards are nominated at the statewide primary and elected at the general, 5 to 9 members, staggered four-year terms",
+		"citation": "Neb. Rev. Stat. § 32-543(2)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-543",
+		"quote": "Terms shall be staggered so that approximately one-half of the members are elected to the board at each general election for terms of four years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Some Class I to III districts in a learning community nominate by caucus, with a six-member board elected at the primary for six-year terms",
+		"citation": "Neb. Rev. Stat. § 32-543(1)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-543",
+		"quote": "the board of education shall consist of six members to be elected by the registered voters of the school district at the statewide primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class IV (Lincoln) school board members are elected by district at the same time as the city council, on a nonpartisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-544",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-544",
+		"quote": "for four-year terms at the same time as members of the city council of the city in which the district is located",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Class V (Omaha) school board members are nominated at the statewide primary and elected at the general, on a nonpartisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-545",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-545",
+		"quote": "Candidates for election to such board of education shall be nominated upon the nonpartisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School district classes are set by population: Class IV contains a primary class city, Class V a metropolitan class city",
+		"citation": "Neb. Rev. Stat. § 79-102",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=79-102",
+		"quote": "Class IV includes any school district embracing territory having a population of two hundred thousand or more inhabitants with a city of the primary class",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Natural resources district directors serve four-year terms on the nonpartisan ballot at the general election",
+		"citation": "Neb. Rev. Stat. § 32-513",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-513",
+		"quote": "District directors shall be elected on the nonpartisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Community college boards are elected on the nonpartisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-514",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-514",
+		"quote": "Board members shall be elected on the nonpartisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Public power district boards are nonpartisan; small districts skip the primary",
+		"citation": "Neb. Rev. Stat. § 32-512",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-512",
+		"quote": "their successors shall be nominated and elected on the nonpartisan ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Local hospital district boards are elected at the statewide primary on the nonpartisan ballot",
+		"citation": "Neb. Rev. Stat. § 32-550",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-550",
+		"quote": "The members shall be elected on the nonpartisan ballot.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "City airport authority boards have five members, six-year terms, elected like the city officers",
+		"citation": "Neb. Rev. Stat. § 32-547",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-547",
+		"quote": "shall be nominated and elected in the manner provided by law for the election of officers of the city concerned",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Special elections are barred in most months of even-numbered years unless held with the statewide election",
+		"citation": "Neb. Rev. Stat. § 32-405(1)(b)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=32-405",
+		"quote": "No special election shall be held under the Election Act in March, April, May, June, October, November, or December of an even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Omaha is a home rule city: in 1922 it adopted its existing charter as its home rule charter (court annotation published under the section)",
+		"citation": "Neb. Rev. Stat. § 14-101, annotation (Carlberg v. Metcalfe)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=14-101",
+		"quote": "City of Omaha became, on July 18, 1922, a home rule city by adopting the existing charter governing it as its home rule charter.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Lincoln is a city of the primary class (court annotation published under the section)",
+		"citation": "Neb. Rev. Stat. § 15-104, annotation (Campbell v. City of Lincoln)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=15-104",
+		"quote": "Lands annexed by city of primary class met all requirements set out in this section. Campbell v. City of Lincoln",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Lincoln operates under a home rule charter (court annotation published under the section)",
+		"citation": "Neb. Rev. Stat. § 15-101, annotation (Pester v. City of Lincoln)",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=15-101",
+		"quote": "home rule charter prevails over conflicting provisions in statute. Pester v. City of Lincoln",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township electors hold an annual town meeting with powers over town property, roads and taxes",
+		"citation": "Neb. Rev. Stat. § 23-224",
+		"url": "https://nebraskalegislature.gov/laws/statutes.php?statute=23-224",
+		"quote": "The electors present at the annual town meeting shall have power",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

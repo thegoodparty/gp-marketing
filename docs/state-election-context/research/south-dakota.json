@@ -1,0 +1,650 @@
+[
+	{
+		"claim": "The Legislature convenes on the second Tuesday of January",
+		"citation": "S.D. Const. art. III, § 7",
+		"url": "https://sdlegislature.gov/api/Statutes/Constitution/3-7",
+		"quote": "on the second Tuesday of January at 12 o'clock m.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A regular session is held every year and lasts at most forty legislative days",
+		"citation": "S.D. Const. art. III, § 6",
+		"url": "https://sdlegislature.gov/api/Statutes/Constitution/3-6",
+		"quote": "A regular session of the Legislature shall be held each year and shall not exceed forty legislative",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "During session the governor has five days (not counting weekends and holidays) to act on a bill",
+		"citation": "S.D. Const. art. IV, § 4",
+		"url": "https://sdlegislature.gov/api/Statutes/Constitution/4-4",
+		"quote": "within five days, not including Saturdays, Sundays, or holidays, of presentation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After the Legislature adjourns sine die or recesses for more than five days, the governor has fifteen days to act",
+		"citation": "S.D. Const. art. IV, § 4",
+		"url": "https://sdlegislature.gov/api/Statutes/Constitution/4-4",
+		"quote": "within fifteen days after such adjournment or start",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No act takes effect until ninety days after adjournment unless passed as an emergency",
+		"citation": "S.D. Const. art. III, § 22",
+		"url": "https://sdlegislature.gov/api/Statutes/Constitution/3-22",
+		"quote": "No act shall take effect until ninety days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Acts of a regular session take effect on 1 July unless they say otherwise",
+		"citation": "SDCL 2-14-16",
+		"url": "https://sdlegislature.gov/api/Statutes/2-14-16.html",
+		"quote": "takes effect on the first day of July after its passage",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The primary is the first Tuesday after the first Monday in June of even-numbered years",
+		"citation": "SDCL 12-2-1",
+		"url": "https://sdlegislature.gov/api/Statutes/12-2-1.html",
+		"quote": "on the first Tuesday after the first Monday in June of every even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is the first Tuesday after the first Monday in November of even-numbered years, and county officers are elected at it",
+		"citation": "SDCL 12-2-2",
+		"url": "https://sdlegislature.gov/api/Statutes/12-2-2.html",
+		"quote": "the several state, district, and county officers",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any local governing body may choose to hold its election with the June primary, with county approval",
+		"citation": "SDCL 12-2-5",
+		"url": "https://sdlegislature.gov/api/Statutes/12-2-5.html",
+		"quote": "may choose to hold their elections in conjunction with the regular June primary election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities hold an election every year, in June or November, and the governing body sets which by January 14",
+		"citation": "SDCL 9-13-1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-1.html",
+		"quote": "each municipality must hold an election of officers each year on the first Tuesday after the first Monday in June or the first Tuesday after the first Monday in November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The municipal governing body sets the election date by January 14 of the election year",
+		"citation": "SDCL 9-13-1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-1.html",
+		"quote": "The governing body shall establish the date of the regular election by January fourteenth of the election year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality may by ordinance hold its regular election only in even-numbered years",
+		"citation": "SDCL 9-13-1.3",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-1.3.html",
+		"quote": "may, by ordinance, choose to hold the regular municipal election only in even-numbered years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In even-numbered years the municipal election is held with the June primary or the November general election",
+		"citation": "SDCL 9-13-37",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-37.html",
+		"quote": "in even-numbered years, hold the general municipal election in conjunction with the regular June primary election or the regular November general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In odd-numbered years a municipality may hold its election jointly with the school district",
+		"citation": "SDCL 9-13-1.1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-1.1.html",
+		"quote": "may, in odd-numbered years, choose to hold a general municipal election in conjunction with a regular school district election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No municipal election is held where every race is uncontested and there is no ballot question",
+		"citation": "SDCL 9-13-5",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-5.html",
+		"quote": "The number of nominating petitions filed for each vacant position to be filled does not exceed the number of vacancies",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal candidates appear on the ballot with no designation other than the office",
+		"citation": "SDCL 9-13-21",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-21.html",
+		"quote": "shall be arranged without any other designation than that of the office for which they are candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal candidates are nominated by petition, and filing it constitutes nomination",
+		"citation": "SDCL 9-13-7",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-7.html",
+		"quote": "Upon verification, the filing of a nominating petition constitutes nomination.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipal races are won by plurality unless an ordinance passed at least six months earlier requires a runoff",
+		"citation": "SDCL 9-13-25",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-25.html",
+		"quote": "the person having the highest number of votes for any municipal office is elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality may require runoffs by ordinance at least six months before the election",
+		"citation": "SDCL 9-13-25",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-25.html",
+		"quote": "by ordinance enacted at least six months before the election, require a runoff election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Where a runoff ordinance exists, a runoff is held three weeks later if no one in a race of three or more wins a majority",
+		"citation": "SDCL 9-13-26.1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-13-26.1.html",
+		"quote": "a runoff election shall be held three weeks from the date of the first election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School districts hold an annual election in June or November, chosen by board resolution",
+		"citation": "SDCL 13-7-10",
+		"url": "https://sdlegislature.gov/api/Statutes/13-7-10.html",
+		"quote": "each school district must hold an annual election on the first Tuesday after the first Monday in June or the first Tuesday after the first Monday in November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In even-numbered years the school board election is held with the June primary or the November general election",
+		"citation": "SDCL 13-7-10.3",
+		"url": "https://sdlegislature.gov/api/Statutes/13-7-10.3.html",
+		"quote": "in even-numbered years, hold the school board election in conjunction with the regular June primary election or the regular November general election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "No party affiliation appears on a school ballot",
+		"citation": "SDCL 13-7-13",
+		"url": "https://sdlegislature.gov/api/Statutes/13-7-13.html",
+		"quote": "No party affiliation may appear on the ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board candidates are nominated by petition",
+		"citation": "SDCL 13-7-6",
+		"url": "https://sdlegislature.gov/api/Statutes/13-7-6.html",
+		"quote": "the filing of the nominating petition constitutes nomination",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School boards have five, seven or nine members on three-year terms, which the board may change to two or four years for joint elections",
+		"citation": "SDCL 13-8-2",
+		"url": "https://sdlegislature.gov/api/Statutes/13-8-2.html",
+		"quote": "A school board consists of five, seven, or nine members whose terms are from one to three years initially, and three years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board may change terms to four or two years to hold joint elections",
+		"citation": "SDCL 13-8-2",
+		"url": "https://sdlegislature.gov/api/Statutes/13-8-2.html",
+		"quote": "increase the length of terms from three to four years or decrease the length of terms from three to two years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Conservation district supervisors are nominated by petition and elected on a nonpolitical ballot at the general election",
+		"citation": "SDCL 38-8-39",
+		"url": "https://sdlegislature.gov/api/Statutes/38-8-39.html",
+		"quote": "The auditor shall prepare ballots substantially in the form of the nonpolitical ballot",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Ranked choice voting is banned, including by charter or ordinance",
+		"citation": "SDCL 12-1-9.1",
+		"url": "https://sdlegislature.gov/api/Statutes/12-1-9.1.html",
+		"quote": "a political subdivision may not adopt or enforce in any manner a rule, resolution, charter provision, or ordinance",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only registered members of a party may vote that party's primary ballot",
+		"citation": "SDCL 12-6-26",
+		"url": "https://sdlegislature.gov/api/Statutes/12-6-26.html",
+		"quote": "No person may vote a party ballot at any primary election unless the person is registered as a member of that political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party may open its primary to voters registered with no party affiliation",
+		"citation": "SDCL 12-6-26",
+		"url": "https://sdlegislature.gov/api/Statutes/12-6-26.html",
+		"quote": "may allow for participation in the party's primary elections by any person who is registered to vote with no party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A party candidate must be registered with that party",
+		"citation": "SDCL 12-6-3.2",
+		"url": "https://sdlegislature.gov/api/Statutes/12-6-3.2.html",
+		"quote": "unless that person is a registered voter with that party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary is won by the most votes",
+		"citation": "SDCL 12-6-50",
+		"url": "https://sdlegislature.gov/api/Statutes/12-6-50.html",
+		"quote": "who receives the highest number of votes cast by the voters of his party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Primary runoffs apply only to U.S. Senate, U.S. House and Governor, below 35 percent",
+		"citation": "SDCL 12-6-51.1",
+		"url": "https://sdlegislature.gov/api/Statutes/12-6-51.1.html",
+		"quote": "If no candidate for United States Senate, United States House of Representatives, or Governor in a race involving three or more candidates receives thirty-five percent",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sheriff, auditor, register of deeds, treasurer, state's attorney and coroner are nominated and elected on political ballots",
+		"citation": "SDCL 12-1-1.1",
+		"url": "https://sdlegislature.gov/api/Statutes/12-1-1.1.html",
+		"quote": "on political ballots shall apply to the nomination and election of a sheriff, county auditor, register of deeds, treasurer, state's attorney, and coroner",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "County commissioner candidates file partisan petitions (and independents their own)",
+		"citation": "SDCL 12-6-7",
+		"url": "https://sdlegislature.gov/api/Statutes/12-6-7.html",
+		"quote": "for county commissioner district candidates",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent is nominated by certificate of nomination signed by registered voters of the district",
+		"citation": "SDCL 12-7-1",
+		"url": "https://sdlegislature.gov/api/Statutes/12-7-1.html",
+		"quote": "who is not nominated by a primary election may be nominated by filing a certificate of nomination",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A primary candidate may not file as an independent for the same office in the same year",
+		"citation": "SDCL 12-7-5",
+		"url": "https://sdlegislature.gov/api/Statutes/12-7-5.html",
+		"quote": "for an office for which he has been a candidate in the primary election of the same year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may not sign a party candidate's petition for a party they are not in, and may not sign for more candidates than seats",
+		"citation": "SDCL 12-6-8",
+		"url": "https://sdlegislature.gov/api/Statutes/12-6-8.html",
+		"quote": "For a political candidate of a party of which the person is not a member",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party members may sign an independent's petition if they have not already signed one for that office",
+		"citation": "SDCL 12-6-8",
+		"url": "https://sdlegislature.gov/api/Statutes/12-6-8.html",
+		"quote": "from signing either a petition nominating an independent or a nonpolitical candidate for office if the person has not previously signed a petition for that office to be filled",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An independent candidate may be any registered voter regardless of party who declares as independent",
+		"citation": "SDCL 12-1-3(25)",
+		"url": "https://sdlegislature.gov/api/Statutes/12-1-3.html",
+		"quote": "any registered voter regardless of party affiliation who declares to be an independent candidate for public office",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each organized county has a board of three to seven commissioners on four-year terms elected at the general election",
+		"citation": "SDCL 7-8-1",
+		"url": "https://sdlegislature.gov/api/Statutes/7-8-1.html",
+		"quote": "shall have a board of commissioners consisting of not less than three nor more than seven members",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioner seats are staggered by district number between presidential and gubernatorial years",
+		"citation": "SDCL 7-8-1",
+		"url": "https://sdlegislature.gov/api/Statutes/7-8-1.html",
+		"quote": "numbered or unnumbered district shall run for election at the general election at which the Governor is elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commissioners are nominated and elected by the voters of their district",
+		"citation": "SDCL 7-8-2",
+		"url": "https://sdlegislature.gov/api/Statutes/7-8-2.html",
+		"quote": "The nomination and election of county commissioners shall be by a vote of the voters of the district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters may change the commission to three, five or seven by petition and election",
+		"citation": "SDCL 7-8-3",
+		"url": "https://sdlegislature.gov/api/Statutes/7-8-3.html",
+		"quote": "may be increased to five or seven or reduced to five or three",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect a sheriff, auditor and register of deeds in one cycle, and a treasurer, state's attorney and coroner in the other, on four-year terms, unless a charter says otherwise",
+		"citation": "SDCL 7-7-1.1",
+		"url": "https://sdlegislature.gov/api/Statutes/7-7-1.1.html",
+		"quote": "Unless otherwise provided by county charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties elect a treasurer, state's attorney and coroner",
+		"citation": "SDCL 7-7-1.1",
+		"url": "https://sdlegislature.gov/api/Statutes/7-7-1.1.html",
+		"quote": "a treasurer, state's attorney, and coroner",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A county commission may combine two or more county offices into one elected office",
+		"citation": "SDCL 7-7-1.2",
+		"url": "https://sdlegislature.gov/api/Statutes/7-7-1.2.html",
+		"quote": "combine two or more county offices and that one person shall be elected to, and perform the duties of, the combined offices",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Counties may adopt an appointed county manager form, with the commission still elected",
+		"citation": "SDCL 7-8A-1, 7-8A-2",
+		"url": "https://sdlegislature.gov/api/Statutes/7-8A-2.html",
+		"quote": "The board shall be elected in the same manner as provided by chapter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Any county or city may adopt a home rule charter",
+		"citation": "S.D. Const. art. IX, § 2",
+		"url": "https://sdlegislature.gov/api/Statutes/Constitution/9-2",
+		"quote": "Any county or city or combinations thereof may provide for the adoption",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A charter may set any structure, superior to statute, as long as the legislative body is popularly elected",
+		"citation": "S.D. Const. art. IX, § 2",
+		"url": "https://sdlegislature.gov/api/Statutes/Constitution/9-2",
+		"quote": "provided that the legislative body so established be chosen by popular election",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A township organized before cannot be abolished without a vote of its voters",
+		"citation": "S.D. Const. art. IX, § 1",
+		"url": "https://sdlegislature.gov/api/Statutes/Constitution/9-1",
+		"quote": "No township heretofore organized",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule units may not set standards lower than state law",
+		"citation": "SDCL 6-12-5",
+		"url": "https://sdlegislature.gov/api/Statutes/6-12-5.html",
+		"quote": "Neither charter nor ordinances adopted thereunder may set standards and requirements which are lower or less stringent than those imposed by state law",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Civil township voters hold an annual township meeting on the first Tuesday of March",
+		"citation": "SDCL 8-3-1",
+		"url": "https://sdlegislature.gov/api/Statutes/8-3-1.html",
+		"quote": "shall annually assemble and hold a township meeting on the first Tuesday of March",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "One supervisor is elected each year at the annual meeting for a three-year term",
+		"citation": "SDCL 8-3-12",
+		"url": "https://sdlegislature.gov/api/Statutes/8-3-12.html",
+		"quote": "one supervisor, who shall hold his office for the term of three years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A clerk and treasurer are elected at each annual meeting, and a constable may be",
+		"citation": "SDCL 8-3-13",
+		"url": "https://sdlegislature.gov/api/Statutes/8-3-13.html",
+		"quote": "At each annual meeting, a clerk and a treasurer shall be elected, and a constable may be elected.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township officers are elected by ballot unless unopposed",
+		"citation": "SDCL 8-3-15",
+		"url": "https://sdlegislature.gov/api/Statutes/8-3-15.html",
+		"quote": "shall be elected by ballot except if there is no opposing candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A township may require nominating petitions by ordinance",
+		"citation": "SDCL 8-3-1.1",
+		"url": "https://sdlegislature.gov/api/Statutes/8-3-1.1.html",
+		"quote": "may, by ordinance, require a candidate for township office to file a nominating petition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Township organization can be abolished by petition and election",
+		"citation": "SDCL 8-1-23",
+		"url": "https://sdlegislature.gov/api/Statutes/8-1-23.html",
+		"quote": "abolition",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Three classes of municipality by population: first class 5,000 and over, second class 500 to 4,999, third class under 500",
+		"citation": "SDCL 9-2-1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-2-1.html",
+		"quote": "Municipalities of the third class: municipal corporations with a population of fewer than five hundred.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality is a city or town",
+		"citation": "SDCL 9-1-1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-1-1.html",
+		"quote": "\"Municipal corporation\" or \"municipality,\" any city or town that is organized pursuant to this title",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A municipality whose census population crosses a class line may apply to court to change class",
+		"citation": "SDCL 9-2-2.1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-2-2.1.html",
+		"quote": "the municipality may, through its governing body, apply to the circuit court having jurisdiction for a judgment authorizing the classification change",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Existing classification continues until changed",
+		"citation": "SDCL 9-2-4",
+		"url": "https://sdlegislature.gov/api/Statutes/9-2-4.html",
+		"quote": "The present classification of government of existing municipalities continues until changed as provided by this title.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "First and second class municipalities have a mayor and council or a commission, with or without a manager; third class have a board of trustees",
+		"citation": "SDCL 9-11-11",
+		"url": "https://sdlegislature.gov/api/Statutes/9-11-11.html",
+		"quote": "Each third class municipality must be governed by a board of trustees, with or without a city manager.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "First and second class forms",
+		"citation": "SDCL 9-11-11",
+		"url": "https://sdlegislature.gov/api/Statutes/9-11-11.html",
+		"quote": "must be governed by a mayor and common council, a mayor and a common council with a city manager, a board of commissioners, or a board of commissioners with a city manager",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Existing forms continue until changed",
+		"citation": "SDCL 9-11-11",
+		"url": "https://sdlegislature.gov/api/Statutes/9-11-11.html",
+		"quote": "The present form of government of existing municipalities must continue until changed as provided by this title.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Aldermanic mayor term two to five years by ordinance",
+		"citation": "SDCL 9-8-1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-8-1.html",
+		"quote": "The mayor holds office for a term of not less than two nor more than five years as determined by ordinance.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Council of mayor plus two aldermen per ward, two-year terms unless ordinance sets three to five",
+		"citation": "SDCL 9-8-4",
+		"url": "https://sdlegislature.gov/api/Statutes/9-8-4.html",
+		"quote": "two aldermen elected from and by the voters of each ward",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Alderman term default two years, ordinance may set three to five",
+		"citation": "SDCL 9-8-4",
+		"url": "https://sdlegislature.gov/api/Statutes/9-8-4.html",
+		"quote": "The term of office for each alderman is two years, unless a municipality adopts an ordinance establishing the term of office to be three, four, or five years.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Second and third class voters may choose at-large aldermen",
+		"citation": "SDCL 9-8-4.1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-8-4.1.html",
+		"quote": "may, by majority vote, choose to elect aldermen to the common council at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commission form: mayor plus two or four commissioners at large",
+		"citation": "SDCL 9-9-1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-9-1.html",
+		"quote": "the board of commissioners shall consist of the mayor and two or four commissioners elected at large",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commission terms two to five years by ordinance",
+		"citation": "SDCL 9-9-3",
+		"url": "https://sdlegislature.gov/api/Statutes/9-9-3.html",
+		"quote": "The term of office of the mayor and commissioners is not less than two or more than five years, as determined by ordinance",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Commission with manager: nine at-large commissioners",
+		"citation": "SDCL 9-10-5",
+		"url": "https://sdlegislature.gov/api/Statutes/9-10-5.html",
+		"quote": "the number of at-large commissioners is nine",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Board of trustees has three or five members at large",
+		"citation": "SDCL 9-7-1",
+		"url": "https://sdlegislature.gov/api/Statutes/9-7-1.html",
+		"quote": "The board of trustees of a municipality consists of either three or five members elected at large.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Trustees serve three-year terms",
+		"citation": "SDCL 9-7-3",
+		"url": "https://sdlegislature.gov/api/Statutes/9-7-3.html",
+		"quote": "A member of the board of trustees holds office for a term of three years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Voters can change form of government or number of wards, commissioners or trustees by petition and election",
+		"citation": "SDCL 9-11-6",
+		"url": "https://sdlegislature.gov/api/Statutes/9-11-6.html",
+		"quote": "upon a question of the number of wards, commissioners, or trustees",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Statute addresses home rule election costs for counties and first and second class municipalities",
+		"citation": "SDCL 6-12-1",
+		"url": "https://sdlegislature.gov/api/Statutes/6-12-1.html",
+		"quote": "counties, and first and second class municipalities are authorized to expend from their general funds",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Title 12 applies to township, municipal, school and other local elections unless their own statutes say otherwise",
+		"citation": "SDCL 12-1-2",
+		"url": "https://sdlegislature.gov/api/Statutes/12-1-2.html",
+		"quote": "The provisions of this title apply to township, municipal, school, and other subdivision elections unless otherwise provided",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School districts hold no election when every race is uncontested and there is no question",
+		"citation": "SDCL 13-7-9",
+		"url": "https://sdlegislature.gov/api/Statutes/13-7-9.html",
+		"quote": "does not exceed the number of vacancies",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The school board picks the election date by resolution early in the year",
+		"citation": "SDCL 13-7-10",
+		"url": "https://sdlegislature.gov/api/Statutes/13-7-10.html",
+		"quote": "The school board shall select the date of the election by resolution no later than the first regular meeting after January first of each year.",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A school board term change is subject to referendum on petition",
+		"citation": "SDCL 13-7-32",
+		"url": "https://sdlegislature.gov/api/Statutes/13-7-32.html",
+		"quote": "is subject to a referendum if five percent of the registered voters of the school district",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Civil township organization happens on petition of the voters, so some areas are unorganized",
+		"citation": "SDCL 8-1-5",
+		"url": "https://sdlegislature.gov/api/Statutes/8-1-5.html",
+		"quote": "shall petition the board of county commissioners for civil township organization",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

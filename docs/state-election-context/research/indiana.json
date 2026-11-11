@@ -1,0 +1,749 @@
+[
+	{
+		"claim": "General elections are held in November of even-numbered years",
+		"citation": "Ind. Code § 3-10-2-1",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "A general election shall be held on the first Tuesday after the first Monday in November in each even-numbered year.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The primary is held in May of every general election year",
+		"citation": "Ind. Code § 3-10-1-3",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "A primary election shall be held on the first Tuesday after the first Monday in May of each year in which a general election is held.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County officers, county commissioners, county council, township trustee and township board are elected at the general election every four years",
+		"citation": "Ind. Code § 3-10-2-13",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "shall be elected at the general election before their terms of office expire and every four (4) years thereafter",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The offices elected at the general election include county assessor, commissioners, council, township trustee and township board",
+		"citation": "Ind. Code § 3-10-2-13",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "(8) County assessor. (9) County commissioner. (10) County council member. (11) Township trustee. (12) Township board member.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipal elections are held in November every four years in the odd-numbered year before a presidential election (2027, 2031 and so on)",
+		"citation": "Ind. Code § 3-10-6-5",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "a municipal election shall be held on the first Tuesday after the first Monday in November 2023, 2027, 2031",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Municipal primaries are held in May of the same odd-numbered years",
+		"citation": "Ind. Code § 3-10-6-2(a)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "a municipal primary election shall be held on the first Tuesday after the first Monday in May 2023, 2027, 2031",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The odd-year municipal schedule covers all cities, towns of 3,500 or more, and every town in Marion County",
+		"citation": "Ind. Code § 3-10-6-1",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "Towns having a population of three thousand five hundred (3,500) or more.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Towns in a county with a consolidated city follow that schedule regardless of population",
+		"citation": "Ind. Code § 3-10-6-1(a)(3)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "Towns located entirely or partially within a county having a consolidated city, regardless of their population.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A town may adopt an ordinance to stagger council terms",
+		"citation": "Ind. Code § 3-10-6-2.5",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "a town may adopt an ordinance during the year preceding a municipal election conducted under section 2 of this chapter prescribing the length of the term of office for town legislative body members",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Towns with staggered council terms, or an ordinance moving their elections, vote alongside a general election",
+		"citation": "Ind. Code § 3-10-7-3",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "shall conduct a municipal election in that town that coincides with a general election",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A town under 3,500 outside Marion County may move its elections to general election years by ordinance",
+		"citation": "Ind. Code § 3-10-7-2.9",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "That the elections for town offices shall be held during general elections or municipal elections, or both.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A town election may not be held in the year after a presidential election",
+		"citation": "Ind. Code § 3-10-7-2.9(c)(1)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "A town election may not be held in a year following a year in which an election for presidential electors is held.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An ordinance moving town elections cannot be repealed for twelve years",
+		"citation": "Ind. Code § 3-10-7-2.9(d)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "The ordinance may not be repealed earlier than twelve (12) years after the ordinance was adopted.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A town over 10,000 may adopt a seven-member council elected in two different years",
+		"citation": "Ind. Code § 36-5-2-4.5",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "Four (4) members of the legislative body are elected during a year that municipal elections are held",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Home rule applies to every county, municipality and township",
+		"citation": "Ind. Code §§ 36-1-2-23, 36-1-3-1",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "\"Unit\" means county, municipality, or township.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Home rule gives units all powers needed for local affairs, even if not granted by statute",
+		"citation": "Ind. Code § 36-1-3-4",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "all other powers necessary or desirable in the conduct of its affairs, even though not granted by statute",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Home rule does not reach elections: a unit has no power to legislate on or conduct an election unless a statute expressly grants it",
+		"citation": "Ind. Code § 36-1-3-8(a)(12)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "or otherwise conduct an election, except as expressly granted by statute",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A voter may vote in a party primary if they voted for most of that party's nominees at the last general election, or intend to at the next",
+		"citation": "Ind. Code § 3-10-1-6",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "at the last general election, voted for a majority of the regular nominees of the political party holding the primary election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A primary voter can be challenged on party affiliation",
+		"citation": "Ind. Code § 3-10-1-10",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "may challenge the person on the ground of party affiliation",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A candidate's party affiliation is set by the two most recent primaries they voted in, or by the county chair's certification",
+		"citation": "Ind. Code § 3-8-2-7(a)(4)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "The two (2) most recent primary elections in Indiana in which the candidate voted were primary elections held by the party with which the candidate claims affiliation.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Parties nominate all candidates for the November municipal election in the municipal primary",
+		"citation": "Ind. Code § 3-10-6-2(b)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "shall nominate all candidates to be voted for at the municipal election to be held in November",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County, township, city and town offices appear on the party primary ballot",
+		"citation": "Ind. Code § 3-10-1-19(g)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "(B) Township trustee. (C) Township board member.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Towns under 3,500 outside Marion County nominate major party candidates by convention unless the council adopts a primary by ordinance",
+		"citation": "Ind. Code §§ 3-8-5-1, 3-8-5-2(c)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "Unless a town legislative body adopts an ordinance under subsection (e), a town shall use the convention method described in this chapter to nominate major political party candidates for town offices.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A candidate defeated in a primary or convention cannot run for the same office at the next general or municipal election",
+		"citation": "Ind. Code § 3-8-1-5.5",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "is not eligible to become a candidate for the same office in the next general or municipal election",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The candidate with the most votes wins; there is no runoff",
+		"citation": "Ind. Code § 3-12-4-9",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "the board shall declare the candidate receiving the highest number of votes for each office to be elected",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Independents and candidates of parties without primary access are nominated by petition",
+		"citation": "Ind. Code § 3-8-6-1",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "represents a political party not qualified to nominate candidates in a primary or by convention",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Petition signers must be registered at their address and qualified to vote for the candidate",
+		"citation": "Ind. Code § 3-8-6-2",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "A candidate may be nominated for an elected office by petition of voters who are:",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "School board candidates are nominated only by petition",
+		"citation": "Ind. Code § 3-8-2.5-2(a)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "A candidate for a school board office must file a petition of nomination",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A school board candidate states a party affiliation, independent, or no affiliation, and the statement is shown on the ballot",
+		"citation": "Ind. Code § 3-8-2.5-2.5(a)(5)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "the candidate's statement under this subdivision must be indicated on the ballot in the manner determined by the county election board",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A school board candidate may choose not to disclose any party affiliation",
+		"citation": "Ind. Code § 3-8-2.5-2.5(a)(5)(C)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "That the candidate elects not to disclose any affiliation with a political party",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A straight-party vote does not count for any school board candidate",
+		"citation": "Ind. Code § 3-12-1-7.1",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "a straight party vote does not count for any candidate for a school board office",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Elected school boards are chosen at the general election; some school corporations' plans do not provide for election",
+		"citation": "Ind. Code § 20-23-4-29.1(b)",
+		"url": "https://iga.in.gov/ic/2026/Title_20.html",
+		"quote": "If a plan provides for election of members of the governing body, the members of the governing body shall be elected at a general election.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "School board candidates with the most votes are elected",
+		"citation": "Ind. Code § 20-23-4-29.1(d)",
+		"url": "https://iga.in.gov/ic/2026/Title_20.html",
+		"quote": "The candidates who receive the most votes are elected.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The three-member board of commissioners is the county executive",
+		"citation": "Ind. Code § 36-2-2-2",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The three (3) member board of commissioners of a county elected under this chapter is the county executive.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Commissioners serve four-year staggered terms, one or two elected at each general election",
+		"citation": "Ind. Code § 36-2-2-3",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The number of members to be elected to the executive alternates between one (1) and two (2) at succeeding general elections.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The seven-member county council is the county fiscal body",
+		"citation": "Ind. Code § 36-2-3-2(a)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The seven (7) member county council elected under this chapter is the county fiscal body.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County council members serve four-year terms",
+		"citation": "Ind. Code § 36-2-3-3(b)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The term of office of a member of the fiscal body is four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "By default the council has four district members and three at-large members",
+		"citation": "Ind. Code § 36-2-3-4(a)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "Three (3) at-large members of the fiscal body shall be elected by the voters of the whole county.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A few large counties elect their council from single-member districts only, set by population bands in the statute",
+		"citation": "Ind. Code § 36-2-3-4(b)-(c)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "shall divide the county into seven (7) single-member districts",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Counties elect a clerk of the circuit court, auditor, recorder, treasurer, sheriff, coroner and surveyor for four-year terms",
+		"citation": "Ind. Const. art. 6, § 2(a)",
+		"url": "https://iga.in.gov/publications/indiana_constitution/Constitution%20(as%20amended%202024).pdf",
+		"quote": "Clerk of the Circuit Court, Auditor, Recorder, Treasurer, Sheriff, Coroner, and Surveyor",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Clerk, auditor, recorder, treasurer, sheriff and coroner are limited to eight years in any twelve",
+		"citation": "Ind. Const. art. 6, § 2(c)",
+		"url": "https://iga.in.gov/publications/indiana_constitution/Constitution%20(as%20amended%202024).pdf",
+		"quote": "more than eight years in any period of twelve years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The township trustee is the township executive, elected for four years",
+		"citation": "Ind. Code § 36-6-4-2",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The trustee is the township executive.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Each township elects a three-member township board, five members in Marion County",
+		"citation": "Ind. Code § 36-6-6-2",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The township board in a county containing a consolidated city shall consist of five (5) members",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The township board is the township legislative body, with four-year terms",
+		"citation": "Ind. Code § 36-6-6-2(c)-(d)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The township board is the township legislative body.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Only a few townships still elect a township assessor",
+		"citation": "Ind. Code § 3-10-2-13(13)",
+		"url": "https://iga.in.gov/ic/2026/Title_3.html",
+		"quote": "Township assessor (only in a township referred to in",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A 2026 law requires townships the state scores as designated to merge with another township in their county",
+		"citation": "Ind. Code § 36-6-1.7-14",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "must merge with at least one (1) other township government in the county",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The township merger law does not apply in Marion County",
+		"citation": "Ind. Code § 36-6-1.7-1",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "This chapter does not apply to a county having a consolidated city.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "All mergers under the 2026 law take effect by 1 January 2029",
+		"citation": "Ind. Code § 36-6-1.7-19",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "All township government mergers under this chapter must be effective not later than January 1, 2029.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Merged townships elect a three-member at-large board starting with the 2030 general election",
+		"citation": "Ind. Code § 36-6-6-2.1(c)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "Beginning with the 2030 general election, all voters of the resulting merged township government shall elect a three (3) member township board.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A municipality is a city or a town",
+		"citation": "Ind. Code § 36-1-2-11",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "\"Municipality\" means city or town.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Second class cities have 34,000 to 599,999 people; first class 600,000 or more",
+		"citation": "Ind. Code § 36-4-1-1(a)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "Cities of 34,000 to 599,999 Second class cities",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A second class city keeps its class if its population falls below 34,000, unless it opts for third class",
+		"citation": "Ind. Code § 36-4-1-1(b)-(c)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "remains a second class city even though its population decreases",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A third class city stays third class even after reaching 34,000 unless it opts up by ordinance",
+		"citation": "Ind. Code § 36-4-1-1.1",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "a third class city remains a third class city even though the city attains a population of at least thirty-four thousand (34,000)",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The mayor is the city executive, elected for four years",
+		"citation": "Ind. Code § 36-4-5-2",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The term of office of a city executive is four (4) years",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Common council members serve four-year terms",
+		"citation": "Ind. Code § 36-4-6-2(f)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The term of office of a member of the legislative body is four (4) years, beginning at noon on January 1",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A second class city council has six district and three at-large members",
+		"citation": "Ind. Code § 36-4-6-3(h)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The legislative body is composed of six (6) members elected from the districts established under subsection (b) and three (3) at-large members.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A third class city council has five district and two at-large members by default",
+		"citation": "Ind. Code § 36-4-6-4(h)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The legislative body is composed of five (5) members elected from the districts established under subsection (b) and two (2) at-large members.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Second class cities elect a clerk, third class cities a clerk-treasurer",
+		"citation": "Ind. Code § 36-4-10-2(a)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "by the voters of each third class city",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The town council is the legislative body and its president is the town executive; towns have no mayor",
+		"citation": "Ind. Code § 36-5-2-2",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The president of the town council selected under section 7 of this chapter is the town executive.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Town council size may be set between three and seven by a vote of the town",
+		"citation": "Ind. Code § 36-5-2-4.2",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "which must be at least three (3) and not more than seven (7)",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Town council members serve four-year terms by default",
+		"citation": "Ind. Code § 36-5-2-3(a)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "the term of office of a member of the legislative body is four (4) years, beginning at noon January 1 after the member's election",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Towns elect a clerk-treasurer",
+		"citation": "Ind. Code § 36-5-6-2",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "the clerk-treasurer elected under this chapter is both the town clerk and the town fiscal officer",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A town becomes a city only by a vote of its residents, and a town under 2,000 cannot",
+		"citation": "Ind. Code §§ 36-4-1.5-1, 36-4-1.5-2",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "A town with a population of less than two thousand (2,000) may not be changed into a city.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Some third class cities use four district and three at-large members by ordinance",
+		"citation": "Ind. Code § 36-4-6-4(j)-(k)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The legislative body is composed of four (4) members elected from the districts established under subsection (j) and three (3) at-large members.",
+		"certainty": "usual case",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "County executives name the townships that will merge by 1 October 2027",
+		"citation": "Ind. Code § 36-6-1.7-16(b)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "the county executive shall adopt a resolution that names the township governments that will merge",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The Indianapolis mayor is elected countywide in the municipal election",
+		"citation": "Ind. Code § 36-3-3-2(a)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "shall be elected under IC 3-10-6 by the voters of the whole county",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The consolidated city of Indianapolis covers all of Marion County except the excluded cities",
+		"citation": "Ind. Code § 36-3-1-4(a)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "all other territory in the county except territory of an excluded city",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The mayor is the executive of both the consolidated city and Marion County, elected countywide",
+		"citation": "Ind. Code § 36-3-3-2",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "who is the executive of both the consolidated city and the county",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The city-county council is the legislative body of both, with 25 members",
+		"citation": "Ind. Code § 36-3-4-2",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "The city-county council consists of twenty-five (25) members.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "All 25 city-county council members are elected from districts",
+		"citation": "Ind. Code § 36-3-4-3",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "divide the whole county into twenty-five (25) districts",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "In Marion County the treasurer, auditor and assessor serve ex officio as county commissioners",
+		"citation": "Ind. Code § 36-3-1-5(b)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "These three (3) officers then serve ex officio as commissioners",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Until 2027 an excluded city is any municipality in the county over 5,000 people, other than the first class city",
+		"citation": "Ind. Code § 36-3-1-7 (version until 1-1-2027)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "having a population of more than five thousand (5,000) in the county is known as an excluded city",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "From 1 January 2027 the excluded cities are named: Lawrence, Beech Grove, Southport, Speedway and Cumberland",
+		"citation": "Ind. Code § 36-3-1-7 (version from 1-1-2027)",
+		"url": "https://iga.in.gov/ic/2026/Title_36.html",
+		"quote": "(1) The city of Lawrence. (2) The city of Beech Grove. (3) The city of Southport. (4) The town of Speedway. (5) The town of Cumberland.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The first regular session convenes in November of even-numbered years to organize",
+		"citation": "Ind. Code § 2-2.1-1-2(a)",
+		"url": "https://iga.in.gov/ic/2026/Title_2.html",
+		"quote": "shall convene on the third Tuesday after the first Monday of November of each even-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The General Assembly reconvenes no later than the fourth Monday in January",
+		"citation": "Ind. Code § 2-2.1-1-2(d)",
+		"url": "https://iga.in.gov/ic/2026/Title_2.html",
+		"quote": "shall reconvene in session no later than the fourth Monday in January of the following year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The odd-year session must adjourn by 29 April",
+		"citation": "Ind. Code § 2-2.1-1-2(e)",
+		"url": "https://iga.in.gov/ic/2026/Title_2.html",
+		"quote": "shall adjourn sine die not later than April 29 in any odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "A one-day technical session in June of odd years can act on vetoed bills",
+		"citation": "Ind. Code § 2-2.1-1-2.5",
+		"url": "https://iga.in.gov/ic/2026/Title_2.html",
+		"quote": "shall convene on the second Tuesday after the first Monday in June of each odd-numbered year",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The technical session considers bills vetoed by the governor",
+		"citation": "Ind. Code § 2-2.1-1-2.5(b)",
+		"url": "https://iga.in.gov/ic/2026/Title_2.html",
+		"quote": "Bills enacted during the first regular session vetoed by the governor.",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Special sessions last at most 30 session days or 40 calendar days",
+		"citation": "Ind. Code § 2-2.1-1-4",
+		"url": "https://iga.in.gov/ic/2026/Title_2.html",
+		"quote": "shall continue for not more than thirty (30) session days nor more than forty (40) calendar days",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Sessions begin in January unless law sets another day",
+		"citation": "Ind. Const. art. 4, § 9",
+		"url": "https://iga.in.gov/publications/indiana_constitution/Constitution%20(as%20amended%202024).pdf",
+		"quote": "unless a different day or place shall have been appointed by law",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "The governor has seven days after presentment to act on a bill",
+		"citation": "Ind. Const. art. 5, § 14(a)",
+		"url": "https://iga.in.gov/publications/indiana_constitution/Constitution%20(as%20amended%202024).pdf",
+		"quote": "The Governor shall have seven days after the day of presentment to act upon such bill",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "An unsigned, unvetoed bill becomes law on the eighth day after presentment",
+		"citation": "Ind. Const. art. 5, § 14(a)(3)",
+		"url": "https://iga.in.gov/publications/indiana_constitution/Constitution%20(as%20amended%202024).pdf",
+		"quote": "eighth day after presentment",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	},
+	{
+		"claim": "Acts of a regular session take effect on 1 July unless the act says otherwise",
+		"citation": "Ind. Code § 1-1-3-3(b)",
+		"url": "https://iga.in.gov/ic/2026/Title_1.html",
+		"quote": "takes effect on July 1 next following its enactment, unless a different time is specified in the SECTION",
+		"certainty": "statutory",
+		"verified": "read in statute",
+		"manual": true
+	}
+]

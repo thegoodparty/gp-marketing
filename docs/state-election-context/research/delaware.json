@@ -1,0 +1,266 @@
+[
+	{
+		"claim": "The General Assembly convenes on the second Tuesday of January each year",
+		"citation": "Del. Const. art. II, § 4(a)",
+		"url": "https://delcode.delaware.gov/constitution/constitution-03.html",
+		"quote": "The General Assembly shall convene on the second Tuesday of January of each calendar year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Each session may not run past 5 p.m. on the last day of June unless recalled",
+		"citation": "Del. Const. art. II, § 4(b)",
+		"url": "https://delcode.delaware.gov/constitution/constitution-03.html",
+		"quote": "each session may not extend beyond 5:00 p.m. on the last day of June unless the session is recalled by the Governor or the mutual call of the presiding officers of both Houses",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A bill not returned within 10 days, Sundays excepted, becomes law unless final adjournment prevents return",
+		"citation": "Del. Const. art. III, § 18(a)",
+		"url": "https://delcode.delaware.gov/constitution/constitution-04.html",
+		"quote": "If any bill shall not be returned by the Governor within 10 days, Sundays excepted, after it shall have been presented to the Governor, the same shall be a law in like manner as if the Governor had signed it",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The Assembly counts as continuously in session until final adjournment",
+		"citation": "Del. Const. art. III, § 18(b)",
+		"url": "https://delcode.delaware.gov/constitution/constitution-04.html",
+		"quote": "the General Assembly shall be considered to be continuously in Session until final adjournment",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "After final adjournment a bill needs the governor’s approval within 30 days",
+		"citation": "Del. Const. art. III, § 18(c)",
+		"url": "https://delcode.delaware.gov/constitution/constitution-04.html",
+		"quote": "No bill shall become a law after the final adjournment of the General Assembly, unless approved by the Governor within 30 days",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The general election is held every two years in November",
+		"citation": "Del. Const. art. V, § 1",
+		"url": "https://delcode.delaware.gov/constitution/constitution-06.html",
+		"quote": "The general election shall be held biennially on the Tuesday next after the first Monday in the month of November",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Clerks of the peace, registers of wills, recorders and sheriffs are elected by county for four years at general elections",
+		"citation": "Del. Const. art. III, § 22",
+		"url": "https://delcode.delaware.gov/constitution/constitution-04.html",
+		"quote": "The terms of office of Clerks of the Peace, Registers of Wills, Recorders, and Sheriffs shall be 4 years. These officers shall be chosen by the qualified electors of the respective counties at general elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Party primaries are on the second Tuesday after the first Monday in September",
+		"citation": "15 Del. C. § 3101(3)",
+		"url": "https://delcode.delaware.gov/title15/c031/sc01/index.html",
+		"quote": "Primary elections for all political parties shall be conducted on the second Tuesday after the first Monday in September",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Only voters registered with a party may vote in its primary",
+		"citation": "15 Del. C. § 3110",
+		"url": "https://delcode.delaware.gov/title15/c031/sc01/index.html",
+		"quote": "is a duly registered voter and if it appears upon the elector",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "A plurality wins the primary nomination",
+		"citation": "15 Del. C. § 3107",
+		"url": "https://delcode.delaware.gov/title15/c031/sc01/index.html",
+		"quote": "who receives a plurality of the votes cast in that candidate",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "In all elections a plurality makes a choice unless otherwise provided",
+		"citation": "15 Del. C. § 5703",
+		"url": "https://delcode.delaware.gov/title15/c057/index.html",
+		"quote": "In all elections, unless it is otherwise expressly provided, a plurality or the highest number of votes make a choice",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unaffiliated candidate files a sworn declaration of no party affiliation for at least 90 days, plus petitions",
+		"citation": "15 Del. C. § 3002(b)",
+		"url": "https://delcode.delaware.gov/title15/c030/index.html",
+		"quote": "stating that the candidate has not been affiliated with any political party for at least 90 days before the filing of the declaration",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Unaffiliated candidates must be certified to appear on the general ballot",
+		"citation": "15 Del. C. § 3002(a)",
+		"url": "https://delcode.delaware.gov/title15/c030/index.html",
+		"quote": "No person shall qualify to appear on the general election ballot of this State as a candidate unaffiliated with a political party unless",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Wilmington’s city elections follow general election law; other municipalities are under subchapter IV",
+		"citation": "15 Del. C. § 7501",
+		"url": "https://delcode.delaware.gov/title15/c075/sc01/index.html",
+		"quote": "Subchapters II and III of this chapter shall apply to the City of Wilmington and subchapter IV of this chapter shall apply to all other municipalities",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Wilmington’s mayor, council and officers are elected under the general election rules",
+		"citation": "15 Del. C. § 7521",
+		"url": "https://delcode.delaware.gov/title15/c075/sc02/index.html",
+		"quote": "Registration and elections in the City of Wilmington for the Mayor, Council and other officers of the City of Wilmington shall in all respects be conducted in conformity with the provisions governing general elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Wilmington municipal elections recognize political parties",
+		"citation": "15 Del. C. § 7522",
+		"url": "https://delcode.delaware.gov/title15/c075/sc02/index.html",
+		"quote": "Definition of political party",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Other municipalities run their own elections using state voting machines",
+		"citation": "15 Del. C. § 7550(c)",
+		"url": "https://delcode.delaware.gov/title15/c075/sc04/index.html",
+		"quote": "Municipalities shall conduct all elections for local office using voting machines that the Department of Elections shall provide",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Candidate eligibility for town office is set by the town charter",
+		"citation": "15 Del. C. § 7555(a)",
+		"url": "https://delcode.delaware.gov/title15/c075/sc04/index.html",
+		"quote": "Candidate eligibility shall be established in the town charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board elections are held annually on the second Tuesday of May",
+		"citation": "14 Del. C. § 1072(c)",
+		"url": "https://delcode.delaware.gov/title14/c010/sc04/index.html",
+		"quote": "Elections for school board members shall be held annually on the second Tuesday of May",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "An unopposed school board candidate is declared elected without a poll",
+		"citation": "14 Del. C. § 1072(c)",
+		"url": "https://delcode.delaware.gov/title14/c010/sc04/index.html",
+		"quote": "when only 1 person files for election to a given vacancy the school board shall declare that person elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board candidates are listed without party designation",
+		"citation": "14 Del. C. § 1076",
+		"url": "https://delcode.delaware.gov/title14/c010/sc04/index.html",
+		"quote": "the names of all filed candidates shall be listed alphabetically without political party designation",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "School board members are elected by the voters of each reorganized school district",
+		"citation": "14 Del. C. § 1051(a)",
+		"url": "https://delcode.delaware.gov/title14/c010/sc03/index.html",
+		"quote": "School board members shall be elected by the qualified voters of the respective reorganized school districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "New Castle County elects a county executive countywide every four years, in presidential years",
+		"citation": "9 Del. C. § 1111(a)",
+		"url": "https://delcode.delaware.gov/title9/c011/sc02/index.html",
+		"quote": "shall be elected each fourth year in a presidential election year",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "New Castle County executive is limited to two consecutive terms",
+		"citation": "9 Del. C. § 1111(a)",
+		"url": "https://delcode.delaware.gov/title9/c011/sc02/index.html",
+		"quote": "He or she shall serve no more than 2 consecutive terms of 4 years each",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "New Castle County Council has 13 members: 12 by district and a president elected countywide",
+		"citation": "9 Del. C. § 1141(c)",
+		"url": "https://delcode.delaware.gov/title9/c011/sc04/index.html",
+		"quote": "the County Council shall consist of 13 members. Twelve of these members shall be elected from council districts",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "The thirteenth member is the countywide council president",
+		"citation": "9 Del. C. § 1141(c)",
+		"url": "https://delcode.delaware.gov/title9/c011/sc04/index.html",
+		"quote": "The thirteenth member shall be elected at large from New Castle County and shall serve as the President of the County Council",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Kent County is governed by a seven-member Levy Court: six by district and one countywide",
+		"citation": "9 Del. C. § 4103(a)",
+		"url": "https://delcode.delaware.gov/title9/c041/sc01/index.html",
+		"quote": "In Kent County, the governing body shall consist of 7 elected officials",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Kent County has six Levy Court districts plus the county as a whole",
+		"citation": "9 Del. C. § 4102(a)",
+		"url": "https://delcode.delaware.gov/title9/c041/sc01/index.html",
+		"quote": "Kent County shall be divided into 6 Levy Court Districts, 1 additional Levy Court District is comprised of the County as a whole",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sussex County government has five members serving four-year terms",
+		"citation": "9 Del. C. § 7002(a)",
+		"url": "https://delcode.delaware.gov/title9/c070/index.html",
+		"quote": "The county government shall consist of 5 members. Unless otherwise provided by law, elected officials of the county governing body shall serve a term of 4 years",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Sussex members must live in their district",
+		"citation": "9 Del. C. § 7002(b)",
+		"url": "https://delcode.delaware.gov/title9/c070/index.html",
+		"quote": "They shall be residents of the district from which they are elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Municipalities of at least 1,000 people may amend their charters to take home rule powers",
+		"citation": "22 Del. C. § 802",
+		"url": "https://delcode.delaware.gov/title22/c008/sc01/index.html",
+		"quote": "Every municipal corporation in this State containing a population of at least 1,000 persons as shown by the last official federal decennial census may proceed as set forth in this chapter to amend its municipal charter",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule charter amendments may not change voter qualifications or the municipal election date",
+		"citation": "22 Del. C. § 835(a)",
+		"url": "https://delcode.delaware.gov/title22/c008/sc06/index.html",
+		"quote": "Change the qualifications of those entitled to vote at municipal elections; (4) Change the date for holding of municipal elections",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	},
+	{
+		"claim": "Home rule amendments cannot change an incumbent’s term mid-term",
+		"citation": "22 Del. C. § 835(a)(1)",
+		"url": "https://delcode.delaware.gov/title22/c008/sc06/index.html",
+		"quote": "Permit the changing of any term of any elected official until the incumbent has completed the term to which the incumbent was elected",
+		"certainty": "statutory",
+		"verified": "read in statute"
+	}
+]

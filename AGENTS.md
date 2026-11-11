@@ -129,6 +129,8 @@ Read the nearest relevant doc rather than loading everything.
 - Never attempt a code fix for a candidate data problem (claimed/unclaimed, wrong
   profile data) — that lives in other systems; explain and escalate (`docs/elections.md`).
 - Never claim a change works without having verified it (`/all`, typecheck, tests).
+- Never load a font from `next/font/google` or a Google Fonts link: the build fails at random
+  when Google returns a font URL with no file extension. Fonts are self-hosted in `src/ui/_fonts/`.
 
 ## Keep docs current
 

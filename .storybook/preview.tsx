@@ -1,5 +1,3 @@
-import { Outfit } from 'next/font/google';
-import { Open_Sans } from 'next/font/google';
 import * as storybookAddonTagBadges from 'storybook-addon-tag-badges/preview';
 import { definePreview, type NextJsParameters } from '@storybook/nextjs';
 import addonA11y, { type A11yParameters } from '@storybook/addon-a11y';
@@ -10,22 +8,8 @@ import addonThemes, { type ThemesTypes } from '@storybook/addon-themes';
 import addonVite from '@storybook/addon-vitest';
 import { definePreviewAddon } from 'storybook/internal/csf';
 import '../src/ui/_styles/globals.css';
+import { primaryFont, secondaryFont } from '../src/ui/_fonts/fonts';
 
-const primaryFont = Outfit({
-	display: 'swap',
-	preload: true,
-	subsets: ['latin'],
-	variable: '--font-primary',
-	weight: ['400', '600'],
-});
-
-const secondaryFont = Open_Sans({
-	display: 'swap',
-	preload: true,
-	subsets: ['latin'],
-	variable: '--font-secondary',
-	weight: ['400', '600'],
-});
 function addonDesigns() {
 	return definePreviewAddon<{ parameters: { design?: Config } }>({ parameters: {} });
 }

@@ -101,28 +101,27 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [displayCount, setDisplayCount] = useState(initialDisplayCount);
 
-	// Sort elections alphabetically and filter by search
-	const filteredElections = useMemo(() => {
-		const sorted = [...props.elections].sort((a, b) => a.name.localeCompare(b.name));
+	const sortedElections = useMemo(() => [...props.elections].sort((a, b) => a.name.localeCompare(b.name)), [props.elections]);
 
-		if (!searchQuery.trim()) {
-			return sorted;
-		}
-
+	// Every row stays in the HTML and the ones past Show More or outside the search
+	// are hidden, not dropped: crawlers do not click Show More, so a sliced list gave
+	// /elections/mi 24 links to its 593 places and left most counties unlinked
+	// (Emily, 2026-11-12). See "A list that pages or filters" in docs/elections.md.
+	const { visibleRows, totalCount } = useMemo(() => {
 		const query = searchQuery.toLowerCase().trim();
-		return sorted.filter(election => election.name.toLowerCase().includes(query));
-	}, [props.elections, searchQuery]);
+		let matched = 0;
+		const rows = sortedElections.map(election => {
+			if (query && !election.name.toLowerCase().includes(query)) return false;
+			matched += 1;
+			return matched <= displayCount;
+		});
+		return { visibleRows: rows, totalCount: matched };
+	}, [sortedElections, searchQuery, displayCount]);
 
-	// Get elections to display based on pagination
-	const displayedElections = useMemo(() => {
-		return filteredElections.slice(0, displayCount);
-	}, [filteredElections, displayCount]);
-
-	const hasMore = displayCount < filteredElections.length;
-	const totalCount = filteredElections.length;
+	const hasMore = displayCount < totalCount;
 
 	const handleShowMore = () => {
-		trackVoterGuideEvent('showMoreClick', { list: 'locations_index', hidden_count: filteredElections.length - displayCount });
+		trackVoterGuideEvent('showMoreClick', { list: 'locations_index', hidden_count: totalCount - displayCount });
 		setDisplayCount(prev => prev + initialDisplayCount);
 	};
 
@@ -164,11 +163,11 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 					)}
 
 					{/* Elections Grid */}
-					{displayedElections.length > 0 ? (
-						<nav aria-label='Elections by location'>
+					{sortedElections.length > 0 && (
+						<nav aria-label='Elections by location' hidden={totalCount === 0}>
 							<ul className={grid()}>
-								{displayedElections.map((election, index) => (
-									<li key={`${election.href}-${index}`}>
+								{sortedElections.map((election, index) => (
+									<li key={`${election.href}-${index}`} hidden={!visibleRows[index]}>
 										<Anchor
 											href={election.href}
 											className={locationLink()}
@@ -187,7 +186,8 @@ export function ElectionsIndexBlock(props: ElectionsIndexBlockProps) {
 								))}
 							</ul>
 						</nav>
-					) : (
+					)}
+					{totalCount === 0 && (
 						<div className={emptyState()}>
 							<Text styleType='body-1'>{searchQuery ? `No results found for "${searchQuery}"` : 'No locations found'}</Text>
 						</div>

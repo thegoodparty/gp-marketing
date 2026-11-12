@@ -125,9 +125,11 @@ in omni), where the `z.preprocess` around `isPrimary`/`isRunoff` turns `undefine
 A slug can also name many race rows. Every California Assembly district is
 `ca/state-representative`, in every election year, and `/v1/races` folds the rows into one
 answer picked by id, which put a 2022 race on a page whose candidates were running in 2026.
-`getRaceBySlug` therefore asks for a race with an election date from today first and falls back
-to the unfiltered read only when there is none, so an office with no upcoming election still
-resolves to its last race. The location pages lean on the same lookup: the place feed carries
+`getRaceBySlug` therefore asks for a race with an election date from today first. When there is
+none it does not trust the unfiltered read to be the last race: the API keeps the lowest-id row
+per slug, usually the oldest cycle, which put "Last election November 8, 2022" on governor and
+sheriff pages the week after Nov 3, 2026. It reads the last 1, 2 and 4 years in parallel and takes
+the narrowest window that has a race, and only then the unfiltered read. The location pages lean on the same lookup: the place feed carries
 one row per office dated by the last race it knew, so `resolvePlaceRaceElectionDates` refreshes
 every row whose date has passed, general or primary (Los Angeles's mayor, council and city
 attorney all read November 2022 while their position pages said November 2026; Emily,
@@ -227,6 +229,13 @@ them. Their route files, the `candidatesHref` the position routes used to comput
 Position Candidates template type are all removed, so the redirects are the only thing answering
 those URLs. Keep them. The hero's "View all candidates" button links to `#position-candidates` on
 the same page.
+
+**The pre-migration office URLs redirect too.** Before March 2026 the old app served offices at
+`/elections/position/<race slug>` (`/elections/position/al/anniston/city-executive-mayor`). Nothing
+answered them after the move, so about 54,000 addresses Search Console had 16 months of history for
+returned 404 until November 2026. `src/app/elections/position/[...raceSlug]/page.tsx` now looks the
+race up and 308s to `resolveRaceElectionHrefs`'s answer, which supplies the county a city slug
+lacks. A slug with no race stays a 404. Keep it: it is the only thing answering those URLs.
 
 Race slugs look like `state/[county]/[city]/[subplace]/positionSlug`. City and town
 races often carry 3-part slugs that must be expanded to 4-level URLs by resolving the
@@ -632,6 +641,19 @@ slugs miss, the city position route tries `<place slug>/<position>` last,
 `resolveElectionPositionFromRaceSlug` sends a race whose prefix is a known city slug
 to the city route rather than the subplace one, and the subplace route 308s the old
 split URL to the city-level one.
+
+#### A list that pages or filters must hide rows, not drop them
+
+Crawlers read the server HTML and never click Show More or type in a search box.
+A `'use client'` block that slices or filters its array before rendering ships
+only the visible rows as `<a>` tags; the rest travel as data in the RSC payload,
+which no crawler follows. The counties-and-cities index did this: `/elections/mi`
+linked 24 of its 593 places, so most Michigan counties had no link from their
+state page (November 2026). `ElectionsIndexBlock` now renders every row and puts
+`hidden` on the ones past Show More or outside the search. Put `hidden` on an
+element with no Tailwind display class (a bare `<li>`), or the class wins and
+the row shows. Measured on `/elections/mi`, all 593 links add about 8 KB
+gzipped (45 KB to 53 KB).
 
 ### Not fixable here, escalate
 

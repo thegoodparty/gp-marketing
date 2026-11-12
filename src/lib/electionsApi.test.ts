@@ -837,25 +837,27 @@ describe('getRaceBySlug falls back to the primary when there is no general', () 
 		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [] : [GENERAL]));
 
 		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-11-08' });
-		expect(calls).toHaveLength(2);
-		expect(calls[1]).not.toContain('electionDateStart');
-		expect(calls[1]).not.toContain('isPrimary');
+		// Upcoming, then the three recent-past windows and the unfiltered read together.
+		expect(calls).toHaveLength(5);
+		const unfiltered = calls.filter(c => !c.includes('electionDateStart'));
+		expect(unfiltered).toHaveLength(1);
+		expect(unfiltered[0]).not.toContain('isPrimary');
 	});
 
 	test('a primary-only race resolves on the retry rather than 404ing the page', async () => {
 		const calls = recordingFetch(url => (url.includes('isPrimary=true') ? [PRIMARY] : []));
 
 		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-08-09', isPrimary: true });
-		// Upcoming first, then the unfiltered general, then the primary.
-		expect(calls).toHaveLength(3);
-		expect(calls[2]).toContain('isPrimary=true');
+		// Upcoming first, then the past generals (three windows and unfiltered), then the primary.
+		expect(calls).toHaveLength(6);
+		expect(calls[5]).toContain('isPrimary=true');
 	});
 
 	test('a slug with no race at all still returns null', async () => {
 		const calls = recordingFetch(() => []);
 
 		expect(await getRaceBySlug(SLUG)).toBeNull();
-		expect(calls).toHaveLength(3);
+		expect(calls).toHaveLength(6);
 	});
 
 	/** resolvePlaceRaceElectionDates asks for the general on purpose; a primary would be wrong. */
@@ -910,12 +912,61 @@ describe('getRaceBySlug prefers an upcoming race for a shared slug', () => {
 		expect(sent).toBe(yesterday.toISOString().slice(0, 10));
 	});
 
-	test('an office with no upcoming election still resolves to its last race', async () => {
+	test('an office with no race in the last four years still resolves on the unfiltered read', async () => {
 		const calls = recordingFetch(url => (url.includes('electionDateStart=') ? [] : [OLD]));
 
 		expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2022-11-08' });
-		expect(calls).toHaveLength(2);
-		expect(calls[1]).not.toContain('electionDateStart');
+		expect(calls).toHaveLength(5);
+	});
+
+	/**
+	 * The API keeps the lowest-id row per slug, so once Nov 3, 2026 passed the
+	 * unfiltered read put 2022 back on governor and sheriff pages (Emily, 2026-11-12).
+	 */
+	describe('once the election has passed', () => {
+		const JUST_PAST = { slug: SLUG, name: 'State Representative', electionDate: '2026-11-03', isPrimary: false };
+		const TWO_YEARS_BACK = { slug: SLUG, name: 'State Representative', electionDate: '2024-11-05', isPrimary: false };
+
+		function windowYears(url: string): number | null {
+			const start = /electionDateStart=(\d{4})/.exec(url)?.[1];
+			const end = /electionDateEnd=(\d{4})/.exec(url)?.[1];
+			return start && end ? Number(end) - Number(start) : null;
+		}
+
+		test('takes the race from the last year over the oldest row', async () => {
+			const calls = recordingFetch(url => {
+				if (!url.includes('electionDateStart=')) return [OLD];
+				const years = windowYears(url);
+				if (years === null) return [];
+				return years <= 1 ? [JUST_PAST] : [TWO_YEARS_BACK];
+			});
+
+			expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2026-11-03' });
+			expect(calls).toHaveLength(5);
+		});
+
+		test('falls back to a wider window when the last year has no race', async () => {
+			recordingFetch(url => {
+				if (!url.includes('electionDateStart=')) return [OLD];
+				const years = windowYears(url);
+				if (years === null || years < 2) return [];
+				return [TWO_YEARS_BACK];
+			});
+
+			expect(await getRaceBySlug(SLUG)).toMatchObject({ electionDate: '2024-11-05' });
+		});
+
+		test('every window ends where the upcoming read starts', async () => {
+			const calls = recordingFetch(() => []);
+			await getRaceBySlug(SLUG);
+			const upcomingStart = /electionDateStart=(\d{4}-\d{2}-\d{2})/.exec(calls[0] ?? '')?.[1];
+			const windows = calls.filter(c => c.includes('electionDateEnd='));
+
+			expect(windows).toHaveLength(3);
+			for (const url of windows) {
+				expect(/electionDateEnd=(\d{4}-\d{2}-\d{2})/.exec(url)?.[1]).toBe(upcomingStart);
+			}
+		});
 	});
 
 	test('an explicit filter skips the upcoming-first step', async () => {

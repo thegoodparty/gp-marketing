@@ -11,9 +11,15 @@ import { describe, expect, it } from 'bun:test';
 
 const ELECTIONS_ROOT = 'src/app/elections';
 
+/** Routes that only redirect or 404 and never render a page, so they carry no metadata. */
+const REDIRECT_ONLY_PAGES = new Set([`${ELECTIONS_ROOT}/position/[...raceSlug]/page.tsx`]);
+
 async function electionPageFiles(): Promise<string[]> {
 	const glob = new Bun.Glob('**/page.tsx');
-	return [...glob.scanSync({ cwd: ELECTIONS_ROOT })].map(path => `${ELECTIONS_ROOT}/${path}`).sort();
+	return [...glob.scanSync({ cwd: ELECTIONS_ROOT })]
+		.map(path => `${ELECTIONS_ROOT}/${path}`)
+		.filter(file => !REDIRECT_ONLY_PAGES.has(file))
+		.sort();
 }
 
 function metadataBody(source: string): string {

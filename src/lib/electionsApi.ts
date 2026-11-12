@@ -286,6 +286,7 @@ async function fetchRaceBySlug(
 	includePlace: boolean,
 	isPrimary?: boolean,
 	electionDateStart?: string,
+	electionDateEnd?: string,
 ): Promise<RaceDetail | null> {
 	const searchParams = new URLSearchParams({
 		raceSlug,
@@ -296,6 +297,9 @@ async function fetchRaceBySlug(
 	}
 	if (electionDateStart) {
 		searchParams.set('electionDateStart', electionDateStart);
+	}
+	if (electionDateEnd) {
+		searchParams.set('electionDateEnd', electionDateEnd);
 	}
 	const url = `${GP_API_ELECTIONS_BASE_URL}/races?${searchParams}`;
 	const data = await fetchJson<RaceDetail[]>(url, CACHE_OPTIONS);
@@ -329,13 +333,35 @@ export async function getRaceBySlug(
 	// unfiltered read, so an office with no upcoming election still resolves to
 	// its last race the way it always did. The explicit-filter path is left as
 	// it was: those callers ask for a specific row on purpose.
-	if (filters?.isPrimary === undefined) {
-		const upcoming = await fetchRaceBySlug(raceSlug, includePlace, undefined, upcomingSinceDateOnly());
-		if (upcoming) return upcoming;
+	if (filters?.isPrimary !== undefined) {
+		return fetchRaceBySlug(raceSlug, includePlace, filters.isPrimary);
 	}
-	const race = await fetchRaceBySlug(raceSlug, includePlace, filters?.isPrimary);
-	if (race || filters?.isPrimary !== undefined) return race;
+	const since = upcomingSinceDateOnly();
+	const upcoming = await fetchRaceBySlug(raceSlug, includePlace, undefined, since);
+	if (upcoming) return upcoming;
+	// With nothing ahead, the unfiltered read is not "the last race": the API keeps
+	// the lowest-id row per slug, usually the oldest cycle, so after Nov 3, 2026
+	// the AL, CA, GA and TX governor pages all read "Last election November 8,
+	// 2022" (Emily, 2026-11-12). Narrow to recent windows first; within one, a
+	// two-year office still sees only its last cycle. Parallel, so this costs one
+	// round trip more than before, and only for offices with no upcoming race.
+	const pastReads = await Promise.all([
+		...RECENT_PAST_WINDOWS_YEARS.map(async years => {
+			return await fetchRaceBySlug(raceSlug, includePlace, undefined, dateOnlyYearsBefore(since, years), since);
+		}),
+		fetchRaceBySlug(raceSlug, includePlace),
+	]);
+	const race = pastReads.find(r => r !== null);
+	if (race) return race;
 	return fetchRaceBySlug(raceSlug, includePlace, true);
+}
+
+const RECENT_PAST_WINDOWS_YEARS = [1, 2, 4];
+
+function dateOnlyYearsBefore(dateOnly: string, years: number): string {
+	const d = new Date(`${dateOnly}T00:00:00Z`);
+	d.setUTCFullYear(d.getUTCFullYear() - years);
+	return d.toISOString().slice(0, 10);
 }
 
 /**

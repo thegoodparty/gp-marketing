@@ -222,6 +222,79 @@ describe('the counties and cities index', () => {
 	});
 });
 
+/**
+ * Crawlers read the server HTML and never click Show More, so every place must
+ * be a link from the start; Show More and search only change which are hidden
+ * (Emily, 2026-11-12).
+ */
+describe('the counties and cities index keeps every place as a link', () => {
+	const PLACES = ['Alcona County', 'Alger County', 'Allegan County', 'Marquette County', 'Wayne County'].map(name => ({
+		name,
+		href: `/elections/mi/${name.toLowerCase().replace(/ /g, '-')}`,
+		level: 'county' as const,
+	}));
+
+	async function renderIndex() {
+		const { ElectionsIndexBlock } = await import('./ElectionsIndexBlock.tsx');
+		await render(React.createElement(ElectionsIndexBlock, { stateSlug: 'mi', initialDisplayCount: 2, elections: PLACES }));
+	}
+
+	function shownNames() {
+		return [...document.querySelectorAll('li')].filter(li => !li.hidden).map(li => li.textContent);
+	}
+
+	async function search(value: string) {
+		const input = document.querySelector('input')!;
+		await act(async () => {
+			// React picked its IE change-event fallback at import time (see beforeEach),
+			// which reads the value on focus and keyup, so a bare input event is missed.
+			const setter = Object.getOwnPropertyDescriptor(dom.window.HTMLInputElement.prototype, 'value')!.set!;
+			input.focus();
+			setter.call(input, value);
+			input.dispatchEvent(new dom.window.Event('input', { bubbles: true }));
+			input.dispatchEvent(new dom.window.KeyboardEvent('keyup', { bubbles: true }));
+			await flush();
+		});
+	}
+
+	test('every place is a link on load, and only the first page is shown', async () => {
+		await renderIndex();
+
+		expect(document.querySelectorAll('a[href^="/elections/mi/"]')).toHaveLength(5);
+		expect(shownNames()).toEqual(['Alcona County', 'Alger County']);
+		expect(document.body.textContent).toContain('5 Available Results');
+	});
+
+	test('Show More reveals the next page and the button goes once all are shown', async () => {
+		await renderIndex();
+		const showMore = () => [...document.querySelectorAll('button')].find(b => b.textContent?.includes('Show More'));
+
+		await click(showMore()!);
+		expect(shownNames()).toEqual(['Alcona County', 'Alger County', 'Allegan County', 'Marquette County']);
+		await click(showMore()!);
+		expect(shownNames()).toHaveLength(5);
+		expect(showMore()).toBeUndefined();
+	});
+
+	test('a search hides the places that do not match instead of removing their links', async () => {
+		await renderIndex();
+		await search('marq');
+
+		expect(shownNames()).toEqual(['Marquette County']);
+		expect(document.querySelectorAll('a[href^="/elections/mi/"]')).toHaveLength(5);
+		expect(document.body.textContent).toContain('1 Available Results');
+	});
+
+	test('a search with no match says so and still keeps the links', async () => {
+		await renderIndex();
+		await search('zzz');
+
+		expect(document.body.textContent).toContain('No results found for "zzz"');
+		expect(document.querySelector('nav')?.hidden).toBe(true);
+		expect(document.querySelectorAll('a[href^="/elections/mi/"]')).toHaveLength(5);
+	});
+});
+
 describe('the shared button', () => {
 	test('reports the event a server-rendered block asked for, with its own label and destination', async () => {
 		const { ComponentButton } = await import('./Inputs/Button.tsx');

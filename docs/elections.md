@@ -125,9 +125,11 @@ in omni), where the `z.preprocess` around `isPrimary`/`isRunoff` turns `undefine
 A slug can also name many race rows. Every California Assembly district is
 `ca/state-representative`, in every election year, and `/v1/races` folds the rows into one
 answer picked by id, which put a 2022 race on a page whose candidates were running in 2026.
-`getRaceBySlug` therefore asks for a race with an election date from today first and falls back
-to the unfiltered read only when there is none, so an office with no upcoming election still
-resolves to its last race. The location pages lean on the same lookup: the place feed carries
+`getRaceBySlug` therefore asks for a race with an election date from today first. When there is
+none it does not trust the unfiltered read to be the last race: the API keeps the lowest-id row
+per slug, usually the oldest cycle, which put "Last election November 8, 2022" on governor and
+sheriff pages the week after Nov 3, 2026. It reads the last 1, 2 and 4 years in parallel and takes
+the narrowest window that has a race, and only then the unfiltered read. The location pages lean on the same lookup: the place feed carries
 one row per office dated by the last race it knew, so `resolvePlaceRaceElectionDates` refreshes
 every row whose date has passed, general or primary (Los Angeles's mayor, council and city
 attorney all read November 2022 while their position pages said November 2026; Emily,

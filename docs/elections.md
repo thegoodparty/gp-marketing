@@ -228,6 +228,13 @@ Position Candidates template type are all removed, so the redirects are the only
 those URLs. Keep them. The hero's "View all candidates" button links to `#position-candidates` on
 the same page.
 
+**The pre-migration office URLs redirect too.** Before March 2026 the old app served offices at
+`/elections/position/<race slug>` (`/elections/position/al/anniston/city-executive-mayor`). Nothing
+answered them after the move, so about 54,000 addresses Search Console had 16 months of history for
+returned 404 until November 2026. `src/app/elections/position/[...raceSlug]/page.tsx` now looks the
+race up and 308s to `resolveRaceElectionHrefs`'s answer, which supplies the county a city slug
+lacks. A slug with no race stays a 404. Keep it: it is the only thing answering those URLs.
+
 Race slugs look like `state/[county]/[city]/[subplace]/positionSlug`. City and town
 races often carry 3-part slugs that must be expanded to 4-level URLs by resolving the
 county (`resolveRaceElectionHrefs`, `resolveCountySlugForPlace`,

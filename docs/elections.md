@@ -633,6 +633,19 @@ slugs miss, the city position route tries `<place slug>/<position>` last,
 to the city route rather than the subplace one, and the subplace route 308s the old
 split URL to the city-level one.
 
+#### A list that pages or filters must hide rows, not drop them
+
+Crawlers read the server HTML and never click Show More or type in a search box.
+A `'use client'` block that slices or filters its array before rendering ships
+only the visible rows as `<a>` tags; the rest travel as data in the RSC payload,
+which no crawler follows. The counties-and-cities index did this: `/elections/mi`
+linked 24 of its 593 places, so most Michigan counties had no link from their
+state page (November 2026). `ElectionsIndexBlock` now renders every row and puts
+`hidden` on the ones past Show More or outside the search. Put `hidden` on an
+element with no Tailwind display class (a bare `<li>`), or the class wins and
+the row shows. Measured on `/elections/mi`, all 593 links add about 8 KB
+gzipped (45 KB to 53 KB).
+
 ### Not fixable here, escalate
 
 Candidate claimed-vs-unclaimed state and any "my profile is wrong" bug is a data

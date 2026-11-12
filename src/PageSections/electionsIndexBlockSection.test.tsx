@@ -40,6 +40,26 @@ describe('ElectionsIndexBlockSection', () => {
 		expect(html).not.toContain('Alabama');
 	});
 
+	/** What a crawler reads: every place a link, the ones past Show More hidden (Emily, 2026-11-12). */
+	test('the server HTML links every place, past the first page too', () => {
+		const counties = Array.from({ length: 30 }, (_, i) => ({
+			name: `County ${String(i).padStart(2, '0')}`,
+			href: `/elections/mi/county-${i}`,
+			level: 'county',
+		}));
+		const element = ElectionsIndexBlockSection({
+			...section,
+			electionsOverride: counties,
+			stateSlugOverride: 'mi',
+		} as unknown as Props);
+		if (!element) throw new Error('expected the block to render');
+		const html = renderToStaticMarkup(element as React.ReactElement);
+
+		expect(html.match(/href="\/elections\/mi\/county-\d+"/g)).toHaveLength(30);
+		expect(html.match(/<li hidden="">/g)).toHaveLength(6);
+		expect(html).toContain('30 Available Results');
+	});
+
 	test('still lists every state when no page list is given at all', () => {
 		const element = ElectionsIndexBlockSection({ ...section } as unknown as Props);
 		if (!element) throw new Error('expected the block to render');

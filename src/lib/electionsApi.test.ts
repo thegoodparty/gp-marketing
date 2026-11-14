@@ -1096,26 +1096,26 @@ describe('gp-api person-profile reads carry the service credential', () => {
 		expect((calls[0]?.init as { next?: unknown }).next).toBeUndefined();
 	});
 
-	test('the removal list caches by URL with its removals tag and 5-minute revalidate', async () => {
+	test('the removal list caches by URL with its removals tag and 1-hour revalidate', async () => {
 		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		process.env['NEXT_RUNTIME'] = 'nodejs';
 		const calls = captureFetch(200, []);
 
 		await getRemovedPersonIds();
 
-		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '300', 'people-removals']);
-		expect(lastCacheCall.options).toEqual({ revalidate: 300, tags: ['people-removals'] });
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '3600', 'people-removals']);
+		expect(lastCacheCall.options).toEqual({ revalidate: 3600, tags: ['people-removals'] });
 	});
 
-	test('the published list caches by URL with its published tag and 5-minute revalidate', async () => {
+	test('the published list caches by URL with its published tag and 1-hour revalidate', async () => {
 		process.env['GP_API_SERVICE_TOKEN'] = 'service-token';
 		process.env['NEXT_RUNTIME'] = 'nodejs';
 		const calls = captureFetch(200, []);
 
 		await getPublishedPersonProfileIds();
 
-		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '300', 'people-published']);
-		expect(lastCacheCall.options).toEqual({ revalidate: 300, tags: ['people-published'] });
+		expect(lastCacheCall.keyParts).toEqual(['gp-api-json', calls[0]?.url, '3600', 'people-published']);
+		expect(lastCacheCall.options).toEqual({ revalidate: 3600, tags: ['people-published'] });
 	});
 
 	test('a 410 from the render gate is gone and a 404 is absent', async () => {

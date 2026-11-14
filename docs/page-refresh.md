@@ -3,9 +3,9 @@
 Every `/people/<slug>` page and every `/elections` location and position page
 is ISR: rendered once, then served from Vercel's cache until something tells it
 to re-render. This doc lists, for each of those pages, every source it reads,
-everything that changes that source, and how the page finds out. **Before
-raising any page's refresh window, every row for that page must have an
-on-demand path.** A row without one is only as fresh as the window.
+everything that changes that source, and how the page finds out. A row
+without an on-demand path is only as fresh as the page's window, so check
+[What has no on-demand path](#what-has-no-on-demand-path) before raising one.
 
 Update this doc in the same PR when you add a read to one of these pages, a tag,
 or (in omni) a gp-api write that changes what one of them shows.
@@ -15,8 +15,10 @@ or (in omni) a gp-api write that changes what one of them shows.
 - **The shortest cached read wins.** In Next 15 a page re-renders after the
   shortest `revalidate` among its own segment export and every `unstable_cache`
   read made while rendering it. Every profile, location and position page reads
-  the removals list (`getRemovedPersonIds`, 300 s), so all of them refresh every
-  5 minutes, whatever their `revalidate = 3600` says.
+  the removals and published lists (`getRemovedPersonIds`,
+  `getPublishedPersonProfileIds`, 3600 s each, to match the pages'
+  `revalidate = 3600`), so all of them refresh hourly. A shorter read here would
+  shorten every one of those pages to match.
 - **A page carries the tags of every cached read it made.** `revalidateTag(t)`
   marks every page that read anything tagged `t`, and each re-renders on its
   next request (Vercel reports it as `REVALIDATED`).
@@ -54,8 +56,8 @@ person's own photo only after reading their overlay, so they carry the
 | | Office deleted with its priorities: a withdrawn win's dormant office (`WinOfficeService`), a test-mode org (`TestModeService`) | `person:<id>` of each live profile that published one |
 | | User linked to a person (`POST /links`, null-id sweep, lazy link on `GET mine`, non-prod `test-set-person-id`) | none needed: no profile exists yet, and the create that follows clears the tag |
 | Other people's overlays, read for card photos (`person:<other id>`) | that person's writes, above | their `person:<id>` |
-| Removals list, `/unlisted` (`people-removals`, 300 s) | rows above that name it | `people-removals` |
-| Published list, `/published` (`people-published`, 300 s) | rows above that name it | `people-published` |
+| Removals list, `/unlisted` (`people-removals`, 3600 s) | rows above that name it | `people-removals` |
+| Published list, `/published` (`people-published`, 3600 s) | rows above that name it | `people-published` |
 | Election data: `/persons/:id`, `/persons/by-slug/:slug`, `/person-merges/:id`, `/officeholders`, `/candidacies`, `/persons?ids=`, `/places` (`election-data`, 3600 s) | The nightly load: offices, candidacies, races, positions, party, the pledge flag, names and slugs, and the data team's person merges and purges (written in the same run) | `election-data`, **no caller yet** |
 | Voter density, `/v1/public-person-profiles/voter-density` (`person:<id>` + `election-data`, 3600 s; gp-api holds it 60 s in memory) | The nightly load (rebuilt monthly, copied nightly) | `election-data`, **no caller yet** |
 | Sanity `personProfile` template, navigation, footer, social channels | Publish in Studio | Sanity webhook clears the type's tag |
@@ -90,17 +92,19 @@ The 51 state pages are prebuilt at build time; the rest render on first request.
 
 ## What has no on-demand path
 
-These keep every page above at its current 5-minute window. Each needs a
-trigger before that page's window can go up:
+These are only as fresh as the hourly page window. Each needs a trigger to be
+fresher than that:
 
-1. **The nightly election load.** See below.
-2. **Time.** The day after an election, countdowns, the default year. Needs a
-   refresh just after midnight Pacific every day, for example a Vercel cron
-   that clears `election-data`.
-3. **Sanity documents a template references.** The webhook clears only the
-   published document's own type. Needs the webhook to also clear the template
-   tags (or a shared tag on every `sanityFetch`) when a referenced type is
-   published.
+1. **The nightly election load.** Up to about 2 hours late: the election-data
+   reads are cached 3600 s, and the page can wait up to another hour before it
+   re-renders. See below.
+2. **Time.** Up to 1 hour late: the day after an election, countdowns, the
+   default year. Needs a refresh just after midnight Pacific every day, for
+   example a Vercel cron that clears `election-data`.
+3. **Sanity documents a template references.** Up to 1 hour late. The webhook
+   clears only the published document's own type. Needs the webhook to also
+   clear the template tags (or a shared tag on every `sanityFetch`) when a
+   referenced type is published.
 
 ## Nightly load
 

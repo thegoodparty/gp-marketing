@@ -526,7 +526,7 @@ export const PEOPLE_PUBLISHED_CACHE_TAG = 'people-published';
 export async function getRemovedPersonIds(): Promise<Set<string> | null> {
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/unlisted`;
 	try {
-		const rows = (await fetchGpApiJsonCached(url, { revalidate: 300, tags: [PEOPLE_REMOVALS_CACHE_TAG] })) as Array<{ personId?: string }>;
+		const rows = (await fetchGpApiJsonCached(url, { revalidate: 3600, tags: [PEOPLE_REMOVALS_CACHE_TAG] })) as Array<{ personId?: string }>;
 		if (!Array.isArray(rows)) return null;
 		const ids = new Set<string>();
 		for (const row of rows) {
@@ -801,7 +801,7 @@ export async function getPublicPersonProfileStatus(personId: string): Promise<Pu
 export async function getPublishedPersonProfileIds(): Promise<Set<string> | null> {
 	const url = `${GP_API_BASE_URL.replace(/\/$/, '')}/v1/public-person-profiles/published`;
 	try {
-		const rows = (await fetchGpApiJsonCached(url, { revalidate: 300, tags: [PEOPLE_PUBLISHED_CACHE_TAG] })) as Array<{ personId?: string }>;
+		const rows = (await fetchGpApiJsonCached(url, { revalidate: 3600, tags: [PEOPLE_PUBLISHED_CACHE_TAG] })) as Array<{ personId?: string }>;
 		if (!Array.isArray(rows)) return null;
 		return new Set(rows.flatMap(row => (row.personId ? [row.personId.toLowerCase()] : [])));
 	} catch (err) {

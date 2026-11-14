@@ -364,6 +364,30 @@ limit per file when it is run against a real host. Either one firing means raise
 Raising it is safe and does not remove any file — the band grows on the end and every
 existing id keeps serving. Lowering it would orphan the tail ids, so don't.
 
+### Why a /people URL changes or leaves the band
+
+**Who is listed.** `fetchPeopleSitemapEntries` lists a person when gp-api says they
+published a profile, or when any candidacy or officeholder row names an office for them.
+Nothing checks an election date, so election day passing removes no one: a candidate who
+lost on Nov 3 keeps the candidacy row that lists them. A person with neither is a thin
+profile, which renders `noindex`, so the band and the renderer agree.
+
+**Weekly re-clustering moves a few hundred URLs.** Since gp-data-platform #982 (October
+2026) the data platform re-clusters people every Tuesday, and the change reaches the site
+the same day. Sitemap churn logs therefore show a removal spike on Wednesdays, a few hundred
+`/people` URLs a week. Most are merges into another profile of the same person or renames
+(the name part of the slug changes, sometimes the id8 too), and those 308 to the surviving
+page. A handful each week come from a record with no successor and 404 by design. A
+Wednesday spike is normal; a spike on another day is worth asking the data team about.
+
+**Losing the only office drops a profile with no redirect.** If an upstream change removes
+or detaches a person's only candidacy or office row, their page still loads but goes
+`noindex` and leaves the band. Nothing redirects, because the URL did not move. Example:
+gp-data-platform #1313 (Nov 4, 2026) hid BallotReady races superseded by a re-created copy,
+and about 440 candidates sourced from Techspeed were still attached to the old copy, so they
+dropped out on Nov 5 until the data team re-attached them. That is a data problem: escalate
+it, do not loosen the listing rule here.
+
 ### Joint offices eat place slots
 
 A combined office (Indiana's Clerk/Treasurer, Montana's Clerk/Recorder/Surveyor,

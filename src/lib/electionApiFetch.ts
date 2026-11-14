@@ -84,7 +84,7 @@ export async function fetchElectionApiJsonCached(
  * next read asks gp-api again.
  *
  * The revalidate window and tags are part of the key because one URL has
- * several readers: the removals feed is read by the profile pages (5 minutes,
+ * several readers: the removals feed is read by the profile pages (1 hour,
  * `people-removals`) and by the sitemap (1 hour, `people-sitemap`). With a
  * shared entry, whichever wrote first would set the tags it is stored under.
  */

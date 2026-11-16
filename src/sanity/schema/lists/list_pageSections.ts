@@ -109,6 +109,8 @@ export const list_pageSections = {
 								'https://cdn.sanity.io/images/3rbseux7/production/4cc26cd73a3b57c6d5e31c1016978191cf217e45-3000x2000.png',
 							component_illustratedColumnsBlock:
 								'https://cdn.sanity.io/images/3rbseux7/production/fd3fdb442852e7d8c3bbd21fecc00ed43bbdf245-3000x2000.png',
+							component_eventAgendaBlock:
+								'https://cdn.sanity.io/images/3rbseux7/production/81e34d9fd80de8fe63b3e8a7b54ef9119f788766-3000x2000.png',
 						};
 						return s in i ? i[s] : undefined;
 					},

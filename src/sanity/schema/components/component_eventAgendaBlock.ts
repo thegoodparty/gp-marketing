@@ -53,7 +53,6 @@ export const component_eventAgendaBlock = {
 	preview: {
 		select: {
 			title: 'summaryInfo.field_title',
-			subtitle: 'field_agendaTitle',
 		},
 		prepare: (x: any) => {
 			const infer = {

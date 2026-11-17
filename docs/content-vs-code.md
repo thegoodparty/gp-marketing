@@ -31,7 +31,10 @@ Studio (the CMS, served at `/studio/main`), do not open a PR:
   "hide on", matched as fragments of the page path, so "/elections/" covers
   /elections and everything under it). Visitors can dismiss it; it comes back
   when the message, button link or start time changes.
-- Redirects (managed as content; they take effect without a deploy).
+- Redirects (managed as content; they take effect without a deploy). A blog article
+  URL whose article was unpublished or merged falls back to a permanent redirect to
+  `/blog` on its own; add a redirect in Sanity when the old URL should land on a
+  specific surviving article instead, since that entry wins over the fallback.
 - A/B experiment variants.
 - Embeds via the Embedded Block, as long as the provider is one the block supports:
   HubSpot (forms, meetings), YouTube, Vimeo, Calendly, Navattic, VoteAmerica. Any

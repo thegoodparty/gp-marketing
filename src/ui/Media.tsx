@@ -46,6 +46,7 @@ export type MediaProps = {
 	image?: SanityImage;
 	objectFit?: ResponsiveImageProps['objectFit'];
 	priority?: boolean;
+	sizes?: ResponsiveImageProps['sizes'];
 	video?: string;
 };
 
@@ -55,7 +56,9 @@ export function Media(props: MediaProps) {
 
 	return (
 		<div className={cn(base(), props.className)} data-component='Media'>
-			{props.image && !props.video && <ResponsiveImage image={props.image} objectFit={props.objectFit} priority={props.priority} />}
+			{props.image && !props.video && (
+				<ResponsiveImage image={props.image} objectFit={props.objectFit} priority={props.priority} sizes={props.sizes} />
+			)}
 			{props.video && <Video video={props.video} />}
 		</div>
 	);

@@ -18,7 +18,6 @@ import { goodpartyOrg_socialChannelsQuery } from '~/sanity/groq';
 import { FacebookPixel } from '~/ui/FacebookPixel';
 import { GTM } from '~/ui/GTM';
 import { Segment } from '~/ui/Segment';
-import { VWOScript } from 'vwo-smartcode-nextjs';
 import { ComponentErrorBoundary } from '~/ui/ComponentErrorBoundary';
 import { PageHeader } from '~/components/PageHeader';
 import { PageFooter } from '~/components/PageFooter';
@@ -75,7 +74,6 @@ export default async function RootLayout({ children }: Props) {
 			className={`bg-background-primary ${primaryFont.variable} ${primaryFont.className} ${secondaryFont.variable} ${secondaryFont.className}`}
 		>
 			<head>
-				<VWOScript accountId='757033' />
 				{pledgeCopyCookieName && (
 					// Picks the visitor's pledge copy test arm before first paint (see `~/experiments/pledgeCopyTest`).
 					<script id='pledge-copy-test' dangerouslySetInnerHTML={{ __html: pledgeCopyHeadScript(pledgeCopyCookieName) }} />

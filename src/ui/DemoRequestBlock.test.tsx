@@ -216,7 +216,19 @@ describe('DemoRequestBlock', () => {
 
 		await waitUntil(() => card().textContent?.includes('Pick a time, Jordan') ?? false);
 
-		expect(card().querySelector('a[href="https://meetings.hubspot.com/example/demo"]')).not.toBeNull();
+		const openLink = card().querySelector('a[target="_blank"]');
+		expect(openLink).not.toBeNull();
+		const openHref = openLink!.getAttribute('href')!;
+		// The booking page skips its own email gate when the contact details ride along.
+		expect(openHref.startsWith('https://meetings.hubspot.com/example/demo?')).toBe(true);
+		expect(openHref).toContain('firstName=Jordan');
+		expect(openHref).toContain('lastName=Rivera');
+		expect(openHref).toContain('email=jordan%40example.com');
+		expect(openHref).not.toContain('embed=true');
+		await waitUntil(() => card().querySelector('iframe') !== null);
+		const iframeSrc = card().querySelector('iframe')!.getAttribute('src')!;
+		expect(iframeSrc).toContain('embed=true');
+		expect(iframeSrc).toContain('firstName=Jordan');
 		expect(trackedEvents.map(e => e.name)).toContain('Demo Request Submitted');
 		expect(trackedEvents.find(e => e.name === 'Demo Request Qualified')?.props).toMatchObject({ outcome: 'pass' });
 	});
@@ -319,13 +331,16 @@ describe('DemoRequestBlock', () => {
 
 		const src = card().querySelector('iframe')!.getAttribute('src')!;
 		// The attribute boundary held: the query string survived instead of being cut at the quote.
-		expect(src.endsWith('?embed=true')).toBe(true);
+		expect(src).toContain('embed=true');
 		expect(src).toContain('%22');
 		expect(src).not.toContain('"');
 		// Still on an allowed host, and the parsed embed came from the container we wrote, not junk.
 		expect(new URL(src).hostname).toBe('meetings.hubspot.com');
-		// The plain link is untouched: React escapes that attribute itself.
-		expect(card().querySelector('a[target="_blank"]')?.getAttribute('href')).toBe(hostile);
+		// The plain link carries the same encoded URL plus the prefill, and React escapes the attribute.
+		const plain = card().querySelector('a[target="_blank"]')?.getAttribute('href') ?? '';
+		expect(plain).not.toContain('"');
+		expect(plain).toContain('firstName=Jordan');
+		expect(new URL(plain).hostname).toBe('meetings.hubspot.com');
 	});
 
 });

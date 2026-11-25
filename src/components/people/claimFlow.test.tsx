@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test';
 import { JSDOM } from 'jsdom';
 import * as React from 'react';
 import { act } from 'react';
@@ -16,6 +16,13 @@ import { createRoot, type Root } from 'react-dom/client';
  * exports other importers rely on. The analytics assertions read the
  * `window.amplitude` / `window.dataLayer` sinks the real functions write to.
  */
+
+// Radix picks its layout-effect hook once, when the module first loads: the real
+// one if `globalThis.document` exists, a no-op otherwise. The DOM suite shares one
+// process, so a test file that imports Radix before any JSDOM exists leaves the
+// dialog's presence and portal effects as no-ops and the pop-up never mounts.
+// Re-pointing the hook at React's here makes these tests independent of file order.
+mock.module('@radix-ui/react-use-layout-effect', () => ({ useLayoutEffect: React.useLayoutEffect }));
 
 const DOM_GLOBALS = [
 	'Node',

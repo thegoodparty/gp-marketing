@@ -142,8 +142,9 @@ but `allFaqsQuery` leaves it out, so it has no page, no sitemap entry, and no pl
 the FAQ landing page's list, even if an editor adds it there. Its slug is
 optional; a writer creating FAQs that exist only to sit inside one article should set
 `field_articleOnly: true` and may skip the rules below. If a slug is written anyway,
-it still has to follow them. A link picked in Studio that points straight at an
-Article only FAQ still resolves to its old page URL, which now 404s.
+it still has to follow them. Studio's link picker does not offer Article only FAQs, and
+an existing link to an FAQ that is later switched to Article only resolves to the
+FAQ landing page (`/frequently-asked-questions`) rather than its removed page.
 
 Studio validation does **not** run for Content Lake API writes, so an API writer has
 to enforce the same slug contract the Studio does:

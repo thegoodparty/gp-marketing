@@ -10,7 +10,7 @@
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { basename, join } from 'node:path';
-import { buildRetiredDdhqMap, renderRetiredDdhqDataModule } from './lib/people-retired-ddhq-generate';
+import { assertWithinMiddlewareBudget, buildRetiredDdhqMap, renderRetiredDdhqDataModule } from './lib/people-retired-ddhq-generate';
 
 const OUTPUT = join(import.meta.dir, '..', 'src', 'lib', 'people-retired-ddhq.data.ts');
 
@@ -22,7 +22,9 @@ if (!csvPath) {
 
 const map = buildRetiredDdhqMap(await readFile(csvPath, 'utf8'));
 const generatedAt = new Date().toISOString().slice(0, 10);
-await writeFile(OUTPUT, renderRetiredDdhqDataModule(map, { file: basename(csvPath), generatedAt }));
+const moduleText = renderRetiredDdhqDataModule(map, { file: basename(csvPath), generatedAt });
+assertWithinMiddlewareBudget(moduleText);
+await writeFile(OUTPUT, moduleText);
 
 console.log(
 	`Wrote ${OUTPUT}: ${map.rows} rows read, ${Object.keys(map.redirects).length} redirects, ${map.gone.length} gone.`,

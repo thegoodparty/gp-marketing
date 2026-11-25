@@ -390,7 +390,10 @@ tells Google to drop the URL on the next crawl. `src/middleware.ts` answers them
 from that CSV; the map is keyed on the whole slug, not the id8, so a live profile that shares
 an id8 by chance is untouched. When the data team re-runs the export, re-run the script and
 commit the result. These URLs were never in the sitemap after the re-keying, so nothing here
-touches the band.
+touches the band. The committed file is still a 12-row seed. The map is bundled into global
+middleware, which Vercel caps in size, so the generator refuses to write a module over 400 KB
+(`RETIRED_DDHQ_MAX_MODULE_BYTES`). The full ~27,900-row export will likely exceed that; if it does,
+move the lookup to the `/people/[slug]` route or a data store instead of raising the budget.
 
 **Losing the only office drops a profile with no redirect.** If an upstream change removes
 or detaches a person's only candidacy or office row, their page still loads but goes

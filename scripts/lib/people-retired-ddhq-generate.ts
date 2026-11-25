@@ -135,6 +135,24 @@ export const buildRetiredDdhqMap = (csvText: string): RetiredDdhqMap => {
 	return { redirects, gone: [...gone].sort(), rows: rows.length };
 };
 
+/**
+ * The map is bundled into global middleware, which runs on every page request and
+ * which Vercel caps in size (the cap depends on the plan). Past this budget, move
+ * the lookup out of middleware (the /people route or a data store) rather than raise it.
+ */
+export const RETIRED_DDHQ_MAX_MODULE_BYTES = 400_000;
+
+export const assertWithinMiddlewareBudget = (moduleText: string, maxBytes = RETIRED_DDHQ_MAX_MODULE_BYTES): void => {
+	const bytes = Buffer.byteLength(moduleText, 'utf8');
+	if (bytes > maxBytes) {
+		throw new Error(
+			`The generated map is ${bytes.toLocaleString()} bytes, over the ${maxBytes.toLocaleString()}-byte middleware budget. ` +
+				'It ships in global middleware, so a larger file risks failing the Vercel deploy. ' +
+				'Move the lookup out of middleware (the /people/[slug] route or a data store) before committing it.',
+		);
+	}
+};
+
 export const renderRetiredDdhqDataModule = (map: RetiredDdhqMap, source: { file: string; generatedAt: string }): string => {
 	const redirectEntries = Object.keys(map.redirects)
 		.sort()

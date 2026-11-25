@@ -40,7 +40,7 @@ export const retiredDdhqAnswer = (pathname: string): RetiredDdhqAnswer | null =>
 	const slug = pathname.slice(PEOPLE_PREFIX.length).replace(/\/+$/, '').toLowerCase();
 	if (!slug || slug.includes('/')) return null;
 
-	const raceSlug = RETIRED_DDHQ_REDIRECTS[slug];
+	const raceSlug = Object.hasOwn(RETIRED_DDHQ_REDIRECTS, slug) ? RETIRED_DDHQ_REDIRECTS[slug] : undefined;
 	if (raceSlug) return { kind: 'redirect', destination: retiredDdhqRedirectDestination(raceSlug) };
 	if (isGone(slug)) return { kind: 'gone' };
 	return null;

@@ -29,6 +29,13 @@ describe('retiredDdhqAnswer', () => {
 		expect(retiredDdhqAnswer('/people/someone-else-259b578a')).toBeNull();
 	});
 
+	it('leaves slugs that name Object.prototype members to the route', () => {
+		expect(retiredDdhqAnswer('/people/constructor')).toBeNull();
+		expect(retiredDdhqAnswer('/people/__proto__')).toBeNull();
+		expect(retiredDdhqAnswer('/people/tostring')).toBeNull();
+		expect(retiredDdhqAnswer('/people/hasownproperty')).toBeNull();
+	});
+
 	it('ignores nested paths and other routes', () => {
 		expect(retiredDdhqAnswer('/people/vinnie-royster-cf77a7fd/extra')).toBeNull();
 		expect(retiredDdhqAnswer('/candidate/vinnie-royster-cf77a7fd')).toBeNull();

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { buildRetiredDdhqMap, parseCsv, raceSlugFromCell, renderRetiredDdhqDataModule, slugFromCell } from './people-retired-ddhq-generate';
+import { assertWithinMiddlewareBudget, buildRetiredDdhqMap, parseCsv, raceSlugFromCell, renderRetiredDdhqDataModule, slugFromCell } from './people-retired-ddhq-generate';
 
 const EXPORT = [
 	'url,state,impressions_90d,race_slug,johns_recommendation',
@@ -86,5 +86,19 @@ describe('renderRetiredDdhqDataModule', () => {
 		expect(out).toContain("'demitri-theodoropoulos-259b578a': 'de/newark/city-legislature',\n\t'thomas-maly-e8089cc9'");
 		expect(out).toContain('export const RETIRED_DDHQ_GONE = `felix-pardo-9570da5f\nvinnie-royster-cf77a7fd`;');
 		expect(out).toContain('Rows read: 4. Redirects: 2. Gone: 2.');
+	});
+});
+
+describe('assertWithinMiddlewareBudget', () => {
+	it('accepts a module under the budget', () => {
+		expect(() => assertWithinMiddlewareBudget('x'.repeat(100), 100)).not.toThrow();
+	});
+
+	it('refuses a module over the budget, since the map ships in global middleware', () => {
+		expect(() => assertWithinMiddlewareBudget('x'.repeat(101), 100)).toThrow(/middleware budget/);
+	});
+
+	it('counts bytes, not characters', () => {
+		expect(() => assertWithinMiddlewareBudget('é'.repeat(60), 100)).toThrow(/middleware budget/);
 	});
 });

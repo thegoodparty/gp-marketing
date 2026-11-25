@@ -51,6 +51,7 @@ import { ctaActionWithShared } from './ctaActionWithShared.ts';
 import { inlineFeaturesItem } from './inlineFeaturesItem.ts';
 import { imageContentBlockItems } from './imageContentBlockItems.ts';
 import { callout } from './callout.ts';
+import { articleSummary } from './articleSummary.ts';
 import { ctaBannerBlockDesignSettings } from './ctaBannerBlockDesignSettings.ts';
 import { stepperBlockItems } from './stepperBlockItems.ts';
 import { customFeature } from './customFeature.ts';
@@ -206,6 +207,7 @@ export const groupSchema = [
 	inlineFeaturesItem,
 	imageContentBlockItems,
 	callout,
+	articleSummary,
 	ctaBannerBlockDesignSettings,
 	stepperBlockItems,
 	customFeature,

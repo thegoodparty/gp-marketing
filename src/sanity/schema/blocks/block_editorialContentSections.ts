@@ -82,6 +82,10 @@ export const block_editorialContentSections = {
 			},
 		},
 		{
+			type: 'articleSummary',
+			title: 'Article Summary',
+		},
+		{
 			type: 'button',
 			title: 'Button',
 		},

@@ -340,7 +340,7 @@ export const goodpartyOrg_footerQuery = defineQuery(
 /*language=textmate*/
 export const imageCtaGroq = `field_componentColor6Colors,"image":coalesce(ctaAssets,campaignPromotion.ref_promotion->ctaAssets),${ctaGroq}`;
 /*language=textmate*/
-export const articleSectionsGroq = `_key,_type,_type=="block"||_type=="imageContentSection"||_type=="tableGroup"=>{...},_type=="videoSection"=>{field_videoEmbedCode,field_caption},_type=="imageCta"=>{${imageCtaGroq}},_type=="ctaSection"=>{${imageCtaGroq}},_type=="inlineQuoteSection"=>{...,ref_quoteBy->},_type=="button"=>{${buttonGroq}},_type=="faqs"=>{...,list_faQs[]->{${faQGroq}}},_type=="callout"=>{...,block_summaryText[]{...,${textBlockGroq}}}`;
+export const articleSectionsGroq = `_key,_type,_type=="block"||_type=="imageContentSection"||_type=="tableGroup"=>{...},_type=="videoSection"=>{field_videoEmbedCode,field_caption},_type=="imageCta"=>{${imageCtaGroq}},_type=="ctaSection"=>{${imageCtaGroq}},_type=="inlineQuoteSection"=>{...,ref_quoteBy->},_type=="button"=>{${buttonGroq}},_type=="faqs"=>{...,list_faQs[]->{${faQGroq}}},_type=="callout"=>{...,block_summaryText[]{...,${textBlockGroq}}},_type=="articleSummary"=>{field_label,block_summaryBody[]{...,${textBlockGroq}}}`;
 /*language=textmate*/
 /** The title of one article by slug, for the position pages' guide card (see `renderElectionsPositionPage`). */
 export const articleTitleBySlugQuery = defineQuery(

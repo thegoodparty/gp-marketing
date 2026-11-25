@@ -138,8 +138,8 @@ public URLs:
 Every FAQ gets its own page at `/frequently-asked-questions/<slug>` and a sitemap
 entry, unless `faqOverview.field_articleOnly` is `true`. An Article only FAQ still
 renders, with its FAQ structured data, inside any article or page that references it,
-but `allFaqsQuery` leaves it out, so it has no page, no sitemap entry, and no link on
-the FAQ landing page (the landing page shows its answer inline instead). Its slug is
+but `allFaqsQuery` leaves it out, so it has no page, no sitemap entry, and no place in
+the FAQ landing page's list, even if an editor adds it there. Its slug is
 optional; a writer creating FAQs that exist only to sit inside one article should set
 `field_articleOnly: true` and may skip the rules below. If a slug is written anyway,
 it still has to follow them. A link picked in Studio that points straight at an

@@ -35,7 +35,7 @@ export const BlogArticleHero = (props: BlogArticleHeroProps) => {
 						<Author {...props.author} size='sm' className='md:hidden' />
 						<Author {...props.author} size='lg' className='max-md:hidden' />
 					</div>
-					<Media className='[&_img]:rounded-sm' image={props.image} priority />
+					<Media className='[&_img]:rounded-sm' image={props.image} priority sizes={{ minLg: '50vw' }} />
 				</div>
 			</Container>
 		</div>

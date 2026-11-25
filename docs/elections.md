@@ -380,6 +380,21 @@ the same day. Sitemap churn logs therefore show a removal spike on Wednesdays, a
 page. A handful each week come from a record with no successor and 404 by design. A
 Wednesday spike is normal; a spike on another day is worth asking the data team about.
 
+**The DDHQ-only profiles retired on Oct 7, 2026 answer from a generated map.** The #982
+re-keying retired about 27,900 profiles that existed only in DDHQ data, with no survivor, so
+the resolver had nothing to forward to and they 404ed for six weeks. The data team's per-URL
+export (ClickUp DATA-2674, `ddhq_retired_indexed_earning.csv` in Drive) carries John's call
+for each: a 308 to the office page where the race could be matched, otherwise 410 Gone, which
+tells Google to drop the URL on the next crawl. `src/middleware.ts` answers them from
+`src/lib/people-retired-ddhq.data.ts`, which `scripts/generate-people-retired-ddhq.ts` builds
+from that CSV; the map is keyed on the whole slug, not the id8, so a live profile that shares
+an id8 by chance is untouched. When the data team re-runs the export, re-run the script and
+commit the result. These URLs were never in the sitemap after the re-keying, so nothing here
+touches the band. The committed file is still a 12-row seed. The map is bundled into global
+middleware, which Vercel caps in size, so the generator refuses to write a module over 400 KB
+(`RETIRED_DDHQ_MAX_MODULE_BYTES`). The full ~27,900-row export will likely exceed that; if it does,
+move the lookup to the `/people/[slug]` route or a data store instead of raising the budget.
+
 **Losing the only office drops a profile with no redirect.** If an upstream change removes
 or detaches a person's only candidacy or office row, their page still loads but goes
 `noindex` and leaves the band. Nothing redirects, because the URL did not move. Example:

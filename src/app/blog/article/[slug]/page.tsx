@@ -1,5 +1,5 @@
 import type { Metadata, ResolvingMetadata } from 'next';
-import { notFound } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 
 import { articleQuery } from '~/sanity/groq';
 import { sanityFetch } from '~/sanity/sanityClient';
@@ -41,8 +41,8 @@ import { resolveBlogNewsletterExperiment } from '~/experiments/resolveBlogNewsle
 // SSR per request so the voter-facing newsletter block can read the visitor's AMP_* cookie
 // and resolve the copy arm on the server (same pattern as `src/app/[slug]/page.tsx`).
 // `generateStaticParams` was removed with this: it is a build-time API that the Next.js
-// docs only sanction alongside `force-static`. Unknown slugs hit `notFound()` below and
-// the sitemap enumerates articles from Sanity in `src/lib/sitemap-entries.ts`.
+// docs only sanction alongside `force-static`. Unknown slugs redirect to the blog index below
+// and the sitemap enumerates articles from Sanity in `src/lib/sitemap-entries.ts`.
 export const dynamic = 'force-dynamic';
 
 export default async function Page(props: any) {
@@ -56,8 +56,14 @@ export default async function Page(props: any) {
 		tags: ['article'],
 	});
 
+	// Articles retired in Sanity (unpublished or merged) kept 404ing while Search Console
+	// still sent visitors to them: 242 such URLs in November 2026. A slug with no article
+	// behind it now goes to the blog index with a 308. The Sanity redirect list runs in
+	// middleware before this page, so a hand-made redirect to the surviving article wins.
+	// `sanityFetch` throws on a network failure rather than returning null, so a Sanity
+	// outage errors instead of sending live articles here.
 	if (!page) {
-		notFound();
+		permanentRedirect('/blog');
 	}
 
 	const articleNavigation = resolveArticleNavigation(page.contentSections?.block_editorialContentSections);

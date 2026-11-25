@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { isGoodPartyProductionHost, shouldNoIndexHost } from '~/lib/crawlableHosts';
 import { lpRedirectDestination } from '~/lib/lp-redirects';
+import { retiredDdhqAnswer } from '~/lib/people-retired-ddhq';
 import {
 	type RedirectMap,
 	fetchRedirectMapFromSanityCdn,
@@ -68,6 +69,10 @@ function maybeBootstrapAmplitudeDeviceCookie(request: NextRequest): NextResponse
 	return response;
 }
 
+const RETIRED_PROFILE_GONE_BODY =
+	'<!doctype html><title>Profile no longer available</title>' +
+	'<p>This profile is no longer on GoodParty.org. <a href="/elections">Browse elections we know about</a>.</p>';
+
 export async function middleware(request: NextRequest): Promise<NextResponse> {
 	const noIndex = shouldNoIndexHost(request.headers.get('host') ?? request.nextUrl.hostname);
 	const withNoIndex = (response: NextResponse): NextResponse => {
@@ -105,6 +110,22 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
 		return withNoIndex(
 			NextResponse.redirect(destination, match.permanent ? 308 : 307),
+		);
+	}
+
+	// Retired DDHQ-only profiles (see people-retired-ddhq.ts). Answered here, not
+	// in the /people route, because a page can only 404; a 410 needs a response.
+	// After the CMS map so an editor's redirect for one of these URLs still wins.
+	const retired = retiredDdhqAnswer(pathname);
+	if (retired?.kind === 'redirect') {
+		return withNoIndex(NextResponse.redirect(new URL(retired.destination, request.url), 308));
+	}
+	if (retired?.kind === 'gone') {
+		return withNoIndex(
+			new NextResponse(RETIRED_PROFILE_GONE_BODY, {
+				status: 410,
+				headers: { 'content-type': 'text/html; charset=utf-8' },
+			}),
 		);
 	}
 

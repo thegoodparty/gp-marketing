@@ -13,6 +13,8 @@ export function resolveFAQItems(items?: any, options?: ResolveFAQItemsOptions) {
 
 	const faqItems: FAQBlockItemProps[] = [];
 	items?.forEach((item: any) => {
+		if (options?.linksOnly && item.faqOverview?.field_articleOnly === true) return;
+
 		const href =
 			options?.linksOnly && options.slugMap && item._id
 				? getFaqHref(item as FaqLike, options.slugMap)

@@ -58,6 +58,7 @@ export const LinkSelectType = {
 					}
 					return { type: doc.name };
 				}),
+				options: { filter: '!(_type == "faq" && faqOverview.field_articleOnly == true)' },
 				name: 'href',
 				title: `Link`,
 				hidden: x => !String(x.parent?.site),

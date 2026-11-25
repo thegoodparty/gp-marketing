@@ -129,11 +129,22 @@ public URLs:
 | `glossary`                   | Political terms | `glossaryTermOverview.field_slug`      |                                    |
 | `goodpartyOrg_landingPages`  | Landing pages   | `detailPageOverviewNoHero.field_slug`  |                                    |
 | `policy`                     | Policy pages    | `policyOverview.field_slug`            |                                    |
-| `faq`                        | FAQ entries     | `faqOverview.field_slug`               | Required and unique; see rules below |
+| `faq`                        | FAQ entries     | `faqOverview.field_slug`               | Required and unique unless Article only; see rules below |
 | `categories`                 | Blog sections   | `tagOverview.field_slug`               |                                    |
 | `topics`                     | Blog tags       | `tagOverview.field_slug`               |                                    |
 
 ### FAQ slug rules (required)
+
+Every FAQ gets its own page at `/frequently-asked-questions/<slug>` and a sitemap
+entry, unless `faqOverview.field_articleOnly` is `true`. An Article only FAQ still
+renders, with its FAQ structured data, inside any article or page that references it,
+but `allFaqsQuery` leaves it out, so it has no page, no sitemap entry, and no place in
+the FAQ landing page's list, even if an editor adds it there. Its slug is
+optional; a writer creating FAQs that exist only to sit inside one article should set
+`field_articleOnly: true` and may skip the rules below. If a slug is written anyway,
+it still has to follow them. Studio's link picker does not offer Article only FAQs, and
+an existing link to an FAQ that is later switched to Article only resolves to the
+FAQ landing page (`/frequently-asked-questions`) rather than its removed page.
 
 Studio validation does **not** run for Content Lake API writes, so an API writer has
 to enforce the same slug contract the Studio does:

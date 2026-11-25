@@ -23,8 +23,12 @@ export const faqOverview = {
       title: 'Slug',
       name: 'field_slug',
       type: 'field_slug',
+      description: 'Not needed when Article only is on.',
       validation: (Rule: any) =>
-        Rule.required().custom(async (slug: unknown, ctx: any) => {
+        Rule.custom(async (slug: unknown, ctx: any) => {
+          const hasSlug = typeof slug === 'string' && slug.trim() !== '';
+          if (!hasSlug && ctx.parent?.field_articleOnly === true) return true;
+          if (!hasSlug) return 'Required';
           const formatError = validateFaqSlugFormat(slug);
           if (formatError !== true) return formatError;
 
@@ -37,6 +41,14 @@ export const faqOverview = {
 
           return existing === 0 || 'Another FAQ already uses this slug';
         }),
+    },
+    {
+      title: 'Article only',
+      name: 'field_articleOnly',
+      type: 'boolean',
+      description:
+        'Show this FAQ only inside the articles and pages it is added to. It gets no page of its own under /frequently-asked-questions and is left out of the sitemap. Turning this on removes an existing FAQ page, so add a redirect if that page gets traffic.',
+      initialValue: false,
     },
     {
       title: 'Answer',

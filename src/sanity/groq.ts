@@ -19,7 +19,7 @@ export const glossaryHrefGroq = `_type=="goodpartyOrg_glossary"=>{"href":"/polit
 /*language=textmate*/
 export const glossaryTermHrefGroq = `_type=="glossary"=>{"href":"/political-terms/"+coalesce(glossaryTermOverview.field_slug,_id)}`;
 /*language=textmate*/
-export const faqHrefGroq = `_type=="faq"=>{"href":"/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id)}`;
+export const faqHrefGroq = `_type=="faq"=>{"href":select(faqOverview.field_articleOnly==true=>"/frequently-asked-questions","/frequently-asked-questions/"+coalesce(faqOverview.field_slug,_id))}`;
 /*language=textmate*/
 export const contactHrefGroq = `_type=="goodpartyOrg_contact"=>{"href":"/contact"}`;
 /*language=textmate*/
@@ -356,7 +356,7 @@ export const allArticlesForSearchGroq = `*[_type=="article"] | order(editorialOv
 export const allTermsForSearchGroq = `*[_type=="glossary"] | order(glossaryTermOverview.field_glossaryTerm asc)[]{_id,"title":glossaryTermOverview.field_glossaryTerm,${glossaryTermHrefGroq}}`;
 
 /*language=textmate*/
-export const allFaqsQuery = defineQuery(`${groqFunctions}*[_type=="faq"] | order(faqOverview.field_question asc, _id asc){_id,_updatedAt,${faQGroq}}`);
+export const allFaqsQuery = defineQuery(`${groqFunctions}*[_type=="faq"&&faqOverview.field_articleOnly!=true] | order(faqOverview.field_question asc, _id asc){_id,_updatedAt,${faQGroq}}`);
 /*language=textmate*/
 export const faqByIdQuery = defineQuery(`${groqFunctions}*[_type=="faq"&&_id==$id][0]{_id,_updatedAt,${faQGroq}}`);
 

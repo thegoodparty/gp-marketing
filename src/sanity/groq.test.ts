@@ -76,3 +76,29 @@ describe('custom groq functions', () => {
 		expect(await result.get()).toEqual([{ anchor: '#local-races' }, { anchor: '' }]);
 	});
 });
+
+describe('allFaqsQuery', () => {
+	test('leaves out FAQs marked Article only, so they get no page, sitemap entry or landing link', async () => {
+		const dataset = [
+			{ _id: 'page', _type: 'faq', faqOverview: { field_question: 'Has a page' } },
+			{ _id: 'off', _type: 'faq', faqOverview: { field_question: 'Switch off', field_articleOnly: false } },
+			{ _id: 'article-only', _type: 'faq', faqOverview: { field_question: 'Article only', field_articleOnly: true } },
+		];
+		const result = (await (await evaluate(parse(groq.allFaqsQuery), { dataset })).get()) as Array<{ _id: string }>;
+		expect(result.map(faq => faq._id).sort()).toEqual(['off', 'page']);
+	});
+});
+
+describe('faqHrefGroq', () => {
+	test('sends a link to an Article only FAQ to the FAQ landing page instead of its removed page', async () => {
+		const dataset = [
+			{ _id: 'page', _type: 'faq', faqOverview: { field_slug: 'has-a-page' } },
+			{ _id: 'article-only', _type: 'faq', faqOverview: { field_slug: 'kept-slug', field_articleOnly: true } },
+		];
+		const result = await (await evaluate(parse(`*[_type=="faq"] | order(_id){_id,${groq.faqHrefGroq}}`), { dataset })).get();
+		expect(result).toEqual([
+			{ _id: 'article-only', href: '/frequently-asked-questions' },
+			{ _id: 'page', href: '/frequently-asked-questions/has-a-page' },
+		]);
+	});
+});

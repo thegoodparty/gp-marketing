@@ -356,7 +356,7 @@ export const allArticlesForSearchGroq = `*[_type=="article"] | order(editorialOv
 export const allTermsForSearchGroq = `*[_type=="glossary"] | order(glossaryTermOverview.field_glossaryTerm asc)[]{_id,"title":glossaryTermOverview.field_glossaryTerm,${glossaryTermHrefGroq}}`;
 
 /*language=textmate*/
-export const allFaqsQuery = defineQuery(`${groqFunctions}*[_type=="faq"] | order(faqOverview.field_question asc, _id asc){_id,_updatedAt,${faQGroq}}`);
+export const allFaqsQuery = defineQuery(`${groqFunctions}*[_type=="faq"&&faqOverview.field_articleOnly!=true] | order(faqOverview.field_question asc, _id asc){_id,_updatedAt,${faQGroq}}`);
 /*language=textmate*/
 export const faqByIdQuery = defineQuery(`${groqFunctions}*[_type=="faq"&&_id==$id][0]{_id,_updatedAt,${faQGroq}}`);
 

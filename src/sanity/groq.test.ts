@@ -76,3 +76,15 @@ describe('custom groq functions', () => {
 		expect(await result.get()).toEqual([{ anchor: '#local-races' }, { anchor: '' }]);
 	});
 });
+
+describe('allFaqsQuery', () => {
+	test('leaves out FAQs marked Article only, so they get no page, sitemap entry or landing link', async () => {
+		const dataset = [
+			{ _id: 'page', _type: 'faq', faqOverview: { field_question: 'Has a page' } },
+			{ _id: 'off', _type: 'faq', faqOverview: { field_question: 'Switch off', field_articleOnly: false } },
+			{ _id: 'article-only', _type: 'faq', faqOverview: { field_question: 'Article only', field_articleOnly: true } },
+		];
+		const result = (await (await evaluate(parse(groq.allFaqsQuery), { dataset })).get()) as Array<{ _id: string }>;
+		expect(result.map(faq => faq._id).sort()).toEqual(['off', 'page']);
+	});
+});

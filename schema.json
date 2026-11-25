@@ -12561,6 +12561,13 @@
           },
           "optional": true
         },
+        "field_articleOnly": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
+        },
         "block_answer": {
           "type": "objectAttribute",
           "value": {

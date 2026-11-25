@@ -4,6 +4,7 @@ import {block_editorialContentSections} from './block_editorialContentSections.t
 import {block_policyText} from './block_policyText.ts'
 import {block_answer} from './block_answer.ts'
 import {block_glossaryTermDefinition} from './block_glossaryTermDefinition.ts'
+import {block_articleSummaryText} from './block_articleSummaryText.ts'
 
 export const blockSchema = [
 block_summaryText,
@@ -11,5 +12,6 @@ block_pricingPlanFeatureItemText,
 block_editorialContentSections,
 block_policyText,
 block_answer,
-block_glossaryTermDefinition
+block_glossaryTermDefinition,
+block_articleSummaryText
 ];

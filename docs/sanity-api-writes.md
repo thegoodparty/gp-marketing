@@ -189,6 +189,28 @@ to enforce the same slug contract the Studio does:
 A writer either emits portable text blocks directly or converts HTML to portable text
 before writing (Sanity publishes `@portabletext/block-tools` for this).
 
+### Article summary (direct answer block)
+
+An article's direct answer goes in an `articleSummary` item, placed first in
+`contentSections.block_editorialContentSections`. Fields:
+
+- `field_label` (string, optional, max 80): a short label above the text, such as "Quick answer". Rendered as a `<p>`, never a heading.
+- `block_summaryBody` (portable text, required): `normal` paragraphs only, `strong` as the only decorator, and `inlineInternalLink` / `inlineExternalLink` annotations.
+
+```json
+{
+	"_type": "articleSummary",
+	"_key": "summary1",
+	"field_label": "Quick answer",
+	"block_summaryBody": [
+		{ "_type": "block", "_key": "b1", "style": "normal", "markDefs": [], "children": [{ "_type": "span", "_key": "s1", "text": "Two to four sentences.", "marks": [] }] }
+	]
+}
+```
+
+It renders server-side as a `<div>` inside the article body, so the text reaches crawlers ahead of the first H2.
+Do not use the `callout` or CTA types for this.
+
 ### Draft vs. published
 
 Sanity documents written with a `drafts.` id prefix are drafts. **The site only

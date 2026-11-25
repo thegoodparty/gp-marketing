@@ -10,6 +10,7 @@ import { ButtonSectionGroup } from '~/RichTextContentSections/ButtonSectionGroup
 import { FAQsSectionGroup } from '~/RichTextContentSections/FAQsSectionGroup';
 import { block, marks, list, listItem } from '~/ui/RichData';
 import { CalloutSectionGroup } from '~/RichTextContentSections/CalloutSectionGroup';
+import { ArticleSummarySectionGroup } from '~/RichTextContentSections/ArticleSummarySectionGroup';
 import { NewsletterSectionGroup } from '~/RichTextContentSections/NewsletterSectionGroup';
 import type { NewsletterArticleSection } from '~/experiments/blogNewsletter';
 import { VideoSectionGroup } from '~/RichTextContentSections/VideoSectionGroup';
@@ -108,6 +109,13 @@ export function RichTextContentSections(props: Props) {
 							return (
 								<ComponentErrorBoundary key={`callout-section-${section._key}`} componentName='CalloutSectionGroup'>
 									<CalloutSectionGroup {...section} />
+								</ComponentErrorBoundary>
+							);
+						},
+						articleSummary({ value: section }) {
+							return (
+								<ComponentErrorBoundary key={`article-summary-section-${section._key}`} componentName='ArticleSummarySectionGroup'>
+									<ArticleSummarySectionGroup {...section} />
 								</ComponentErrorBoundary>
 							);
 						},

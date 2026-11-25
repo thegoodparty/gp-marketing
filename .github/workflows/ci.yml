@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # submodules: the AGENTS.md check runs a script from the ai-rules submodule.
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.1.0
         with:
           submodules: true
           persist-credentials: false
@@ -27,7 +27,7 @@ jobs:
       - name: Verify AGENTS.md is the source of truth
         run: bash ai-rules/scripts/agents-md-sync.sh --check
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@v2.2.0
         with:
           bun-version: 1.2.23
 
